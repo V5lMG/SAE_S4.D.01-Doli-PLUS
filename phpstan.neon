@@ -1,0 +1,6 @@
+parameters:
+	level: max
+	paths:
+		- all_users
+	excludePaths:
+	    - all_users/lib
