@@ -281,3 +281,144 @@ table th {
     margin-left: 270px;
     padding: 100px 20px 20px; /* Augmente le padding-top pour éviter le chevauchement */
 }
+
+/* HEADER */
+.topbar {
+    background: #2f3b5c;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li {
+    margin-right: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+/* USER INFO */
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    margin-left: 15px;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 250px;
+    background: #2f3b5c;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+    top: 60px;
+    left: 0;
+}
+
+.sidebar h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+.sidebar ul li:hover {
+    background: #1e2a47;
+    border-radius: 5px;
+}
+
+/* CONTENU PRINCIPAL */
+.main-content {
+    margin-left: 270px;
+    padding: 100px 20px 20px;
+}
+
+h2 {
+    color: #2f3b5c;
+}
+
+/* STATISTIQUES */
+.stats, .recent-invoices {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.stats-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    background-color: #bbb;
+    text-align: center;
+    line-height: 50px;
+    border-radius: 50%;
+    font-size: 20px;
+}
+
+/* TABLEAU DES FACTURES */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+th {
+    background: #f0f0f0;
+}
+
+/* TEXTE VIDE */
+.empty-text {
+    text-align: center;
+    margin-top: 10px;
+    color: #888;
+}

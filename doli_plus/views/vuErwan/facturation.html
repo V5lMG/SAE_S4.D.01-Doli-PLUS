@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturation et Paiement</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="topbar">
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#">Accueil</a></li>
+                <li><a href="#">Tiers</a></li>
+                <li><a href="#">Commerce</a></li>
+                <li><a href="#">Facturation | Paiement</a></li>
+                <li><a href="#">GRH</a></li>
+                <li><a href="#">Outils</a></li>
+            </ul>
+            <br>
+            <br>
+        </nav>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <input type="text" placeholder="Rechercher...">
+        <h3>📂 Factures fournisseur</h3>
+        <ul>
+            <li><a href="#">Nouvelle facture</a></li>
+            <li><a href="#">Liste</a></li>
+            <li><a href="#">Liste des modèles</a></li>
+            <li><a href="#">Règlements</a></li>
+            <li><a href="#">Statistiques</a></li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <h2>📄 Espace facturation et paiement</h2>
+
+        <section class="stats">
+            <h3>Nombres de factures validées - Facture fournisseur</h3>
+            <div class="stats-icons">
+                <div class="icon">📊</div>
+                <div class="icon">📉</div>
+                <div class="icon">📈</div>
+                <div class="icon">🌟</div>
+                <div class="icon">📎</div>
+                <div class="icon">🔖</div>
+            </div>
+            <p class="empty-text">Pas de facture ouverte...</p>
+        </section>
+
+        <section class="recent-invoices">
+            <h3>Les 3 dernières factures fournisseurs modifiées</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Montant TTC</th>
+                        <th>Date modif.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="2">Aucune facture</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+</body>
+</html>
