@@ -1,7 +1,7 @@
 {
   "name": "yasmf/yasmf_hello_world",
   "config": {
-    "vendor-dir": "all_users/lib/vendor"
+    "vendor-dir": "doli_plus/lib/vendor"
   },
   "repositories": [
     {
@@ -11,9 +11,9 @@
   ],
   "autoload": {
     "psr-4": {
-      "controllers\\": "all_users/controllers",
-      "services\\": "all_users/services",
-      "application\\": "all_users/application"
+      "controllers\\": "doli_plus/controllers",
+      "services\\": "doli_plus/services",
+      "application\\": "doli_plus/application"
     }
   },
   "require": {

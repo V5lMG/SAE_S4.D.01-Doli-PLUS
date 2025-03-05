@@ -11,9 +11,9 @@ services:
     image: mysql:8
     container_name: all_users_db
     environment:
-      - MYSQL_USER=all_users
-      - MYSQL_DATABASE=all_users
-      - MYSQL_PASSWORD=all_users
+      - MYSQL_USER=doli_plus
+      - MYSQL_DATABASE=doli_plus
+      - MYSQL_PASSWORD=doli_plus
       - MYSQL_ROOT_PASSWORD=root
     ports:
       - "6612:3306"
