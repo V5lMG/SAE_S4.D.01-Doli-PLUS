@@ -15,14 +15,13 @@ class UsersService
     /**
      * Find users by criteria
      *
-     * @param PDO $pdo the pdo object
      * @param string $likeUsername the string the username should contain
      * @param int $statusId the status id
      * @return string the statement referencing the result set
      */
-    public function findUsersByUsernameAndStatus(PDO $pdo, string $likeUsername, int $statusId): string
+    public function findUsersByUsernameAndStatus(string $likeUsername, int $statusId): string
     {
-        return "STUB";
+        return "STUB : " . $likeUsername . " + " . $statusId;
     }
 
 }

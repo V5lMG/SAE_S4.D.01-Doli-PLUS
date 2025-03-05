@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>All users</title>
@@ -48,7 +48,9 @@ use yasmf\HttpHelper;
         <th>Status</th>
         <th></th>
     </tr>
-    <?php if (isset($search_stmt)) {
+    <?php
+    echo "Test ok";
+    if (isset($search_stmt)) {
         while ($row = $search_stmt->fetch()) { ?>
             <tr>
                 <td><?php echo $row['user_id'] ?></td>
@@ -59,8 +61,5 @@ use yasmf\HttpHelper;
         <?php }
     } ?>
 </table>
-
-
-
 </body>
 </html>

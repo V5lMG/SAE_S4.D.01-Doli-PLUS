@@ -6,16 +6,11 @@ use application\DefaultComponentFactory;
 use yasmf\DataSource;
 use yasmf\Router;
 
-$dbConfig = require 'dbconfig.php';
-
-$data_source = new DataSource(
-    $dbConfig['db_host'],
-    $dbConfig['db_port'], 
-    $dbConfig['db_name'], 
-    $dbConfig['db_user'], 
-    $dbConfig['db_pass'], 
-    $dbConfig['db_charset']
-);
+//$data_source = null; // STUB
 
 $router = new Router(new DefaultComponentFactory()) ;
-$router->route(PREFIX_TO_RELATIVE_PATH,$data_source);
+try {
+    $router->route(PREFIX_TO_RELATIVE_PATH);
+} catch (\yasmf\NoControllerAvailableForNameException $e) {
+    echo "LA PAGE EST OK !!!";
+}
