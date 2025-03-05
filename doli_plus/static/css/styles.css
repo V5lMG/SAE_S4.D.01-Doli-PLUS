@@ -1,0 +1,283 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+}
+
+.title {
+    background-color: #2f3b5c;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+.login-form {
+    margin-top: 20px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    background: #bbb;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.input-group .icon {
+    margin-right: 10px;
+}
+
+.input-group input {
+    border: none;
+    background: transparent;
+    outline: none;
+    flex: 1;
+}
+
+.btn {
+    background-color: #2f3b5c;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background-color: #1e2a47;
+}
+
+.links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.links a {
+    text-decoration: none;
+    color: #2f3b5c;
+    font-weight: bold;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 24px;
+    color: #2f3b5c;
+    margin-bottom: 20px;
+}
+
+.admin-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.admin-button {
+    background-color: #2f3b5c;
+    color: white;
+    text-decoration: none;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+    min-width: 180px;
+}
+
+.admin-button:hover {
+    background-color: #1e2a47;
+}
+
+.access-denied-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8f8f8;
+}
+
+.access-denied-box {
+    background-color: #eeeeee;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 400px;
+}
+
+.access-denied-box p {
+    color: #2f3b5c;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.access-denied-button {
+    background-color: #2f3b5c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.access-denied-button:hover {
+    background-color: #1e2a47;
+}
+
+.sidebar {
+    width: 250px;
+    background: #2f3b5c;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.sidebar ul li:hover {
+    background: #1e2a47;
+    border-radius: 5px;
+}
+
+.main-content {
+    margin-left: 270px;
+    padding: 20px;
+}
+
+header h1 {
+    font-size: 24px;
+    color: #2f3b5c;
+}
+
+.stats, .recent-expenses {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.stats h2, .recent-expenses h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.stats-placeholder {
+    text-align: center;
+    color: gray;
+    padding: 20px;
+    border: 1px dashed gray;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background: #f0f0f0;
+}
+
+/* Bandeau supérieur */
+.topbar {
+    background: #2f3b5c;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.menu span {
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.menu span:hover {
+    text-decoration: underline;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.version {
+    margin-right: 15px;
+    font-size: 14px;
+    background: #1e2a47;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.user {
+    font-weight: bold;
+}
+
+/* Ajustement du contenu principal pour éviter qu'il ne soit caché sous le bandeau */
+.main-content {
+    margin-left: 270px;
+    padding: 80px 20px 20px;
+}
+
+.main-content {
+    margin-left: 270px;
+    padding: 100px 20px 20px; /* Augmente le padding-top pour éviter le chevauchement */
+}
