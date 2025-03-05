@@ -15,7 +15,7 @@
 <!-- Includes CSS for font awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <!-- Includes CSS for Dolibarr theme -->
-<link rel="stylesheet" type="text/css" href="cssTest.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/cssTest.css">
 
 
 
@@ -31,7 +31,9 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="login_center center" style="background-size: cover; background-position: center center; background-attachment: fixed; background-repeat: no-repeat; background: linear-gradient(4deg, rgb(240,240,240) 52%, rgb(60,70,100) 52.1%);">
+<!-- Ligne de fond -->
+<div class="login_center center" style="background-size: cover; background-position: center center; background-attachment: fixed; background-repeat: no-repeat; background: linear-gradient(4deg, rgb(60,70,100) 52%, rgb(240,240,240) 52.1%);">
+
 <div class="login_vertical_align">
 
 
@@ -42,13 +44,6 @@ $(document).ready(function () {
 <input type="hidden" name="loginfunction" value="loginfunction" />
 <input type="hidden" name="backtopage" value="" />
 <!-- Add fields to store and send local user information. This fields are filled by the core/js/dst.js -->
-
-
-
-
-<!-- Title with version -->
-<div class="login_table_title center" title="Dolibarr 17.0.4">
-<a class="login_table_title" href="https://www.dolibarr.org" target="_blank" rel="noopener noreferrer external">Doli-plus 1.0.0</a></div>
 
 
 
@@ -108,9 +103,13 @@ $(document).ready(function () {
 </form>
 
 
+<!-- Title with version -->
+<div class="login_table_title center" title="Dolibarr 17.0.4">
+<a class="login_table_title" href="https://www.dolibarr.org" target="_blank" rel="noopener noreferrer external">Doli-plus 1.0.0</a></div>
 
 
-<!-- authentication mode = dolibarr -->
+
+    <!-- authentication mode = dolibarr -->
 <!-- cookie name used for this session = DOLSESSID_e5c0ce835608c3843ce85b1962f01f6c9c214f8f -->
 <!-- urlfrom in this session =  -->
 
