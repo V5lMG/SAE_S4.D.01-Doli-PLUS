@@ -1,6 +1,6 @@
 parameters:
 	level: max
 	paths:
-		- all_users
+		- doli_plus
 	excludePaths:
-	    - all_users/lib
+	    - doli_plus/lib

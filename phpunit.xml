@@ -25,10 +25,10 @@
 
     <coverage>
         <include>
-            <directory suffix=".php">all_users</directory>
+            <directory suffix=".php">doli_plus</directory>
         </include>
         <exclude>
-            <directory suffix=".php">all_users/lib</directory>
+            <directory suffix=".php">doli_plus/lib</directory>
         </exclude>
     </coverage>
 </phpunit>
