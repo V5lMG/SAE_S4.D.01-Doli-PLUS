@@ -321,6 +321,15 @@ table th {
     margin-bottom: 15px;
 }
 
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+}
+
 .sidebar ul li a {
     text-decoration: none;
     color: white;
@@ -364,4 +373,23 @@ th {
     text-align: center;
     margin-top: 10px;
     color: #888;
+}
+
+/*
+ -------------------------------------------------------------------------------
+                              GESTION NOTES DE FRAIS
+ -------------------------------------------------------------------------------
+ */
+/* Activer l'ouverture au survol */
+.dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1; /* Pour assurer la visibilité */
+    visibility: visible; /* Utile pour les animations */
+}
+
+/* Transition pour un effet fluide */
+.dropdown-menu {
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    opacity: 0; /* Par défaut, le menu est invisible */
+    visibility: hidden;
 }
