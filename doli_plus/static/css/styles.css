@@ -242,20 +242,6 @@ table th {
     background: #f0f0f0;
 }
 
-/* Topbar */
-.topbar {
-    background: #2f3b5c;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-}
 
 .menu span {
     margin-right: 20px;
@@ -312,9 +298,7 @@ table th {
 }
 
 /* Sidebar Adjustments */
-.sidebar {
-    top: 30px;
-}
+
 
 .sidebar h3 {
     font-size: 18px;
@@ -393,3 +377,19 @@ th {
     opacity: 0; /* Par défaut, le menu est invisible */
     visibility: hidden;
 }
+
+/* Menu de déconnexion placé en bas */
+.sidebar .dropdown {
+    margin-top: auto; /* Pousse le menu vers le bas */
+    text-align: center;
+}
+
+.custom-dropdown-toggle {
+    background-color: #495057;
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+}
+

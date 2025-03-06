@@ -17,8 +17,8 @@
         </nav>
     </header>
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
+    <!-- Barre latérale -->
+    <div class="sidebar">
         <h3>📂 Factures fournisseur</h3>
         <ul>
             <li><a href="#">Liste</a></li>
@@ -27,7 +27,19 @@
             <li><a href="#">Palmarès - Graphique</a></li>
             <li><a href="#">Télécharger facture</a></li>
         </ul>
-    </aside>
+        <div class="dropdown d-none d-md-block">
+            <button class="rounded dropdown-toggle custom-dropdown-toggle"
+                    type="button" id="menuDeroulantPage" data-bs-toggle="dropdown" aria-expanded="false">
+                G202443
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="menuDeroulantPage">
+                <!-- Accueil visible seulement sur écrans sm et moins -->
+                <li><a class="dropdown-item" href="#"><i class="fa fa-sign-out-alt"></i> D&eacute;connexion</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-circle-question"></i> Besoin d'aide ? </a></li> <!-- Télécharge un fichier pdf avec la totalité des aides du site -->
+            </ul>
+        </div>
+    </div>
+
 
     <!-- MAIN CONTENT -->
     <main class="main-content">
