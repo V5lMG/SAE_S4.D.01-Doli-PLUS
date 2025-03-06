@@ -92,6 +92,7 @@ body {
     font-size: 24px;
     color: #2f3b5c;
     margin-bottom: 20px;
+    top: 0;
 }
 
 /* Admin Section */
@@ -188,7 +189,6 @@ body {
     padding: 10px;
     cursor: pointer;
 }
-
 .sidebar ul li:hover {
     background: #1e2a47;
     border-radius: 5px;
@@ -199,32 +199,7 @@ body {
     margin-left: 270px;
     padding: 100px 20px 20px;
 }
-
-header h1 {
-    font-size: 24px;
-    color: #2f3b5c;
-}
-
-/* Stats */
-.stats, .recent-expenses {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
-.stats h2, .recent-expenses h2 {
-    font-size: 18px;
-    margin-bottom: 15px;
-}
-
-.stats-placeholder {
-    text-align: center;
-    color: gray;
-    padding: 20px;
-    border: 1px dashed gray;
-}
+    
 
 /* Table */
 table {
@@ -261,7 +236,7 @@ table th {
 .version {
     margin-right: 15px;
     font-size: 14px;
-    background: #1e2a47;
+    background: #202f4e;
     padding: 5px 10px;
     border-radius: 5px;
 }
@@ -385,7 +360,7 @@ th {
 }
 
 .custom-dropdown-toggle {
-    background-color: #495057;
+    background-color: #2f3b5c;
     color: white;
     border: none;
     width: 100%;
@@ -396,4 +371,6 @@ th {
 .btnEnBas {
     margin-top: 400px;
 }
+
+
 
