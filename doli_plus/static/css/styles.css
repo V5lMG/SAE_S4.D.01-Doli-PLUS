@@ -8,6 +8,7 @@ body {
     margin: 0;
 }
 
+/* Container */
 .container {
     background: #f0f0f0;
     padding: 20px;
@@ -17,6 +18,7 @@ body {
     width: 300px;
 }
 
+/* Title */
 .title {
     background-color: #2f3b5c;
     color: white;
@@ -25,6 +27,7 @@ body {
     font-size: 18px;
 }
 
+/* Login Form */
 .login-form {
     margin-top: 20px;
 }
@@ -49,6 +52,7 @@ body {
     flex: 1;
 }
 
+/* Button */
 .btn {
     background-color: #2f3b5c;
     color: white;
@@ -64,6 +68,7 @@ body {
     background-color: #1e2a47;
 }
 
+/* Links */
 .links {
     display: flex;
     justify-content: space-between;
@@ -81,13 +86,16 @@ body {
     text-decoration: underline;
 }
 
+/* Page Title */
 .page-title {
     text-align: center;
     font-size: 24px;
     color: #2f3b5c;
     margin-bottom: 20px;
+    top: 0;
 }
 
+/* Admin Section */
 .admin-container {
     display: flex;
     justify-content: center;
@@ -117,6 +125,7 @@ body {
     background-color: #1e2a47;
 }
 
+/* Access Denied */
 .access-denied-container {
     display: flex;
     justify-content: center;
@@ -154,6 +163,7 @@ body {
     background-color: #1e2a47;
 }
 
+/* Sidebar */
 .sidebar {
     width: 250px;
     background: #2f3b5c;
@@ -179,42 +189,19 @@ body {
     padding: 10px;
     cursor: pointer;
 }
-
 .sidebar ul li:hover {
     background: #1e2a47;
     border-radius: 5px;
 }
 
+/* Main Content */
 .main-content {
     margin-left: 270px;
-    padding: 20px;
+    padding: 100px 20px 20px;
 }
+    
 
-header h1 {
-    font-size: 24px;
-    color: #2f3b5c;
-}
-
-.stats, .recent-expenses {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
-.stats h2, .recent-expenses h2 {
-    font-size: 18px;
-    margin-bottom: 15px;
-}
-
-.stats-placeholder {
-    text-align: center;
-    color: gray;
-    padding: 20px;
-    border: 1px dashed gray;
-}
-
+/* Table */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -230,20 +217,6 @@ table th {
     background: #f0f0f0;
 }
 
-/* Bandeau supérieur */
-.topbar {
-    background: #2f3b5c;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-}
 
 .menu span {
     margin-right: 20px;
@@ -254,6 +227,7 @@ table th {
     text-decoration: underline;
 }
 
+/* User Info */
 .user-info {
     display: flex;
     align-items: center;
@@ -262,7 +236,7 @@ table th {
 .version {
     margin-right: 15px;
     font-size: 14px;
-    background: #1e2a47;
+    background: #202f4e;
     padding: 5px 10px;
     border-radius: 5px;
 }
@@ -271,32 +245,7 @@ table th {
     font-weight: bold;
 }
 
-/* Ajustement du contenu principal pour éviter qu'il ne soit caché sous le bandeau */
-.main-content {
-    margin-left: 270px;
-    padding: 80px 20px 20px;
-}
-
-.main-content {
-    margin-left: 270px;
-    padding: 100px 20px 20px; /* Augmente le padding-top pour éviter le chevauchement */
-}
-
-/* HEADER */
-.topbar {
-    background: #2f3b5c;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-}
-
+/* Navigation Links */
 .nav-links {
     list-style: none;
     display: flex;
@@ -318,27 +267,13 @@ table th {
     text-decoration: underline;
 }
 
-/* USER INFO */
-.user-info {
-    display: flex;
-    align-items: center;
-}
-
+/* User Avatar */
 .user-avatar {
     margin-left: 15px;
 }
 
-/* SIDEBAR */
-.sidebar {
-    width: 250px;
-    background: #2f3b5c;
-    color: white;
-    padding: 20px;
-    position: fixed;
-    height: 100%;
-    top: 60px;
-    left: 0;
-}
+/* Sidebar Adjustments */
+
 
 .sidebar h3 {
     font-size: 18px;
@@ -364,25 +299,7 @@ table th {
     border-radius: 5px;
 }
 
-/* CONTENU PRINCIPAL */
-.main-content {
-    margin-left: 270px;
-    padding: 100px 20px 20px;
-}
-
-h2 {
-    color: #2f3b5c;
-}
-
-/* STATISTIQUES */
-.stats, .recent-invoices {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
+/* Statistics */
 .stats-icons {
     display: flex;
     gap: 15px;
@@ -399,13 +316,7 @@ h2 {
     font-size: 20px;
 }
 
-/* TABLEAU DES FACTURES */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
+/* Invoice Table */
 th, td {
     padding: 10px;
     border: 1px solid #ccc;
@@ -416,9 +327,50 @@ th {
     background: #f0f0f0;
 }
 
-/* TEXTE VIDE */
+/* Empty Text */
 .empty-text {
     text-align: center;
     margin-top: 10px;
     color: #888;
 }
+
+/*
+ -------------------------------------------------------------------------------
+                              GESTION NOTES DE FRAIS
+ -------------------------------------------------------------------------------
+ */
+/* Activer l'ouverture au survol */
+.dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1; /* Pour assurer la visibilité */
+    visibility: visible; /* Utile pour les animations */
+}
+
+/* Transition pour un effet fluide */
+.dropdown-menu {
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    opacity: 0; /* Par défaut, le menu est invisible */
+    visibility: hidden;
+}
+
+/* Menu de déconnexion placé en bas */
+.sidebar .dropdown {
+    margin-top: auto; /* Pousse le menu vers le bas */
+    text-align: center;
+}
+
+.custom-dropdown-toggle {
+    background-color: #2f3b5c;
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.btnEnBas {
+    margin-top: 400px;
+}
+
+
+
