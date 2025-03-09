@@ -18,14 +18,12 @@ body {
     width: 300px;
 }
 
-/* Title */
-.title {
-    background-color: #2f3b5c;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 18px;
-}
+
+/**
+ -------------------------------------------------------------------------------
+ Page de connexion
+ -------------------------------------------------------------------------------
+ */
 
 /* Login Form */
 .login-form {
@@ -86,13 +84,16 @@ body {
     text-decoration: underline;
 }
 
-/* Page Title */
-.page-title {
-    text-align: center;
-    font-size: 24px;
-    color: #2f3b5c;
-    margin-bottom: 20px;
-    top: 0;
+/*
+ -------------------------------------------------------------------------------
+ Titre de la page
+ -------------------------------------------------------------------------------
+ */
+.titre_page {
+    position: absolute;
+    top: 0px;
+    left: 240px;
+    color: #0B63A2;
 }
 
 /* Admin Section */
@@ -163,12 +164,17 @@ body {
     background-color: #1e2a47;
 }
 
-/* Sidebar */
+/*
+ -------------------------------------------------------------------------------
+ Sidebar
+ -------------------------------------------------------------------------------
+ */
+
 .sidebar {
-    width: 250px;
+    width: 200px;
     background: #2f3b5c;
     color: white;
-    padding: 20px;
+    padding: 10px;
     position: fixed;
     height: 100%;
     top: 0;
@@ -194,15 +200,69 @@ body {
     border-radius: 5px;
 }
 
+/* Sidebar Adjustments */
+
+
+.sidebar h3 {
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    font-size: 14px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+.sidebar ul li:hover {
+    background: #1e2a47;
+    border-radius: 5px;
+}
+
+/**
+ -------------------------------------------------------------------------------
+ Contenu principal de la page
+ -------------------------------------------------------------------------------
+ */
+
 /* Main Content */
 .main-content {
-    margin-left: 270px;
-    padding: 100px 20px 20px;
+    position:absolute;
+    left: 240px;
+    top :100px;
+    text-align: center;
+    font-size: 14px;
 }
-    
 
+/**
+ -------------------------------------------------------------------------------
+ Filtres
+ -------------------------------------------------------------------------------
+ */
+.filtres{
+    margin-bottom: 50px;
+    text-align: left;
+    margin-left: 0; /* Pour éviter un décalage */
+    padding-left: 0;
+}
+
+/**
+ -------------------------------------------------------------------------------
+ Tableaux
+ -------------------------------------------------------------------------------
+ */
 /* Table */
 table {
+    left: 240px;
     width: 100%;
     border-collapse: collapse;
 }
@@ -212,11 +272,6 @@ table th, table td {
     padding: 10px;
     text-align: left;
 }
-
-table th {
-    background: #f0f0f0;
-}
-
 
 .menu span {
     margin-right: 20px;
@@ -272,32 +327,6 @@ table th {
     margin-left: 15px;
 }
 
-/* Sidebar Adjustments */
-
-
-.sidebar h3 {
-    font-size: 18px;
-    margin-bottom: 15px;
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar ul li {
-    padding: 10px;
-}
-
-.sidebar ul li a {
-    text-decoration: none;
-    color: white;
-}
-
-.sidebar ul li:hover {
-    background: #1e2a47;
-    border-radius: 5px;
-}
 
 /* Statistics */
 .stats-icons {

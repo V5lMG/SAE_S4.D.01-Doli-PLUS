@@ -32,53 +32,47 @@
         </div>
     </div>
 
+    <h3 class="titre_page">Historique des factures fournisseur</h3>
+
     <!-- MAIN CONTENT -->
     <main class="main-content">
         <section class="recent-invoices">
-            <h2>Les fournisseurs</h2>
-            <table>
+            <form class="filtres row">
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom_fournisseur">
+
+                <label for="tel">Numéro de téléphone :</label>
+                <input type="text" id="tel" name="tel_fournisseur">
+
+                <label for="adresse">Adresse :</label>
+                <input type="text" id="adresse" name="adresse_fournisseur">
+
+                <button type="submit"><i class="fa fa-search"></i></button>
+                <button><i class="fa fa-times"></i></button>
+            </form>
+            <!-- Tableau à afficher avec les factures du fournisseur rechercher-->
+            <!-- dans les filtres d'au-dessus -->
+            <table class="table-striped">
                 <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Numéro de téléphone</th>
-                    <th>Adresse</th>
-                    <th>Code Postal</th>
-                </tr>
+                    <tr>
+                        <th>Ref</th>
+                        <th>Ref.fournisseur</th>
+                        <th>Date facture</th>
+                        <th>Date échéance</th>
+                        <th>Tiers</th>
+                        <th>Code Postal</th>
+                        <th>Condition de règlement</th>
+                        <th>Mode de règlement </th>
+                        <th>Montant HT</th>
+                        <th>Auteur</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td colspan="4">Aucun</td>
-                </tr>
-                <tr>
-                    <td colspan="4">Aucun</td>
-                </tr>
-                <tr>
-                    <td colspan="4">Aucun</td>
-                </tr>
-                <tr>
-                    <td colspan="4">Aucun</td>
-                </tr>
-                <tr>
-                    <td colspan="4">Aucun</td>
-                </tr>
-                <tr>
-                    <td colspan="4">Aucun</td>
-                </tr>
-                <tr>
-                    <td colspan="4">Aucun</td>
-                </tr>
-                <tr>
-                    <td colspan="4">Aucun</td>
-                </tr>
-                <tr>
-                    <td colspan="4">Aucun</td>
-                </tr>
-                <tr>
-                    <td colspan="4">Aucun</td>
-                </tr>
-                <tr>
-                    <td colspan="4">Aucun</td>
-                </tr>
+                    <tr>
+                        <td colspan="10">
+                            Aucun fournisseur trouvé
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </section>
