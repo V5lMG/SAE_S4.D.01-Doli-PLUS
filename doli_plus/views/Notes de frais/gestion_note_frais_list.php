@@ -11,25 +11,8 @@
 </head>
 <body>
 
-    <!-- Barre latérale -->
-    <div class="sidebar">
-        <h3>Notes de frais</h3>
-        <ul>
-            <li>Liste</li>
-            <li><a href="gestion_note_frais_statistiques.html" >Statistiques</a></li>
-        </ul>
-        <div class="dropdown d-md-block ">
-            <button class="rounded dropdown-toggle custom-dropdown-toggle btnEnBas"
-                    type="button" id="menuDeroulantPage" data-bs-toggle="dropdown" aria-expanded="false">
-                G202443
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="menuDeroulantPage">
-                <!-- Accueil visible seulement sur écrans sm et moins -->
-                <li><a class="dropdown-item" href="#"><i class="fa fa-sign-out-alt"></i> D&eacute;connexion</a></li>
-                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-circle-question"></i> Besoin d'aide ? </a></li> <!-- Télécharge un fichier pdf avec la totalité des aides du site -->
-            </ul>
-        </div>
-    </div>
+    <!-- Barre latérale de la page  -->
+    <?php include '../vuErwan/sidebar.html'; ?>
 
     <!-- Contenu principal -->
     <div class="main-content">
