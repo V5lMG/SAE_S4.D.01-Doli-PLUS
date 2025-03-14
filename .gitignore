@@ -1,0 +1,7 @@
+doli_plus/lib
+/.idea
+
+composer.lock
+composer.phar
+
+
