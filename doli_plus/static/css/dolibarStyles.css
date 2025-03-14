@@ -42,6 +42,7 @@ body {
 	margin: 0 auto;
 }
 
+
 /* Login */
 .bodylogin
 {
@@ -167,6 +168,10 @@ div.login_block_other {
 	line-height: 25px;
 	height: 25px;
 }
+.tdinputlogin span.fa {
+	margin-right: 8px; /* Ajoute un espace entre l'icône et l'input */
+}
+
 .userimg.atoplogin img.userphoto, .userimgatoplogin img.userphoto {		/* size for user photo in login bar */
 	width: 30px;
 	height: 30px;

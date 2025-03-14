@@ -44,11 +44,11 @@
                         <br><div class="center" style="margin-top: 5px;"><a class="alogin" href="/G2024-43-SAE/htdocs/user/passwordforgotten.php">Mot de passe oubli&eacute; ?</a></div>
                     </div>
                 </form>
+                <!-- SubTitle with version -->
+                <div class="login_table_title center" title="DoliPlus 1.0.0">
+                    <a class="login_table_title" href="https://www.dolibarr.org" target="_blank" rel="noopener noreferrer external">DoliPlus 1.0.0</a>
+                </div>
             </div>
-        </div>
-        <!-- SubTitle with version -->
-        <div class="login_table_title center" title="DoliPlus 1.0.0">
-            <a class="login_table_title" href="https://www.dolibarr.org" target="_blank" rel="noopener noreferrer external">DoliPlus 1.0.0</a>
         </div>
     </body>
 </html>
