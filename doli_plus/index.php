@@ -12,5 +12,5 @@ $router = new Router(new DefaultComponentFactory()) ;
 try {
     $router->route(PREFIX_TO_RELATIVE_PATH);
 } catch (\yasmf\NoControllerAvailableForNameException $e) {
-    echo "LA PAGE EST DOWN !!!";
+    echo "La page n'est plus fonctionnelle ! Veuillez réessayer plus tard.";
 }

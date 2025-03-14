@@ -19,53 +19,40 @@
 
 namespace application;
 
+use services\AuthService;
 use controllers\HomeController;
-use services\UsersService;
+use controllers\DisconnectController;
 use yasmf\ComponentFactory;
 use yasmf\NoControllerAvailableForNameException;
 use yasmf\NoServiceAvailableForNameException;
 
-/**
- *  The controller factory
- */
 class DefaultComponentFactory implements ComponentFactory
 {
-    private ?UsersService $usersService = null;
+    private ?AuthService $authService = null;
 
-    /**
-     * @param string $controller_name the name of the controller to instanciate
-     * @return mixed the controller
-     * @throws NoControllerAvailableForNameException when controller is not found
-     */
-    public function buildControllerByName(string $controller_name): mixed {
+    public function buildControllerByName(string $controller_name): mixed
+    {
         return match ($controller_name) {
             "Home" => $this->buildHomeController(),
+            "Disconnect" => $this->buildDisconnectController(),
             default => throw new NoControllerAvailableForNameException($controller_name)
         };
     }
 
-    /**
-     * @param string $service_name the name of the service
-     * @return mixed the created service
-     * @throws NoServiceAvailableForNameException when service is not found
-     */
     public function buildServiceByName(string $service_name): mixed
     {
         return match($service_name) {
-            "Users" => $this->buildUsersService(),
+            "Auth" => $this->buildAuthService(),
             default => throw new NoServiceAvailableForNameException($service_name)
         };
     }
 
-    /**
-     * @return UsersService
-     */
-    private function buildUsersService(): UsersService
+    private function buildAuthService(): AuthService
     {
-        if ($this->usersService == null) {
-            $this->usersService = new UsersService();
+        if ($this->authService == null) {
+            $this->authService = new AuthService();
         }
-        return $this->usersService;
+        return $this->authService;
     }
 
     /**
@@ -73,6 +60,14 @@ class DefaultComponentFactory implements ComponentFactory
      */
     private function buildHomeController(): HomeController
     {
-        return new HomeController($this->buildUsersService());
+        return new HomeController($this->buildAuthService());
+    }
+
+    /**
+     * @return DisconnectController
+     */
+    private function buildDisconnectController(): DisconnectController
+    {
+        return new DisconnectController($this->buildAuthService());
     }
 }
