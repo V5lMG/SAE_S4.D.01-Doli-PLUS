@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU Affero General Public License
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 namespace application;
 
 use services\AuthService;
-use controllers\HomeController;
+use controllers\AuthController;
 use controllers\DisconnectController;
 use yasmf\ComponentFactory;
 use yasmf\NoControllerAvailableForNameException;
@@ -56,11 +55,11 @@ class DefaultComponentFactory implements ComponentFactory
     }
 
     /**
-     * @return HomeController
+     * @return AuthController
      */
-    private function buildHomeController(): HomeController
+    private function buildHomeController(): AuthController
     {
-        return new HomeController($this->buildAuthService());
+        return new AuthController($this->buildAuthService());
     }
 
     /**

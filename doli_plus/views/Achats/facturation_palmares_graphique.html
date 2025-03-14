@@ -11,26 +11,8 @@
 </head>
 <body>
 
-<!-- Barre latérale -->
-<div class="sidebar">
-    <h3>📂 Factures fournisseur</h3>
-    <ul>
-        <li><a href="facturation_liste.html">Liste</a></li> <!-- Fournisseurs et détails factures -->
-        <li><a href="facturation_palmares_liste.html">Palmarès - Liste</a></li>
-        <li><a href="facturation_palmares_graphique.html">Palmarès - Graphique</a></li>
-    </ul>
-    <div class="dropdown d-none d-md-block">
-        <button class="rounded dropdown-toggle custom-dropdown-toggle btnEnBas"
-                type="button" id="menuDeroulantPage" data-bs-toggle="dropdown" aria-expanded="false">
-            G202443
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="menuDeroulantPage">
-            <!-- Accueil visible seulement sur écrans sm et moins -->
-            <li><a class="dropdown-item" href="#"><i class="fa fa-sign-out-alt"></i> D&eacute;connexion</a></li>
-            <li><a class="dropdown-item" href="#"><i class="fa-regular fa-circle-question"></i> Besoin d'aide </a></li> <!-- Télécharge un fichier pdf avec la totalité des aides du site -->
-        </ul>
-    </div>
-</div>
+<!-- Barre latérale de la page  -->
+<?php include '../vuErwan/sidebar.php'; ?>
 
 <!-- Contenu principal -->
 <style>
