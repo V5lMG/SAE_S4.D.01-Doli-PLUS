@@ -1,7 +1,7 @@
 {
-  "name": "yasmf/yasmf_hello_world",
+  "name": "doli_plus/yasmf_doli_plus",
   "config": {
-    "vendor-dir": "hello_world/lib/vendor"
+    "vendor-dir": "doli_plus/lib/vendor"
   },
   "repositories": [
     {
