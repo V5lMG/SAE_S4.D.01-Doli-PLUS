@@ -170,63 +170,87 @@ body {
  -------------------------------------------------------------------------------
  */
 
-.sidebar {
-    width: 200px;
-    background: #2f3b5c;
-    color: white;
-    padding: 10px;
-    position: fixed;
-    height: 100%;
-    top: 0;
-    left: 0;
-}
+/*.sidebar {*/
+/*    width: 200px;*/
+/*    background: #2f3b5c;*/
+/*    color: white;*/
+/*    padding: 20px;*/
+/*    position: fixed;*/
+/*    height: 100%;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    font-family: Arial, sans-serif;*/
+/*}*/
 
-.sidebar h2 {
-    font-size: 18px;
-    margin-bottom: 15px;
-}
+/*.sidebar h3 {*/
+/*    font-size: 15px;*/
+/*    margin-bottom: 15px;*/
+/*}*/
 
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-}
+/*.sidebar ul {*/
+/*    list-style: none;*/
+/*    padding: 0;*/
+/*}*/
 
-.sidebar ul li {
-    padding: 10px;
-    cursor: pointer;
-}
-.sidebar ul li:hover {
-    background: #1e2a47;
-    border-radius: 5px;
-}
+/*.sidebar ul li {*/
+/*    padding: 10px;*/
+/*    font-size: 14px;*/
+/*    cursor: pointer;*/
+/*}*/
 
-/* Sidebar Adjustments */
+/*.sidebar ul li a {*/
+/*    text-decoration: none;*/
+/*    color: white;*/
+/*}*/
 
+/*.sidebar ul li:hover {*/
+/*    background: #128a6f; !* Couleur lors du passage de la souris *!*/
+/*    border-radius: 5px;*/
+/*}*/
 
-.sidebar h3 {
-    font-size: 15px;
-    margin-bottom: 15px;
-}
+/*.user-dropdown {*/
+/*    position: relative;*/
+/*    margin-top: auto;*/
+/*    margin-bottom: 30px;*/
+/*}*/
 
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-}
+/*.dropdown-btn {*/
+/*    background-color: #28324c;*/
+/*    color: white;*/
+/*    padding: 10px;*/
+/*    width: 100%;*/
+/*    border: none;*/
+/*    cursor: pointer;*/
+/*    text-align: left;*/
+/*}*/
 
-.sidebar ul li {
-    padding: 10px;
-    font-size: 14px;
-}
+/*.dropdown-content {*/
+/*    display: none;*/
+/*    position: absolute;*/
+/*    background-color: #2f3b5b;*/
+/*    bottom: 50%;*/
+/*    left: 0;*/
+/*    min-width: 100%;*/
+/*    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);*/
+/*    z-index: 1;*/
+/*}*/
 
-.sidebar ul li a {
-    text-decoration: none;
-    color: white;
-}
+/*.dropdown-content a {*/
+/*    color: white;*/
+/*    padding: 5px 5px;*/
+/*    text-decoration: none;*/
+/*    display: block;*/
+/*}*/
 
-.sidebar ul li:hover {
-    background: #1e2a47;
-    border-radius: 5px;
-}
+/*.dropdown-content a:hover {*/
+/*    background-color: #128a6f; !* Couleur lors du passage de la souris *!*/
+/*}*/
+
+/*.user-dropdown:hover .dropdown-content {*/
+/*    display: block;*/
+/*}*/
 
 /**
  -------------------------------------------------------------------------------
@@ -237,7 +261,7 @@ body {
 /* Main Content */
 .main-content {
     position:absolute;
-    left: 240px;
+    left: 250px;
     top :100px;
     text-align: center;
     font-size: 14px;

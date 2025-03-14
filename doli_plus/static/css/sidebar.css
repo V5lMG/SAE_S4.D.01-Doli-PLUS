@@ -1,0 +1,87 @@
+/*
+ -------------------------------------------------------------------------------
+ Sidebar
+ -------------------------------------------------------------------------------
+ */
+
+.sidebar {
+    width: 200px;
+    background: #2f3b5c;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+}
+
+.sidebar h3 {
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+.sidebar ul li:hover {
+    background: #128a6f; /* Couleur lors du passage de la souris */
+    border-radius: 5px;
+}
+
+.user-dropdown {
+    position: relative;
+    margin-top: auto;
+    margin-bottom: 30px;
+}
+
+.dropdown-btn {
+    background-color: #28324c;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #2f3b5b;
+    bottom: 50%;
+    left: 0;
+    min-width: 100%;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 5px 5px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #128a6f; /* Couleur lors du passage de la souris */
+}
+
+.user-dropdown:hover .dropdown-content {
+    display: block;
+}
