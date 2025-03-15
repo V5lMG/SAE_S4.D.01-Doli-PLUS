@@ -32,8 +32,8 @@ class DefaultComponentFactory implements ComponentFactory
     public function buildControllerByName(string $controller_name): mixed
     {
         return match ($controller_name) {
-            "Home" => $this->buildHomeController(),
-            "Disconnect" => $this->buildDisconnectController(),
+            "Home" => $this->buildAuthController(),
+//            "Disconnect" => $this->buildDisconnectController(),
             default => throw new NoControllerAvailableForNameException($controller_name)
         };
     }
@@ -57,16 +57,16 @@ class DefaultComponentFactory implements ComponentFactory
     /**
      * @return AuthController
      */
-    private function buildHomeController(): AuthController
+    private function buildAuthController(): AuthController
     {
         return new AuthController($this->buildAuthService());
     }
 
-    /**
-     * @return DisconnectController
-     */
-    private function buildDisconnectController(): DisconnectController
-    {
-        return new DisconnectController($this->buildAuthService());
-    }
+//    /**
+//     * @return DisconnectController
+//     */
+//    private function buildDisconnectController(): DisconnectController
+//    {
+//        return new DisconnectController($this->buildAuthService());
+//    }
 }
