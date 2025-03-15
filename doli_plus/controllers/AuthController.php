@@ -25,13 +25,30 @@ class AuthController
         return new View("views/auth_page");
     }
 
-//    /**
-//     * Action pour afficher la page de connexion
-//     *
-//     * @return View la vue de connexion
-//     */
-//    public function login(): View
-//    {
-//        return new View("views/gestion_note_frais_list");
-//    }
+    /**
+     * Action pour afficher la page de menu
+     *
+     * @return View la vue de menu
+     */
+    public function login(): View
+    {
+        if (isset($_POST['username']) && isset($_POST['password'])) {
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+
+            // Vérifier l'identifiant via l'API Dolibarr
+            if ($this->authService->authentification($username, $password)) {
+                // Authentification réussie → Redirection vers menu.php
+                header("Location: index.php?controller=Menu&action=index");
+                exit();
+            } else {
+                // Authentification échouée → Retour à la page de connexion avec un message d'erreur
+                $view = new View("views/auth_page");
+                $view->setVar("error", "Identifiant ou mot de passe incorrect.");
+                return $view;
+            }
+        }
+
+        return new View("views/auth_page");
+    }
 }

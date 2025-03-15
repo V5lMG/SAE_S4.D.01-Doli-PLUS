@@ -18,34 +18,78 @@
  */
 namespace application;
 
-use services\AuthService;
+use controllers\ConfigController;
+use controllers\FournisseursController;
+use controllers\MenuController;
+use controllers\NoteFraisController;
 use controllers\AuthController;
-use controllers\DisconnectController;
+
+use services\AuthService;
+use services\NoteFraisService;
+
 use yasmf\ComponentFactory;
 use yasmf\NoControllerAvailableForNameException;
 use yasmf\NoServiceAvailableForNameException;
 
+/**
+ * DefaultComponentFactory est une classe responsable de la création dynamique des
+ * contrôleurs et des services nécessaires à l'application.
+ * Elle implémente l'interface ComponentFactory pour suivre une architecture basée sur
+ * l'injection de dépendances, où les composants (contrôleurs, services) sont créés
+ * en fonction de leur nom et sont utilisés par le reste de l'application.
+ *
+ * Cette classe utilise un modèle de conception Singleton pour certains services,
+ * afin de ne créer qu'une seule instance pour chaque service.
+ */
 class DefaultComponentFactory implements ComponentFactory
 {
     private ?AuthService $authService = null;
 
+    /**
+     * Méthode permettant de créer un contrôleur en fonction de son nom.
+     *
+     * @param string $controller_name Le nom du contrôleur à instancier.
+     * @return mixed Le contrôleur correspondant au nom fourni.
+     * @throws NoControllerAvailableForNameException Si aucun contrôleur n'est trouvé pour le nom donné.
+     */
     public function buildControllerByName(string $controller_name): mixed
     {
         return match ($controller_name) {
             "Home" => $this->buildAuthController(),
-//            "Disconnect" => $this->buildDisconnectController(),
+            "Menu" => new MenuController(),
+            "NoteFrais" => new NoteFraisController(),
+            "Fournisseurs" => new FournisseursController(),
+            "Config" => new ConfigController(),
             default => throw new NoControllerAvailableForNameException($controller_name)
         };
     }
 
+    /**
+     * Méthode permettant de créer un service en fonction de son nom.
+     *
+     * @param string $service_name Le nom du service à instancier.
+     * @return mixed Le service correspondant au nom fourni.
+     * @throws NoServiceAvailableForNameException Si aucun service n'est trouvé pour le nom donné.
+     */
     public function buildServiceByName(string $service_name): mixed
     {
         return match($service_name) {
             "Auth" => $this->buildAuthService(),
+            "NoteFrais" => new NoteFraisService(),
             default => throw new NoServiceAvailableForNameException($service_name)
         };
     }
 
+
+    // -------------------------------------------------------------------------------------------------//
+
+
+    /**
+     * Méthode privée pour instancier le service d'authentification.
+     * Le service est créé une seule fois et réutilisé (Singleton).
+     *
+     * @return AuthService Le service d'authentification.
+     */
     private function buildAuthService(): AuthService
     {
         if ($this->authService == null) {
@@ -55,18 +99,12 @@ class DefaultComponentFactory implements ComponentFactory
     }
 
     /**
-     * @return AuthController
+     * Méthode privée pour créer le contrôleur d'authentification.
+     *
+     * @return AuthController Le contrôleur d'authentification.
      */
     private function buildAuthController(): AuthController
     {
         return new AuthController($this->buildAuthService());
     }
-
-//    /**
-//     * @return DisconnectController
-//     */
-//    private function buildDisconnectController(): DisconnectController
-//    {
-//        return new DisconnectController($this->buildAuthService());
-//    }
 }

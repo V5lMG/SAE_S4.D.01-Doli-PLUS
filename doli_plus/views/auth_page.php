@@ -11,8 +11,8 @@
     <!-- Ligne de fond -->
     <div class="login_center center" style="background-size: cover; background: linear-gradient(4deg, rgb(60,70,100) 52%, rgb(240,240,240) 52.1%) no-repeat fixed center center;">
         <div class="login_vertical_align">
-            <form id="login" name="login" method="post" action="doli_plus.php">
-                <div class="login_table">
+            <form id="login" name="login" method="post" action="index.php?controller=Home&action=login">
+            <div class="login_table">
                     <div id="login_line1">
                         <div id="login_left">
                             <img alt="" src="static/img/doliplus_logo.png" id="img_logo" />
@@ -40,9 +40,13 @@
                         </div>
                         <br>
                     </div>
-                    <br><div class="center" style="margin-top: 5px;"><a class="alogin" href="/G2024-43-SAE/htdocs/user/passwordforgotten.php">Mot de passe oubli&eacute; ?</a></div>
+                    <br><div class="center" style="margin-top: 5px;"><a class="alogin" href="http://dolibarr.iut-rodez.fr/G2024-43-SAE/htdocs/user/passwordforgotten.php" target="_blank">Mot de passe oubli&eacute; ?</a></div>
                 </div>
             </form>
+            <!-- Message d'erreur de connexion -->
+            <?php if (isset($error)) { ?>
+                <p style="color: red;"><?php echo $error; ?></p>
+            <?php } ?>
             <!-- SubTitle with version -->
             <div class="login_table_title center" title="DoliPlus 1.0.0">
                 <a class="login_table_title" href="https://www.dolibarr.org" target="_blank" rel="noopener noreferrer external">DoliPlus 1.0.0</a>

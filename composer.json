@@ -21,6 +21,7 @@
     "phpunit/phpunit": "10.0.19",
     "phpstan/phpstan": "1.10.67",
     "ext-pdo": "*",
-    "yasmf/yasmf": ">=1.6.2"
+    "yasmf/yasmf": ">=1.6.2",
+    "ext-curl": "*"
   }
 }
