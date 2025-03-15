@@ -1,10 +1,15 @@
 body {
-    font-size: 0.92em;
     line-height: 1.4;
     font-family: arial, tahoma, verdana, helvetica, serif;
     margin: 0;
     font-weight: 400;
     direction: ltr;
+    background: #f0f0f0;
+    display: table;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    font-size: 1em;
 }
 
 .button {
@@ -44,23 +49,13 @@ body {
 
 
 /* Login */
-.bodylogin
-{
-    background: #f0f0f0;
-    display: table;
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    font-size: 1em;
-}
 .login_center {
     display: table-cell;
     vertical-align: middle;
     width: 100%;
 }
 .login_vertical_align {
-    padding: 10px;
-    padding-bottom: 80px;
+    padding: 10px 10px 80px;
 }
 form#login {
     padding-bottom: 30px;
@@ -83,7 +78,6 @@ form#login {
     background-color: #FFFFFF;
     -webkit-box-shadow: 0 2px 23px 2px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(60,60,60,0.15);
     box-shadow: 0 2px 23px 2px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(60,60,60,0.15);
-
     border-radius: 5px;
 }
 .login_table input#username, .login_table input#password {
@@ -177,8 +171,7 @@ div.login_block_other {
     height: 30px;
     border-radius: 50%;
     background-size: contain;
-    border: 1px solid;
-    border-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .fa-user:before {
