@@ -39,11 +39,18 @@ class AuthService
     }
 
     /**
-     * Vérifie si l'utilisateur est authentifié et retourne le token
+     * Déconnecte l'utilisateur en supprimant son token de session
      */
-    public function getToken(): ?string
+    public function deconnexion(): void
     {
-        // Retourne le token s'il existe dans la session
-        return $_SESSION['api_token'] ?? null;
+        // Démarrer la session si elle n'est pas encore démarrée
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Supprimer le token de session
+        unset($_SESSION['api_token']);
+
+        // session_destroy(); // Détruire complètement la session SI NECESAIRE
     }
 }

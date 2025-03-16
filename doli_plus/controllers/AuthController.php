@@ -38,8 +38,8 @@ class AuthController
 
             // Vérifier l'identifiant via l'API Dolibarr
             if ($this->authService->authentification($username, $password)) {
-                // Authentification réussie → Redirection vers menu.php
-                header("Location: index.php?controller=Menu&action=index");
+                // Authentification réussie → Redirection vers accueil.php
+                header("Location: index.php?controller=Accueil&action=index");
                 exit();
             } else {
                 // Authentification échouée → Retour à la page de connexion avec un message d'erreur
@@ -50,5 +50,19 @@ class AuthController
         }
 
         return new View("views/auth_page");
+    }
+
+    /**
+     * Gère la déconnexion de l'utilisateur
+     *
+     * @return void Redirige toujours vers la page de connexion
+     */
+    public function logout(): void
+    {
+        $this->authService->deconnexion();
+
+        // Redirige vers la page de connexion
+        header("Location: index.php?controller=Home&action=index");
+        exit();
     }
 }

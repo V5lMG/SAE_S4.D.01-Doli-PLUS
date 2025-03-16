@@ -3,10 +3,10 @@ namespace controllers;
 
 use yasmf\View;
 
-class MenuController
+class AccueilController
 {
     public function index(): View
     {
-        return new View("views/menu");
+        return new View("views/accueil");
     }
 }

@@ -20,7 +20,7 @@ namespace application;
 
 use controllers\ConfigController;
 use controllers\FournisseursController;
-use controllers\MenuController;
+use controllers\AccueilController;
 use controllers\NoteFraisController;
 use controllers\AuthController;
 
@@ -56,7 +56,9 @@ class DefaultComponentFactory implements ComponentFactory
     {
         return match ($controller_name) {
             "Home" => $this->buildAuthController(),
-            "Menu" => new MenuController(),
+            "Accueil" => new AccueilController(),
+
+
             "NoteFrais" => new NoteFraisController(),
             "Fournisseurs" => new FournisseursController(),
             "Config" => new ConfigController(),

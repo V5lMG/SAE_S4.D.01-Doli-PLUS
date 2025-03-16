@@ -5,17 +5,14 @@
  */
 
 .sidebar {
-    width: 200px;
-    background: #2f3b5c;
+    background: rgb(38, 60, 92);
     color: white;
-    padding: 20px;
     position: fixed;
-    height: 100%;
-    top: 0;
-    left: 0;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     font-family: Arial, sans-serif;
+    width: 30vh;
 }
 
 .sidebar h3 {
@@ -40,7 +37,7 @@
 }
 
 .sidebar ul li:hover {
-    background: #128a6f; /* Couleur lors du passage de la souris */
+    background: #608CC3; /* Couleur lors du passage de la souris */
     border-radius: 5px;
 }
 
@@ -79,9 +76,18 @@
 }
 
 .dropdown-content a:hover {
-    background-color: #128a6f; /* Couleur lors du passage de la souris */
+    background-color: #608CC3; /* Couleur lors du passage de la souris */
 }
 
 .user-dropdown:hover .dropdown-content {
     display: block;
+}
+
+/* ligne de séparation */
+.responsive-line {
+    width: 98%;
+    height: 2px;
+    background-color: #fdfdfd;
+    border: none;
+    margin: 10px auto;
 }
