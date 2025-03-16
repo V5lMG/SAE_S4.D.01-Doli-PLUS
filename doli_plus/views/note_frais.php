@@ -28,11 +28,7 @@
 
                 <!-- Utilisateur -->
                 <div class="col-md-2">
-                    <select class="form-select" name="utilisateur">
-                        <option value="">Utilisateur</option>
-                        <option value="User1">User1</option>
-                        <option value="User2">User2</option>
-                    </select>
+                        <input type="text" class="form-control" name="ref" placeholder="Utilisateur">
                 </div>
 
                 <!-- Date début -->
