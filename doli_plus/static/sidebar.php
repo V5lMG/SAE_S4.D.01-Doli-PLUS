@@ -17,7 +17,7 @@
         <button class="btn w-100 bouton-action mt-2" onclick="window.location.href='#'">Configuration URL</button>
     </div>
 
-    <!-- Dropdown utilisateur -->
+    <!-- Dropdown utilisateur --> <!-- TODO changer pour fonctionner avec le survole -->
     <div class="dropdown">
         <?php if (isset($error)) : ?>
             <p class="error-message"><?php echo htmlspecialchars($error); ?></p>

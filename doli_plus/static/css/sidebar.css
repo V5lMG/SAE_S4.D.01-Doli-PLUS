@@ -18,13 +18,12 @@
     padding: 10px;
     width: 100%;
 }
+.bouton-action:hover {
+    background-color: #608CC3;
+}
 
 .liste-bouton {
     height: 90vh;
-}
-
-.bouton-action:hover {
-    background-color: #608CC3;
 }
 
 /* Ligne de séparation */
@@ -36,6 +35,7 @@
     margin: 10px auto;
 }
 
+/* Contenair centré à côté de la navbar */
 @media (min-width: 768px) {
     .contenu-principal {
         margin-left: 16.67%; /* Décalage du contenu principal de deux colonnes Bootstrap */

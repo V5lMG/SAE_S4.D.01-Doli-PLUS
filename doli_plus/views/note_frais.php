@@ -5,7 +5,7 @@
         <title>Notes de Frais</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-        <!--<link rel="stylesheet" href="static/css/styles.css"> A rajouté si on modifie le styles.css -->
+        <link rel="stylesheet" href="static/css/styles.css">
         <link rel="stylesheet" href="static/css/sidebar.css">
 
     </head>
@@ -66,7 +66,7 @@
                     </form>
 
                     <!-- Tableau des notes de frais -->
-                    <div class="offset-md-1 mt-4">
+                    <div class="offset-md-1 mt-4 table-responsive">
                         <table class="table table-bordered">
                             <thead class="table-light">
                             <tr>
