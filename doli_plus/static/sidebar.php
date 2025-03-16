@@ -2,6 +2,7 @@
 
     <h3 class="mt-4">Notes de frais</h3>
     <ul>
+        <!-- faire en sorte que l'on clique sur les boutons et non sur le texte -->
         <!-- TODO faire avec yasmf-->
         <li><a href="index.php?controller=NoteFrais&action=index">Liste</a></li>
         <li><a href="#">Statistiques</a></li>
