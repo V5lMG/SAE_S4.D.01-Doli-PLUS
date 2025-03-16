@@ -10,7 +10,7 @@
     </head>
     <body>
         <!-- Barre latérale de la page -->
-        <div>
+        <div class="d-none d-md-block">
             <?php include 'static/sidebar.php'; ?>
         </div>
 

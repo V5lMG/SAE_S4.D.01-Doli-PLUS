@@ -8,10 +8,10 @@
         <link rel="stylesheet" href="static/css/sidebar.css">
     </head>
     <body>
-
-        <!-- Barre latérale de la page  -->
-        <?php include 'static/sidebar.php'; ?>
-
+        <div>
+            <!-- Barre latérale de la page  -->
+            <?php include 'static/sidebar.php'; ?>
+        </div>
         <!-- Contenu principal -->
         <div class="main-content">
             <section class="recent-expenses">

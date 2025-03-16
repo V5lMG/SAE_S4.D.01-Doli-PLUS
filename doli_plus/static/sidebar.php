@@ -3,7 +3,7 @@
     <h3 class="mt-4">Notes de frais</h3>
     <ul>
         <!-- TODO faire avec yasmf-->
-        <li><a href="#">Liste</a></li>
+        <li><a href="index.php?controller=NoteFrais&action=index">Liste</a></li>
         <li><a href="#">Statistiques</a></li>
     </ul>
 
