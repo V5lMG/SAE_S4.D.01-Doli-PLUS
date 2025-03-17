@@ -7,89 +7,88 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="static/css/styles.css">
         <link rel="stylesheet" href="static/css/sidebar.css">
-
     </head>
     <body>
-    <div class="container-fluid">
-        <div class="row">
+        <div class="container-fluid">
+            <div class="row">
 
-            <!-- Importer la sidebar et son css -->
-            <?php include 'static/sidebar.php'; ?>
+                <!-- Importer la sidebar et son css -->
+                <?php include 'static/sidebar.php'; ?>
 
-            <!-- Contenu principal -->
-            <div class="contenu-principal">
-                <div class="container-fluid mt-3">
-                    <!-- Barre de filtres -->
-                    <form method="GET" action="notes_frais.php" class="bg-light p-3 rounded shadow-sm">
-                        <div class="row g-3">
+                <!-- Contenu principal -->
+                <div class="contenu-principal">
+                    <div class="container-fluid mt-3">
+                        <!-- Barre de filtres -->
+                        <form method="GET" action="liste_note_frais.php" class="bg-light p-3 rounded shadow-sm">
+                            <div class="row g-3">
 
-                            <!-- Référence -->
-                            <div class="col-md-2 offset-md-1">
-                                <input type="text" class="form-control" name="ref" placeholder="Référence">
+                                <!-- Référence -->
+                                <div class="col-md-2 offset-md-1">
+                                    <input type="text" class="form-control" name="ref" placeholder="Référence">
+                                </div>
+
+                                <!-- Utilisateur -->
+                                <div class="col-md-2">
+                                    <input type="text" class="form-control" name="ref" placeholder="Utilisateur">
+                                </div>
+
+                                <!-- Date début -->
+                                <div class="col-md-2">
+                                    <input type="date" class="form-control" name="date_debut">
+                                </div>
+
+                                <!-- Date fin -->
+                                <div class="col-md-2">
+                                    <input type="date" class="form-control" name="date_fin">
+                                </div>
+
+                                <!-- État -->
+                                <div class="col-md-2">
+                                    <select class="form-select" name="etat">
+                                        <option value="">État</option>
+                                        <option value="Validé">Validé</option>
+                                        <option value="En attente">En attente</option>
+                                        <option value="Rejeté">Rejeté</option>
+                                    </select>
+                                </div>
+
+                                <!-- Boutons -->
+                                <div class="col-md-1 d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary" title="Rechercher">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                    <button type="reset" class="btn btn-outline-secondary" title="Réinitialiser">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
                             </div>
+                        </form>
 
-                            <!-- Utilisateur -->
-                            <div class="col-md-2">
-                                <input type="text" class="form-control" name="ref" placeholder="Utilisateur">
-                            </div>
-
-                            <!-- Date début -->
-                            <div class="col-md-2">
-                                <input type="date" class="form-control" name="date_debut">
-                            </div>
-
-                            <!-- Date fin -->
-                            <div class="col-md-2">
-                                <input type="date" class="form-control" name="date_fin">
-                            </div>
-
-                            <!-- État -->
-                            <div class="col-md-2">
-                                <select class="form-select" name="etat">
-                                    <option value="">État</option>
-                                    <option value="Validé">Validé</option>
-                                    <option value="En attente">En attente</option>
-                                    <option value="Rejeté">Rejeté</option>
-                                </select>
-                            </div>
-
-                            <!-- Boutons -->
-                            <div class="col-md-1 d-flex gap-2">
-                                <button type="submit" class="btn btn-primary" title="Rechercher">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                                <button type="reset" class="btn btn-outline-secondary" title="Réinitialiser">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </div>
+                        <!-- Tableau des notes de frais -->
+                        <div class="mt-4 table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Réf.</th>
+                                    <th>Utilisateur</th>
+                                    <th>Date début</th>
+                                    <th>Date fin</th>
+                                    <th>Montant HT</th>
+                                    <th>Montant TVA</th>
+                                    <th>Montant TTC</th>
+                                    <th>État</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted">Aucun enregistrement trouvé</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                    </form>
-
-                    <!-- Tableau des notes de frais -->
-                    <div class="offset-md-1 mt-4 table-responsive">
-                        <table class="table table-bordered">
-                            <thead class="table-light">
-                            <tr>
-                                <th>Réf.</th>
-                                <th>Utilisateur</th>
-                                <th>Date début</th>
-                                <th>Date fin</th>
-                                <th>Montant HT</th>
-                                <th>Montant TVA</th>
-                                <th>Montant TTC</th>
-                                <th>État</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td colspan="8" class="text-center text-muted">Aucun enregistrement trouvé</td>
-                            </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </body>
 </html>
