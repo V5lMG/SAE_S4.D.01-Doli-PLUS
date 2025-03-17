@@ -2,19 +2,19 @@
 <div class="sidebar col-12 col-md-2 p-3 d-none d-md-block">
     <div class="liste-bouton">
         <h4 class="mt-3">Notes de frais</h4>
-        <button class="btn w-100 bouton-action mt-2 mb-1" onclick="window.location.href='index.php?controller=NoteFrais&action=index'">Liste</button>
-        <button class="btn w-100 bouton-action mb-1" onclick="window.location.href='#'">Statistiques</button>
+        <button class="btn w-100 bouton-action mt-2 mb-1" onclick="window.location.href='index.php?controller=NoteFrais&action=indexListe'">Liste</button>
+        <button class="btn w-100 bouton-action mb-1" onclick="window.location.href='index.php?controller=NoteFrais&action=indexStatistique'">Statistiques</button>
 
         <hr class="responsive-line">
 
         <h4 class="mt-1">Achats</h4>
-        <button class="btn w-100 bouton-action mt-2 mb-1" onclick="window.location.href='#'">Historique des factures</button>
-        <button class="btn w-100 bouton-action mb-1" onclick="window.location.href='#'">Palmarès</button>
+        <button class="btn w-100 bouton-action mt-2 mb-1" onclick="window.location.href='index.php?controller=Fournisseur&action=indexAchat'">Historique des factures</button>
+        <button class="btn w-100 bouton-action mb-1" onclick="window.location.href='index.php?controller=Fournisseur&action=indexPalmares'">Palmarès</button>
 
         <hr class="responsive-line">
 
         <h4 class="mt-1">URL</h4>
-        <button class="btn w-100 bouton-action mt-2" onclick="window.location.href='#'">Configuration URL</button>
+        <button class="btn w-100 bouton-action mt-2" onclick="window.location.href='index.php?controller=Url&action=index'">Configuration URL</button>
     </div>
 
     <!-- Dropdown utilisateur --> <!-- TODO changer pour fonctionner avec le survole -->
@@ -43,21 +43,21 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <button class="btn" onclick="window.location.href='index.php?controller=NoteFrais&action=index'"><span class="text-white">Liste</span></button>
+                    <button class="btn" onclick="window.location.href='index.php?controller=NoteFrais&action=indexListe'"><span class="text-white">Liste</span></button>
                 </li>
                 <li class="nav-item">
-                    <button class="btn" onclick="window.location.href='#'"><span class="text-white">Statistiques</span></button> <!-- TODO yasmf -->
-                </li>
-                <hr class="responsive-line">
-                <li class="nav-item">
-                    <button class="btn" onclick="window.location.href='#'"><span class="text-white">Historique des factures</span></button> <!-- TODO yasmf -->
-                </li>
-                <li class="nav-item">
-                    <button class="btn" onclick="window.location.href='#'"><span class="text-white">Palmarès</span></button> <!-- TODO yasmf -->
+                    <button class="btn" onclick="window.location.href='index.php?controller=NoteFrais&action=indexStatistique'"><span class="text-white">Statistiques</span></button>
                 </li>
                 <hr class="responsive-line">
                 <li class="nav-item">
-                    <button class="btn" onclick="window.location.href='#'"><span class="text-white">Configuration URL</span></button> <!-- TODO yasmf -->
+                    <button class="btn" onclick="window.location.href='index.php?controller=Fournisseur&action=indexAchat'"><span class="text-white">Historique des factures</span></button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn" onclick="window.location.href='index.php?controller=Fournisseur&action=indexPalmares'"><span class="text-white">Palmarès</span></button>
+                </li>
+                <hr class="responsive-line">
+                <li class="nav-item">
+                    <button class="btn" onclick="window.location.href='#'"><span class="text-white">Configuration URL</span></button>
                 </li>
             </ul>
         </div>

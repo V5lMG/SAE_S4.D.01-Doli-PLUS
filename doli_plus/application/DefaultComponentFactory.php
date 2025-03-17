@@ -18,14 +18,17 @@
  */
 namespace application;
 
-use controllers\ConfigController;
-use controllers\FournisseursController;
+use controllers\palmaresFournisseurController;
+use controllers\UrlController;
+use controllers\FournisseurController;
 use controllers\AccueilController;
 use controllers\NoteFraisController;
 use controllers\AuthController;
+use controllers\StatistiqueNoteFraisController;
 
 use services\AuthService;
 use services\NoteFraisService;
+use services\UrlService;
 
 use yasmf\ComponentFactory;
 use yasmf\NoControllerAvailableForNameException;
@@ -60,8 +63,9 @@ class DefaultComponentFactory implements ComponentFactory
 
 
             "NoteFrais" => new NoteFraisController(),
-            "Fournisseurs" => new FournisseursController(),
-            "Config" => new ConfigController(),
+            "Fournisseur" => new FournisseurController(),
+
+            "Url" => new UrlController(),
             default => throw new NoControllerAvailableForNameException($controller_name)
         };
     }

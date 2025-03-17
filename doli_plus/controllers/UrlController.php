@@ -3,9 +3,9 @@ namespace controllers;
 
 use yasmf\View;
 
-class ConfigController
+class UrlController
 {
-    public function url(): View
+    public function index(): View
     {
         return new View("views/config_url");
     }

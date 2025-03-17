@@ -5,8 +5,13 @@ use yasmf\View;
 
 class NoteFraisController
 {
-    public function index(): View
+    public function indexListe(): View
     {
-        return new View("views/note_frais");
+        return new View("views/liste_note_frais");
+    }
+
+    public function indexStatistique(): View
+    {
+        return new View("views/statistique_note_frais");
     }
 }

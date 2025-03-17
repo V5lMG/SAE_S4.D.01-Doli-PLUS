@@ -18,7 +18,7 @@
 
             <!-- Contenu principal -->
             <div class="contenu-principal">
-                <div class="container-fluid">
+                <div class="container-fluid mt-3">
                     <!-- Barre de filtres -->
                     <form method="GET" action="notes_frais.php" class="bg-light p-3 rounded shadow-sm">
                         <div class="row g-3">
