@@ -48,6 +48,8 @@ class DefaultComponentFactory implements ComponentFactory
 {
     private ?AuthService $authService = null;
 
+    private ?NoteFraisService $noteFraisService = null;
+
     /**
      * Méthode permettant de créer un contrôleur en fonction de son nom.
      *
@@ -62,7 +64,7 @@ class DefaultComponentFactory implements ComponentFactory
             "Accueil" => new AccueilController(),
 
 
-            "NoteFrais" => new NoteFraisController(),
+            "NoteFrais" => $this->buildNoteFraisController(),
             "Fournisseur" => new FournisseurController(),
 
             "Url" => new UrlController(),
@@ -81,14 +83,12 @@ class DefaultComponentFactory implements ComponentFactory
     {
         return match($service_name) {
             "Auth" => $this->buildAuthService(),
-            "NoteFrais" => new NoteFraisService(),
+            "NoteFrais" => $this->buildNoteFraisService(),
             default => throw new NoServiceAvailableForNameException($service_name)
         };
     }
 
-
-    // -------------------------------------------------------------------------------------------------//
-
+    // ---------------------------------------------Authentification----------------------------------------------------//
 
     /**
      * Méthode privée pour instancier le service d'authentification.
@@ -112,5 +112,31 @@ class DefaultComponentFactory implements ComponentFactory
     private function buildAuthController(): AuthController
     {
         return new AuthController($this->buildAuthService());
+    }
+
+    // ---------------------------------------------Note de Frais----------------------------------------------------//
+
+    /**
+     * Méthode privée pour instancier le service d'authentification.
+     * Le service est créé une seule fois et réutilisé (Singleton).
+     *
+     * @return NoteFraisService Le service de la gestion des notes de frais.
+     */
+    private function buildNoteFraisService(): NoteFraisService
+    {
+        if ($this->noteFraisService == null) {
+            $this->noteFraisService = new NoteFraisService();
+        }
+        return $this->noteFraisService;
+    }
+
+    /**
+     * Méthode privée pour créer le contrôleur d'authentification.
+     *
+     * @return AuthController Le contrôleur d'authentification.
+     */
+    private function buildNoteFraisController(): NoteFraisController
+    {
+        return new NoteFraisController($this->buildNoteFraisService());
     }
 }
