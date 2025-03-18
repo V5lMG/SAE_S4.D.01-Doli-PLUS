@@ -3,6 +3,7 @@
     <div class="liste-bouton">
         <h4 class="mt-3">Notes de frais</h4>
         <button class="btn w-100 bouton-action mt-2 mb-1" onclick="window.location.href='index.php?controller=NoteFrais&action=indexListe'">Liste</button>
+        <button class="btn w-100 bouton-action mt-2 mb-1" onclick="window.location.href='index.php?controller=NoteFrais&action=indexListeBis'">ListeBis</button>
         <button class="btn w-100 bouton-action mb-1" onclick="window.location.href='index.php?controller=NoteFrais&action=indexStatistique'">Statistiques</button>
 
         <hr class="responsive-line">
