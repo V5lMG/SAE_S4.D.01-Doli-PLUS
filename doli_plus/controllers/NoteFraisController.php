@@ -34,7 +34,7 @@ class NoteFraisController
 
         // Attribution du résultat de la requête à la variable de la vue
         $view = new View("views/liste_note_frais");
-        $view->setVar('noteFrais', $listNoteFrais);
+        $view->setVar('listeNoteFrais', $listNoteFrais);
         return $view;
     }
 

@@ -10,6 +10,7 @@ class NoteFraisService
      */
     public function recupererListeComplete(): array
     {
+        session_start();
         // Vérifier si un token API est disponible
         if (!isset($_SESSION['api_token'])) {
             return [];
@@ -17,6 +18,7 @@ class NoteFraisService
 
         // Initialiser cURL
         $requeteCurl = curl_init($this->apiUrl);
+        curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPHEADER, [
@@ -31,11 +33,9 @@ class NoteFraisService
 
         // Vérifier si la requête a réussi (HTTP 200)
         if ($httpCode === 200) {
-            var_dump("Requête fonctionnelle");
             return json_decode($response, true) ?? [];
         }
 
-        var_dump("Requête non fonctionnelle");
         return []; // Retourner un tableau vide en cas d'échec
     }
 }

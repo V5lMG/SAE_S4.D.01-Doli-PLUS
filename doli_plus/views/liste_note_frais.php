@@ -1,10 +1,9 @@
 <?php
 session_start();
 
-require_once "services/NoteFraisService.php";
-
-// Récupérer toutes les notes de frais
-// $notesFrais;
+//require_once "services/NoteFraisService.php";
+$listeNoteFrais;
+var_dump($listeNoteFrais);
 ?>
 
 <!DOCTYPE html>
