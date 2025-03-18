@@ -27,18 +27,18 @@ class NoteFraisController
 
     public function indexListe(): View
     {
-        $listNoteFrais = [];
+        $listeNoteFrais = [];
 
         // Récupération de la liste des notes de frais complète
-        $listNoteFrais = $this->noteFraisService->recupererListeComplete();
+        $listeNoteFrais = $this->noteFraisService->recupererListeComplete();
 
         // Attribution du résultat de la requête à la variable de la vue
         $view = new View("views/liste_note_frais");
-        $view->setVar('listeNoteFrais', $listNoteFrais);
+        $view->setVar('listeNoteFrais', $listeNoteFrais);
         return $view;
     }
 
-    public function statistique(): View
+    public function indexStatistique(): View
     {
         return new View("views/statistique_note_frais");
     }

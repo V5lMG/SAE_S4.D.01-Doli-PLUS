@@ -10,6 +10,11 @@ class AuthService
      */
     public function authentification(string $username, string $password): bool
     {
+        // Démarrer la session si elle n'est pas encore démarrée
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         // Construire l'URL de l'API Dolibarr pour l'authentification avec les identifiants
         $url = $this->apiUrl . "?login=" . urlencode($username) . "&password=" . urlencode($password);
 
