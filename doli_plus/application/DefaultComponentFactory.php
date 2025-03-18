@@ -63,6 +63,7 @@ class DefaultComponentFactory implements ComponentFactory
 
 
             "NoteFrais" => new NoteFraisController(),
+            "NoteFraisBis" => new NoteFraisController(),
             "Fournisseur" => new FournisseurController(),
 
             "Url" => new UrlController(),

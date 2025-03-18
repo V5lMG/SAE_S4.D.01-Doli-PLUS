@@ -2,3 +2,7 @@ body {
     height: 100vh;
     font-family: arial, tahoma, verdana, helvetica, serif;
 }
+
+.bouton-recherche {
+    margin-top: 40px;
+}
