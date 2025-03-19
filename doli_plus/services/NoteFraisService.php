@@ -47,11 +47,6 @@ class NoteFraisService
                 $date_debut = date('d/m/Y', $note['date_debut']);
                 $date_fin = date('d/m/Y', $note['date_fin']);
 
-                // Montants totaux
-                $montant_ht_total = array_sum(array_column($data,'total_ht'));
-                $montant_tva_total = array_sum(array_column($data, 'total_tva'));
-                $montant_ttc_total = array_sum(array_column($data, 'total_ttc'));
-
                 $lignesTableau = [];
 
                 // Formater chaque ligne
@@ -62,6 +57,11 @@ class NoteFraisService
                     $value_unit_ttc = $line['value_unit'] / (1 + ($tva/100));
                     $montant_ht = $line['total_ht'] ?? 0.0;
                     $montant_ttc = $line['total_ttc'] ?? 0.0;
+
+                    // Mettre à jour les totaux globaux
+                    $total_ht_global += $montant_ht;
+                    $total_tva_global += $montant_ttc - $montant_ht; // TVA = TTC - HT
+                    $total_ttc_global += $montant_ttc;
 
                     // Formater le type_fees_code pour l'affichage
                     $type = match($line['type_fees_code'] ?? '') {
@@ -94,18 +94,24 @@ class NoteFraisService
                     'user_author_infos' => $note['user_author_infos'] ?? 'Inconnu',
                     'date_debut' => $date_debut,
                     'date_fin' => $date_fin,
-                    'total_ht' => $montant_ht_total,
-                    'montant_tva' => $montant_tva_total,
-                    'montant_ttc' => $montant_ttc_total,
-                    'etat' => $note['status'] === '1' ? 'Validé' : 'Non validé', // Utilisation du statut de la note
-                    'deja_regle' => $note['paid'] === '1' ? 'Oui' : 'Non', // Indication du paiement
-                    'montant_reclame' => (float)($note['total_ttc'] ?? 0.0),
-                    'reste_a_payer' => (float)($note['total_ttc'] ?? 0.0) - (float)($note['total_paid'] ?? 0.0),
-                    'lines' => $lignesTableau, // Contient toutes les lignes formatées
+                    'montant_ht' => $note['total_ht'] ?? 0,
+                    'montant_tva' => $note['total_tva'] ?? 0,
+                    'montant_ttc' => $note['total_ttc'] ?? 0,
+                    'etat' => $note['status'] === '1' ? 'Validé' : 'Non validé', // TODO
+                    'deja_regle' => $note['paid'] === '1' ? 'Oui' : 'Non', // TODO
+                    'montant_reclame' => $note['total_ttc'] ?? 0.0,
+                    'reste_a_payer' => $note['total_ttc'] ?? 0.0 - $note['total_paid'] ?? 0.0,
+                    'lines' => $lignesTableau   // Contient toutes les lignes formatées
                 ];
             }
 
-            var_dump($data);
+            // Ajouter les totaux globaux
+            $totaux = [
+                'montant_ht_total' => number_format($total_ht_global, 2, ',', ' ') . ' €',
+                'montant_tva_total' => number_format($total_tva_global, 2, ',', ' ') . ' €',
+                'montant_ttc_total' => number_format($total_ttc_global, 2, ',', ' ') . ' €'
+            ];
+
             // Retourner le tableau des notes de frais formatées
             return $noteFraisFormatees;
         }

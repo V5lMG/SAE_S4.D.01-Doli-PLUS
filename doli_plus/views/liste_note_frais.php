@@ -110,10 +110,11 @@ if (session_status() === PHP_SESSION_NONE) {
                         </tr>
                         </thead>
                         <tbody>
-                        <?php if (!empty($listeNoteFrais)): ?>
+                        <?php
+                            if (!empty($listeNoteFrais)): ?>
                             <?php foreach ($listeNoteFrais as $note): ?>
                                 <tr data-bs-toggle="collapse" data-bs-target="#collapse-<?= $note['ref'] ?>" aria-expanded="false" aria-controls="collapse-<?= $note['ref'] ?>">
-                                    <td><?= htmlspecialchars($note['ref']) ?></td>
+                                    <td><span class="fw-bold text-decoration-underline text-primary"><?= htmlspecialchars($note['ref']) ?></span></td>
                                     <td><?= htmlspecialchars($note['user_author_infos']) ?></td>
                                     <td><?= htmlspecialchars($note['date_debut']) ?></td>
                                     <td><?= htmlspecialchars($note['date_fin']) ?></td>
@@ -159,6 +160,9 @@ if (session_status() === PHP_SESSION_NONE) {
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
+                            <td colspan="11" class="your-class">Montant HT total : <?= htmlspecialchars("tezt")?>
+                                                              ; Montant TVA total : <?= htmlspecialchars("tezt")?>
+                                                              ; Montant TTC total : <?= htmlspecialchars("tezt")?> </td>
                         <?php else: ?>
                             <tr>
                                 <td colspan="11" class="text-center text-muted">Aucune note de frais trouvée</td>
