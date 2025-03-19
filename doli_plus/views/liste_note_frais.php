@@ -133,7 +133,6 @@ if (session_status() === PHP_SESSION_NONE) {
                                             <tr>
                                                 <th>Date</th>
                                                 <th>Type</th>
-                                                <th>Description</th>
                                                 <th>TVA</th>
                                                 <th>Prix unitaire HT</th>
                                                 <th>Prix unitaire TTC</th>
@@ -146,14 +145,13 @@ if (session_status() === PHP_SESSION_NONE) {
                                             <?php foreach ($note['lines'] as $line): ?>
                                                 <tr>
                                                     <td><?= htmlspecialchars($line['date']) ?></td> <!-- Date -->
-                                                    <td><?= htmlspecialchars($line['type_fees_code']) ?></td> <!-- Type -->
-                                                    <td><?= htmlspecialchars($line['type_fees_libelle']) ?></td> <!-- Description -->
+                                                    <td><?= htmlspecialchars($line['type']) ?></td> <!-- Type -->
                                                     <td><?= htmlspecialchars($line['tva']) ?></td> <!-- Tva -->
                                                     <td><?= htmlspecialchars($line['prix_unitaire_ht']) ?></td> <!-- Prix Unitaire HT -->
                                                     <td><?= htmlspecialchars($line['prix_unitaire_ttc']) ?></td> <!-- Prix unitaire TTC -->
-                                                    <td><?= htmlspecialchars($line['qty']) ?></td> <!-- Quantité -->
-                                                    <td><?= htmlspecialchars($line['total_ht']) ?></td> <!-- Montant HT (calculé avec quantité) -->
-                                                    <td><?= htmlspecialchars($line['total_ttc']) ?></td> <!-- Montant TTC (calculé avec quantité) -->
+                                                    <td><?= htmlspecialchars($line['quantite']) ?></td> <!-- Quantité -->
+                                                    <td><?= htmlspecialchars($line['montant_ht']) ?></td> <!-- Montant HT (calculé avec quantité) -->
+                                                    <td><?= htmlspecialchars($line['montant_ttc']) ?></td> <!-- Montant TTC (calculé avec quantité) -->
                                                 </tr>
                                             <?php endforeach; ?>
                                             </tbody>

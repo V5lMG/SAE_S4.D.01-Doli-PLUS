@@ -48,9 +48,9 @@ class NoteFraisService
                 $date_fin = date('d/m/Y', $note['date_fin']);
 
                 // Montants totaux
-                $montant_ht_total = array_sum(array_column($data, 'montant_ht'));
-                $montant_tva_total = array_sum(array_column($data, 'montant_tva'));
-                $montant_ttc_total = array_sum(array_column($data, 'montant_ttc'));
+                $montant_ht_total = array_sum(array_column($data,'total_ht'));
+                $montant_tva_total = array_sum(array_column($data, 'total_tva'));
+                $montant_ttc_total = array_sum(array_column($data, 'total_ttc'));
 
                 $lignesTableau = [];
 
@@ -65,17 +65,17 @@ class NoteFraisService
 
                     // Formater le type_fees_code pour l'affichage
                     $type = match($line['type_fees_code'] ?? '') {
-                        'EX_KME' => 'Frais Kilométrique',
+                        'EX_KME' => 'Frais kilométriques',
                         'TF_LUNCH' => 'Repas',
                         'TF_TRIP' => 'Transport',
                         default => 'Autre',
                     };
 
+
                     // Créer la ligne sous forme de tableau pour cette ligne spécifique
                     $ligneTableau = [
-                        'date' => $line['date'],
+                        'date' => date("d/m/Y", strtotime($line['date'])),
                         'type' => $type,
-                        'description' => $line['type_fees_libelle'] ?? 'Non spécifiée',
                         'tva' => number_format($tva, 2, ',') . ' %',  // Formater la TVA
                         'prix_unitaire_ht' => number_format($value_unit, 2, ',', ' ') . ' €',  // Formater le prix unitaire HT
                         'prix_unitaire_ttc' => number_format($value_unit_ttc, 2, ',', ' ') . ' €',  // Formater le prix unitaire TTC
@@ -94,7 +94,7 @@ class NoteFraisService
                     'user_author_infos' => $note['user_author_infos'] ?? 'Inconnu',
                     'date_debut' => $date_debut,
                     'date_fin' => $date_fin,
-                    'montant_ht' => $montant_ht_total,
+                    'total_ht' => $montant_ht_total,
                     'montant_tva' => $montant_tva_total,
                     'montant_ttc' => $montant_ttc_total,
                     'etat' => $note['status'] === '1' ? 'Validé' : 'Non validé', // Utilisation du statut de la note
