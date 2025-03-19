@@ -123,6 +123,7 @@ class NoteFraisService
                 ];
             }
 
+            var_dump($data);
             // Retourner le tableau des notes de frais formatées
             return $noteFraisFormatees;
         }
@@ -142,11 +143,15 @@ class NoteFraisService
             return [];
         }
 
-        // Construire l'URL avec le filtre pour "Flute Jean"
-        $url = $this->apiUrl . "?search=Flute%20Jean";  // Filtrage sur "Flute Jean"
+        // Timestamp Unix pour 18/02/2025
+        $timestampDateDebut = 1741647600; // Date: 18/02/2025
+        $timestampDateFin = 1741734000;   // Date: 19/02/2025
+
+        // Construire l'URL avec le filtre sur la date de début
+        $url = $this->apiUrl . "?sortfield=t.rowid&user_ids=1&sqlfilters=(t.date_debut>='" . $timestampDateDebut . "')%20and%20(t.date_debut<'". $timestampDateFin . "')";
 
         // Initialiser cURL pour récupérer les notes de frais filtrées
-        $requeteCurl = curl_init($url);  // URL avec le paramètre de recherche
+        $requeteCurl = curl_init($url);  // URL avec les paramètres de recherche, tri, et filtre
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPHEADER, [
@@ -157,6 +162,7 @@ class NoteFraisService
         // Exécuter la requête
         $response = curl_exec($requeteCurl);
         $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
+        var_dump($response.$httpCode);
         curl_close($requeteCurl);
 
         // Vérifier si la requête a réussi (HTTP 200)
@@ -168,8 +174,8 @@ class NoteFraisService
             // Formater la réponse pour extraire les informations pertinentes
             foreach ($data as $note) {
                 // Formater les dates
-                $date_debut = date('d/m/Y', $note['date_debut']);
-                $date_fin = date('d/m/Y', $note['date_fin']);
+                $date_debut = date('d/m/Y', strtotime($note['date_debut']));
+                $date_fin = date('d/m/Y', strtotime($note['date_fin']));
 
                 // Ajouter les informations formatées dans le tableau final pour la note de frais
                 $noteFraisFormatees[] = [
