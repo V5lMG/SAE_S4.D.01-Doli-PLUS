@@ -160,16 +160,52 @@ if (session_status() === PHP_SESSION_NONE) {
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
-                            <td colspan="11" class="your-class">Montant HT total : <?= htmlspecialchars("tezt")?>
-                                                              ; Montant TVA total : <?= htmlspecialchars("tezt")?>
-                                                              ; Montant TTC total : <?= htmlspecialchars("tezt")?> </td>
-                        <?php else: ?>
+                                <td colspan="11" class="text-center">
+                                    <span class="m-2">Nombre de notes de frais : <?= htmlspecialchars("TODO")?></span>
+                                    <span class="m-2">Montant HT total : <?= htmlspecialchars($note["totaux"]["montant_ht_total"])?></span>
+                                    <span class="m-2">Montant TVA total : <?= htmlspecialchars($note["totaux"]["montant_tva_total"])?></span>
+                                    <span>Montant TTC total : <?= htmlspecialchars($note["totaux"]["montant_ttc_total"])?></span>
+                                </td>
+                            <?php else: ?>
                             <tr>
                                 <td colspan="11" class="text-center text-muted">Aucune note de frais trouvée</td>
                             </tr>
                         <?php endif; ?>
                         </tbody>
                     </table>
+
+                    <?php
+                    $noteFraisFluteJean = (new services\NoteFraisService())->recupererNotesDeFraisFluteJean();
+                    ?>
+
+                    <!-- Affichage des notes de frais de Flute Jean -->
+                    <?php if (!empty($noteFraisFluteJean)): ?>
+                        <h4>Notes de frais de Flute Jean</h4>
+                        <div class="mt-4 table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Réf.</th>
+                                    <th>Employé</th>
+                                    <th>Date début</th>
+                                    <th>Date fin</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach ($noteFraisFluteJean as $note): ?>
+                                    <tr>
+                                        <td><span class="fw-bold text-decoration-underline text-primary"><?= htmlspecialchars($note['ref']) ?></span></td>
+                                        <td><?= htmlspecialchars($note['user_author_infos']) ?></td>
+                                        <td><?= htmlspecialchars($note['date_debut']) ?></td>
+                                        <td><?= htmlspecialchars($note['date_fin']) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php else: ?>
+                        <div class="text-muted text-center mt-3">Aucune note de frais trouvée pour Flute Jean</div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
