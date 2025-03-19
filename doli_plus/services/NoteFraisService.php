@@ -123,7 +123,6 @@ class NoteFraisService
                 ];
             }
 
-            var_dump($data);
             // Retourner le tableau des notes de frais formatées
             return $noteFraisFormatees;
         }
