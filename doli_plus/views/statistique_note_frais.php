@@ -1,10 +1,9 @@
 <?php
 session_start();
 
-$listeStat;
-
 // Convertir le tableau en JSON
-$listeStatJson = json_encode($listeStat);
+$listeStatJson = json_encode($listStat);
+var_dump($listStat);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -21,7 +20,7 @@ $listeStatJson = json_encode($listeStat);
     <div class="container-fluid">
         <div class="row">
 
-            <!-- Importer la sidebar et son css -->
+            <!-- Importer la sidebar -->
             <?php include 'static/sidebar.php'; ?>
 
             <!-- Contenu principal -->
@@ -38,8 +37,47 @@ $listeStatJson = json_encode($listeStat);
                     <!-- Information de la page -->
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-6 text-center">
+                            <!-- Histogramme Courbe ou Baton -->
+                            <div class="p-4 border rounded shadow-sm bg-light">
+                                <h3 class="mb-4">Diagramme de comparaison</h3>
+                                <div class="row justify-content-center mt-3">
+                                    <div class="col-md-4">
+                                        <input type="date" class="form-control" name="date_debut">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="date" class="form-control" name="date_fin">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 text-center">
+                            <!-- Diagramme Circulaire -->
                             <div class="p-4 border rounded shadow-sm bg-light">
                                 <canvas id="diagramme_sectoriel" width="400" height="200"></canvas>
+                                <form action="index.php?controller=NoteFrais&action=indexStatistique" method="post">
+                                    <div class="row justify-content-center mt-3">
+                                        <div class="col-md-4 col-12">
+                                            <label for="date_debut">Date début :</label>
+                                            <input type="date" class="form-control" id="date_debut" name="date_debut" value="<?= isset($date_debut) ? htmlspecialchars($date_debut) : '' ?>">
+                                        </div>
+                                        <div class="col-md-4 col-12">
+                                            <label for="date_fin">Date fin :</label>
+                                            <input type="date" class="form-control" id="date_fin" name="date_fin" value="<?= isset($date_fin) ? htmlspecialchars($date_fin) : '' ?>">
+                                        </div>
+                                        <div class="col-md-1 col-12">
+                                            <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
+                                            <button type="submit" class="btn btn-primary" title="Rechercher">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-1 col-12">
+                                            <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
+                                            <button type="reset" class="btn btn-outline-secondary" title="Réinitialiser" onclick="window.location.href='index.php?controller=NoteFrais&action=indexStatistique&reinitialiser=<?php echo $reintialiser = true ?>'">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -53,9 +91,9 @@ $listeStatJson = json_encode($listeStat);
             const listeStat = <?php echo $listeStatJson; ?>;
 
             // Extraction des labels (types de frais) et des données associées
-            const labels = Object.keys(listeStat); // ["ExpLabelKm", "Lunch", "Transportation", "Other"]
-            const montantTotal = labels.map(type => listeStat[type]['MontantTotalType']); // [45, 117.05, 85.53, 40]
-            const quantite = labels.map(type => listeStat[type]['Quantite']); // [2, 2, 2, 1]
+            const labels = Object.keys(listeStat); // ["Frais kilométriques", "Repas", "Transport", "Autre"]
+            const montantTotal = labels.map(type => listeStat[type]['MontantTotalType']);
+            const quantite = labels.map(type => listeStat[type]['Quantite']);
 
             // Configuration des données pour le diagramme
             const data = {
@@ -70,41 +108,27 @@ $listeStatJson = json_encode($listeStat);
                             'rgba(255, 206, 86, 0.6)',
                             'rgba(75, 192, 192, 0.6)'
                         ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)'
-                        ],
-                        borderWidth: 1
                     },
                     {
                         label: 'Nombre de notes de frais',
-                        data: quantite,        // Nombre de notes de frais
+                        data: quantite,        // Nombre de notes de frais par type
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.6)',
                             'rgba(54, 162, 235, 0.6)',
                             'rgba(255, 206, 86, 0.6)',
                             'rgba(75, 192, 192, 0.6)'
                         ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)'
-                        ],
-                        borderWidth: 1
                     }
                 ]
             };
 
             // Configuration des options du diagramme
             const options = {
-                responsive: true,
+                responsive: false,
                 maintainAspectRatio: false, // Ajuste le diagramme selon le conteneur
                 plugins: {
                     legend: {
-                        position: 'right', // Place la légende en bas
+                        position: 'right',  // Place la légende à droite
                     }
                 }
             };
