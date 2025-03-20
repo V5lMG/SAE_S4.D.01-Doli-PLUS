@@ -1,6 +1,6 @@
 ```
-$ docker-compose up -d 
-$ docker-compose exec doli_plus_app composer update
+$ docker compose up -d 
+$ docker compose exec doli_plus composer update
 ```
 
 
