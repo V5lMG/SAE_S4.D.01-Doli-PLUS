@@ -3,7 +3,7 @@ namespace services;
 
 class NoteFraisService
 {
-        private string $apiUrl = "http://dolibarr.iut-rodez.fr/G2024-43-SAE/htdocs/api/index.php/expensereports";
+    private string $apiUrl = "http://dolibarr.iut-rodez.fr/G2024-43-SAE/htdocs/api/index.php/expensereports";
 
     /**
      * Récupère toutes les notes de frais pour la liste des notes de frais
@@ -198,7 +198,10 @@ class NoteFraisService
      */
     public function recupererStat(string $date_debut = null, string $date_fin = null): array
     {
-        session_start();
+        // Démarrer la session si elle n'est pas encore démarrée
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         // Vérifier si un token API est disponible
         if (!isset($_SESSION['api_token'])) {
             return [];
@@ -221,8 +224,8 @@ class NoteFraisService
         $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
         curl_close($requeteCurl);
 
-        var_dump(json_decode($response, true) ?? []);
-        var_dump($httpCode);
+        //var_dump(json_decode($response, true) ?? []);
+        //var_dump($httpCode);
 
         // Vérifier si la requête a réussi (HTTP 200)
         if ($httpCode === 200) {

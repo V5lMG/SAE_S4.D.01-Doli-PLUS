@@ -1,9 +1,13 @@
 <?php
-session_start();
+// Démarrer la session si elle n'est pas encore démarrée
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Convertir le tableau en JSON
 $listeStatJson = json_encode($listStat);
 var_dump($listStat);
+var_dump($listeStatJson);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -14,78 +18,78 @@ var_dump($listStat);
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="static/css/styles.css">
         <link rel="stylesheet" href="static/css/sidebar.css">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     </head>
     <body>
-    <div class="container-fluid">
-        <div class="row">
+        <div class="container-fluid">
+            <div class="row">
 
-            <!-- Importer la sidebar -->
-            <?php include 'static/sidebar.php'; ?>
+                <!-- Importer la sidebar -->
+                <?php include 'static/sidebar.php'; ?>
 
-            <!-- Contenu principal -->
-            <div class="contenu-principal">
-                <div class="container-fluid">
+                <!-- Contenu principal -->
+                <div class="contenu-principal">
+                    <div class="container-fluid">
 
-                    <!-- Contenu principal a modifier -->
-                    <!-- Titre -->
-                    <div class="row">
-                        <div class="col text-center">
-                            <h1 class="mb-4">Statistiques</h1>
+                        <!-- Contenu principal a modifier -->
+                        <!-- Titre -->
+                        <div class="row">
+                            <div class="col text-center">
+                                <h1 class="mb-4">Statistiques</h1>
+                            </div>
                         </div>
-                    </div>
-                    <!-- Information de la page -->
-                    <div class="row justify-content-center">
-                        <div class="col-12 col-md-6 text-center">
-                            <!-- Histogramme Courbe ou Baton -->
-                            <div class="p-4 border rounded shadow-sm bg-light">
-                                <h3 class="mb-4">Diagramme de comparaison</h3>
-                                <div class="row justify-content-center mt-3">
-                                    <div class="col-md-4">
-                                        <input type="date" class="form-control" name="date_debut">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="date" class="form-control" name="date_fin">
+                        <!-- Information de la page -->
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-md-6 text-center">
+                                <!-- Histogramme Courbe ou Baton -->
+                                <div class="p-4 border rounded shadow-sm bg-light">
+                                    <h3 class="mb-4">Diagramme de comparaison</h3>
+                                    <div class="row justify-content-center mt-3">
+                                        <div class="col-md-4">
+                                            <input type="date" class="form-control" name="date_debut">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="date" class="form-control" name="date_fin">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 col-md-6 text-center">
-                            <!-- Diagramme Circulaire -->
-                            <div class="p-4 border rounded shadow-sm bg-light">
-                                <canvas id="diagramme_sectoriel" width="400" height="200"></canvas>
-                                <form action="index.php?controller=NoteFrais&action=indexStatistique" method="post">
-                                    <div class="row justify-content-center mt-3">
-                                        <div class="col-md-4 col-12">
-                                            <label for="date_debut">Date début :</label>
-                                            <input type="date" class="form-control" id="date_debut" name="date_debut" value="<?= isset($date_debut) ? htmlspecialchars($date_debut) : '' ?>">
+                            <div class="col-12 col-md-6 text-center">
+                                <!-- Diagramme Circulaire -->
+                                <div class="p-4 border rounded shadow-sm bg-light">
+                                    <canvas id="diagramme_sectoriel" width="400" height="200"></canvas>
+                                    <form method="GET" action="index.php?controller=NoteFrais&action=indexStatistique">
+                                        <div class="row justify-content-center mt-3">
+                                            <div class="col-md-4 col-12">
+                                                <label for="date_debut">Date début :</label>
+                                                <input type="date" class="form-control" id="date_debut" name="date_debut" value="<?= isset($date_debut) ? htmlspecialchars($date_debut) : '' ?>">
+                                            </div>
+                                            <div class="col-md-4 col-12">
+                                                <label for="date_fin">Date fin :</label>
+                                                <input type="date" class="form-control" id="date_fin" name="date_fin" value="<?= isset($date_fin) ? htmlspecialchars($date_fin) : '' ?>">
+                                            </div>
+                                            <div class="col-md-1 col-12">
+                                                <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
+                                                <button type="submit" class="btn btn-primary" title="Rechercher">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-1 col-12">
+                                                <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
+                                                <button type="reset" class="btn btn-outline-secondary" title="Réinitialiser" onclick="window.location.href='index.php?controller=NoteFrais&action=indexStatistique&reinitialiser=<?php echo $reintialiser = true ?>'">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="col-md-4 col-12">
-                                            <label for="date_fin">Date fin :</label>
-                                            <input type="date" class="form-control" id="date_fin" name="date_fin" value="<?= isset($date_fin) ? htmlspecialchars($date_fin) : '' ?>">
-                                        </div>
-                                        <div class="col-md-1 col-12">
-                                            <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
-                                            <button type="submit" class="btn btn-primary" title="Rechercher">
-                                                <i class="fa fa-search"></i>
-                                            </button>
-                                        </div>
-                                        <div class="col-md-1 col-12">
-                                            <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
-                                            <button type="reset" class="btn btn-outline-secondary" title="Réinitialiser" onclick="window.location.href='index.php?controller=NoteFrais&action=indexStatistique&reinitialiser=<?php echo $reintialiser = true ?>'">
-                                                <i class="fa fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
                         </div>
+                        <!-- Jusqu'ici -->
                     </div>
-                    <!-- Jusqu'ici -->
                 </div>
             </div>
         </div>
-    </div>
         <script>
             // Récupération des données PHP encodées en JSON
             const listeStat = <?php echo $listeStatJson; ?>;

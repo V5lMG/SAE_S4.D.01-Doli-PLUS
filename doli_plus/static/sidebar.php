@@ -1,7 +1,3 @@
-<?php
-session_start();
-?>
-
 <!-- Barre latérale de la page (affichée sur grands écrans) -->
 <div class="sidebar col-12 col-md-2 p-3 d-none d-md-block">
     <div class="liste-bouton">

@@ -45,8 +45,8 @@ class NoteFraisController
         $date_debut = HttpHelper::getParam('date_debut');
         $date_fin = HttpHelper::getParam('date_fin');
         $reinitialiser = HttpHelper::getParam('reinitialiser');
-
-        var_dump($date_debut, $date_fin, $reinitialiser);
+//
+//        var_dump($date_debut, $date_fin, $reinitialiser);
         if ($reinitialiser == 1) {
             $date_debut = null;
             $date_fin   = null;
@@ -56,7 +56,7 @@ class NoteFraisController
         // Récupération de la liste des notes de frais complète
         $listStat = $this->noteFraisService->recupererStat($date_debut, $date_fin);
 
-        var_dump($listStat);
+        //var_dump($listStat);
         // Attribution du résultat de la requête à la variable de la vue
         $view = new View("views/statistique_note_frais");
         $view->setVar('listStat' , $listStat);
