@@ -209,8 +209,18 @@ class NoteFraisService
 
     /**
      * Récupère les notes de frais pour les statistiques
+     * @param string|null $date_debut
+     * @param string|null $date_fin
+     * @param bool $parMois
+     * @param bool $parJour
+     * @param string $moisChoisi
+     * @return array
      */
-    public function recupererStat(string $date_debut = null, string $date_fin = null): array
+    public function recupererStat(string  $date_debut = null,
+                                  string  $date_fin = null,
+                                  bool $parMois,
+                                  bool $parJour,
+                                  string  $moisChoisi): array
     {
         // Démarrer la session si elle n'est pas encore démarrée
         if (session_status() === PHP_SESSION_NONE) {
@@ -245,6 +255,15 @@ class NoteFraisService
             $sectoriel = [];
             $histogramme = array_fill(1, 12, ['MontantTotal' => 0, 'NombreNotes' => 0]);
 
+            // Si parJour est sélectionné, initialiser un tableau pour les jours du mois
+            $histogrammeJour = [];
+            if ($parJour && $moisChoisi) {
+                // Initialiser l'histogramme pour chaque jour du mois choisi (1 à 31)
+                for ($i = 1; $i <= 31; $i++) {
+                    $histogrammeJour[$i] = ['MontantTotal' => 0, 'NombreNotes' => 0];
+                }
+            }
+
             // Parcourir toutes les notes de frais récupérées
             foreach ($notesFrais as $note) {
                 foreach ($note['lines'] as $line) {
@@ -268,7 +287,7 @@ class NoteFraisService
 
                     $montant = $line['total_ttc'] ?? 0;
                     $mois = (int)date('n', strtotime($date_frais));
-
+                    $jour = (int)date('j', strtotime($date_frais));
 
                     // Vérifier si ce type de note de frais est déjà enregistré
                     if (!isset($sectoriel[$type])) {
@@ -284,8 +303,18 @@ class NoteFraisService
                     // Incrémenter le nombre de notes de frais de ce type
                     $sectoriel[$type]['Quantite']++;
 
-                    $histogramme[$mois]['MontantTotal'] += $montant;
-                    $histogramme[$mois]['NombreNotes']++;
+                    // Calculer pour l'histogramme
+                    if ($parMois) {
+                        // Remplir l'histogramme par mois (1 à 12)
+                        $histogramme[$mois]['MontantTotal'] += $montant;
+                        $histogramme[$mois]['NombreNotes']++;
+                    }
+
+                    if ($parJour && $mois === (int)$moisChoisi) {
+                        // Remplir l'histogramme pour les jours du mois sélectionné
+                        $histogrammeJour[$jour]['MontantTotal'] += $montant;
+                        $histogrammeJour[$jour]['NombreNotes']++;
+                    }
                 }
             }
             // Retourner un tableau contenant deux sous-tableaux, selon le graphique à afficher
@@ -307,7 +336,12 @@ class NoteFraisService
                 $data['MontantTotal'] = number_format($data['MontantTotal'], 2, '.', '');
             }
 
-            return ['sectoriel' => $sectoriel, 'histogramme' => $histogrammeAvecMois];
+            // Formater les montants dans l'histogrammeJour
+            foreach ($histogrammeJour as $jour => &$data) {
+                $data['MontantTotal'] = number_format($data['MontantTotal'], 2, '.', '');
+            }
+
+            return ['sectoriel' => $sectoriel, 'histogramme' => $parMois ? $histogrammeAvecMois : $histogrammeJour];
         }
 
         return []; // Retourner un tableau vide en cas d'échec

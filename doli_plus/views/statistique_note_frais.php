@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+
 // Convertir le tableau en JSON
 $listeStatSectorielle = json_encode($listStat['sectoriel'], true);
 $listeStatHistogramme = json_encode($listStat['histogramme'], true);
@@ -47,11 +48,12 @@ $listeStatHistogramme = json_encode($listStat['histogramme'], true);
                                         <div class="row justify-content-center mt-3">
                                             <div class="col-md-3">
                                                 <label for="parMois">Par mois (sur un an)</label>
-                                                <input type="radio" class="form-check-input" name="filtreJour" id="parMois" checked>
+                                                <!-- j'ai toucher aux deux isset -->
+                                                <input type="radio" class="form-check-input" name="filtreJour" id="parMois" value="mois" <?= isset($parMois) && $parMois ? 'checked' : '' ?>>
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="parJour">Par jour (sur un mois)</label>
-                                                <input type="radio" class="form-check-input" name="filtreJour" id="parJour">
+                                                <input type="radio" class="form-check-input" name="filtreJour" id="parJour" value="jour" <?= isset($parJour) && $parJour ? 'checked' : '' ?>>
                                             </div>
                                             <div class="col-md-6" id="mois_div">
                                                 <label for="mois_filtre">Veuillez sélectionner le mois à afficher :</label>
@@ -59,11 +61,24 @@ $listeStatHistogramme = json_encode($listStat['histogramme'], true);
                                                     <option value="" >--Sélectionner un mois--</option>
                                                     <?php
                                                     // Tableau des mois
-                                                    $mois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-
+                                                    $mois = [
+                                                        1 => 'Janvier',
+                                                        2 => 'Février',
+                                                        3 => 'Mars',
+                                                        4 => 'Avril',
+                                                        5 => 'Mai',
+                                                        6 => 'Juin',
+                                                        7 => 'Juillet',
+                                                        8 => 'Août',
+                                                        9 => 'Septembre',
+                                                        10 => 'Octobre',
+                                                        11 => 'Novembre',
+                                                        12 => 'Décembre'
+                                                    ];
                                                     // Boucle pour afficher les mois dans la liste déroulante
-                                                    foreach ($mois as $moisOption) {
-                                                        echo "<option value=\"$moisOption\">$moisOption</option>";
+                                                    foreach ($mois as $moisNum => $moisOption) { ?>
+                                                        <option value="<?= $moisNum ?>" <?= $moisNum == $moisChoisi ? 'selected' : '' ?> > <?= $moisOption ?> </option>
+                                                    <?php
                                                     }
                                                     ?>
                                                 </select><br><br>
@@ -185,26 +200,31 @@ $listeStatHistogramme = json_encode($listStat['histogramme'], true);
                 options: histogrammeOptions
             });
 
-            /*Fonction pour afficher ou masquer la liste déroulante des mois*/
+            /*----------------------Fonction pour afficher ou masquer la liste déroulante des mois----------------------*/
 
             document.addEventListener("DOMContentLoaded", function () {
                 const parMoisRadio = document.getElementById("parMois");
                 const parJourRadio = document.getElementById("parJour");
                 const moisDiv      = document.getElementById("mois_div");
 
-                moisDiv.style.display = "none";
+                // Vérifier si "parMois" est sélectionné par défaut
+                if (parMoisRadio.checked) {
+                    moisDiv.style.display = "none";
+                } else {
+                    moisDiv.style.display = "block";
+                }
 
-                // Si l'option "Par jour" est sélectionnée, afficher la liste déroulante
-                parJourRadio.addEventListener("change", function () {
-                    if (parJourRadio.checked) {
-                        moisDiv.style.display = "block";
-                    }
-                });
-
-                // Si l'option "Par mois" est sélectionnée, cacher la liste déroulante
+                // Si l'option "Par mois" est sélectionnée, alors on cache la liste déroulante
                 parMoisRadio.addEventListener("change", function () {
                     if (parMoisRadio.checked) {
                         moisDiv.style.display = "none";
+                    }
+                });
+
+                // Si l'option "Par jour" est sélectionnée, alors on affiche la liste déroulante
+                parJourRadio.addEventListener("change", function () {
+                    if (parJourRadio.checked) {
+                        moisDiv.style.display = "block";
                     }
                 });
             });
