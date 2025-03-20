@@ -25,7 +25,6 @@ class NoteFraisController
      */
     public function index(): View {
         AuthService::checkAuthentication();
-
         return new View("views/liste_note_frais");
     }
 
@@ -33,16 +32,44 @@ class NoteFraisController
     {
         AuthService::checkAuthentication();
 
-        $listeNoteFrais = [];
+        // Récupérer la liste complète des notes de frais
+        $listeNoteFraisNonTrie = $this->noteFraisService->recupererListeComplete();
 
-        // Récupération de la liste des notes de frais complète
-        $listeNoteFrais = $this->noteFraisService->recupererListeComplete();
+        // Récupérer les paramètres de filtre envoyés en GET
+        $employe    = HttpHelper::getParam('employe', '');
+        $type       = HttpHelper::getParam('type', 'TOUS');
+        $reference  = HttpHelper::getParam('reference', '');
+        $date_debut = HttpHelper::getParam('date_debut', '');
+        $date_fin   = HttpHelper::getParam('date_fin', '');
+        $etat       = HttpHelper::getParam('etat', 'tous');
 
-        // Attribution du résultat de la requête à la variable de la vue
+        // Vérifier si le paramètre pour afficher toutes les notes est présent
+        $afficherTous = HttpHelper::getParam('afficherTous', '');
+
+        // Si le paramètre "afficherTous" est défini, on n'applique pas de filtre
+        if ($afficherTous) {
+            $listeNoteFrais = $listeNoteFraisNonTrie;
+        } else {
+            // Sinon, appliquer les filtres
+            if (!empty($employe) || $type !== 'TOUS' || !empty($reference) || !empty($date_debut) || !empty($date_fin) || $etat !== 'tous') {
+                $listeNoteFrais = $this->noteFraisService->filtrerValeurs(
+                    $listeNoteFraisNonTrie,
+                    $employe,
+                    $type,
+                    $reference,
+                    $date_debut,
+                    $date_fin,
+                    $etat
+                );
+            }
+        }
+
+        // Retourner la vue avec les notes de frais filtrées ou toutes les notes
         $view = new View("views/liste_note_frais");
         $view->setVar('listeNoteFrais', $listeNoteFrais);
         return $view;
     }
+
 
     public function indexStatistique(): View
     {

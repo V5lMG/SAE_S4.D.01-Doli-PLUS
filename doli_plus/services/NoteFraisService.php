@@ -19,7 +19,6 @@ class NoteFraisService
         if (!isset($_SESSION['api_token'])) {
             return [];
         }
-        // 2UngH5p63zi45fAxFY19neyZTNLYyS36 clé API admin
 
         // Initialiser cURL
         $requeteCurl = curl_init($this->apiUrl);
@@ -134,7 +133,92 @@ class NoteFraisService
     }
 
     /**
-     * Récupère  les notes de frais pour les statistiques
+     * Applique les filtres sur la liste des notes de frais.
+     *
+     * @param array  $notes       Liste complète des notes de frais
+     * @param string|null $employe Filtre par nom d'employé
+     * @param string|null $type   Filtre par type de note
+     * @param string|null $reference   Filtre par référence
+     * @param string|null $date_debut  Filtre par date de début
+     * @param string|null $date_fin    Filtre par date de fin
+     * @param string|null $etat        Filtre par état de la note
+     *
+     * @return array Notes de frais filtrées ou message si aucun filtre n'est sélectionné
+     */
+    public function filtrerValeurs(array $notes, ?string $employe = null, ?string $type = 'TOUS', ?string $reference = null, ?string $date_debut = null, ?string $date_fin = null, ?string $etat = 'tous'): array
+    {
+        // Démarrer la session si elle n'est pas encore démarrée
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Vérifier si un token API est disponible
+        if (!isset($_SESSION['api_token'])) {
+            return [];
+        }
+
+        // Vérifier si des filtres sont sélectionnés
+        if (empty($employe) && $type === 'TOUS' && empty($reference) && empty($date_debut) && empty($date_fin) && $etat === 'tous') {
+            return ['message' => 'Sélectionnez au moins un filtre'];
+        }
+
+        $notesFiltrees = [];
+        foreach ($notes as $note) {
+            // Filtrer par employé
+            if (!empty($employe) && stripos($note['user_author_infos'], $employe) === false) {
+                continue;
+            }
+
+            // Filtrer par référence
+            if (!empty($reference) && stripos($note['ref'], $reference) === false) {
+                continue;
+            }
+
+            // Filtrer par date de début et de fin
+            $noteDateDebut = \DateTime::createFromFormat('d/m/Y', $note['date_debut']);
+            $noteDateFin   = \DateTime::createFromFormat('d/m/Y', $note['date_fin']);
+
+            if (!empty($date_debut)) {
+                $filtreDateDebut = \DateTime::createFromFormat('Y-m-d', $date_debut);
+                if ($noteDateDebut < $filtreDateDebut) {
+                    continue;
+                }
+            }
+
+            if (!empty($date_fin)) {
+                $filtreDateFin = \DateTime::createFromFormat('Y-m-d', $date_fin);
+                if ($noteDateFin > $filtreDateFin) {
+                    continue;
+                }
+            }
+
+            // Filtrer par type de note
+            if ($type !== 'TOUS') {
+                $typeMatch = false;
+                foreach ($note['lines'] as $line) {
+                    if (($line['type_fees_code'] ?? '') === $type) {
+                        $typeMatch = true;
+                        break;
+                    }
+                }
+                if (!$typeMatch) {
+                    continue;
+                }
+            }
+
+            // Filtrer par état
+            if ($etat !== 'tous' && !empty($etat) && stripos($note['etat'], $etat) === false) {
+                continue;
+            }
+
+            $notesFiltrees[] = $note;
+        }
+
+        return $notesFiltrees;
+    }
+
+    /**
+     * Récupère les notes de frais pour les statistiques
      */
     public function recupererStat(string $date_debut = null, string $date_fin = null): array
     {
