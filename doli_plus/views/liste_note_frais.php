@@ -103,7 +103,6 @@ if (session_status() === PHP_SESSION_NONE) {
                                     <th>Montant TVA</th>
                                     <th>Montant TTC</th>
                                     <th>État</th>
-                                    <th>Déjà réglé</th>
                                     <th>Montant réclamé</th>
                                     <th>Reste à payer</th>
                                 </tr>
@@ -121,7 +120,6 @@ if (session_status() === PHP_SESSION_NONE) {
                                             <td><?= number_format($note['montant_tva'], 2, ',', ' ') ?> €</td>
                                             <td><?= number_format($note['montant_ttc'], 2, ',', ' ') ?> €</td>
                                             <td><?= htmlspecialchars($note['etat']) ?></td>
-                                            <td><?= number_format($note['montant_deja_regle'], 2, ',', ' ') ?> €</td>
                                             <td><?= number_format($note['montant_reclame'], 2, ',', ' ') ?> €</td>
                                             <td><?= number_format($note['reste_a_payer'], 2, ',', ' ') ?> €</td>
                                         </tr>
@@ -160,7 +158,7 @@ if (session_status() === PHP_SESSION_NONE) {
                                         </tr>
                                     <?php endforeach; ?>
                                         <td colspan="11" class="text-center">
-                                            <span class="m-2">Nombre de notes de frais : <?= htmlspecialchars("TODO")?></span>
+                                            <span class="m-2">Nombre de notes de frais : <?= htmlspecialchars($note["nombre_note"])?></span>
                                             <span class="m-2">Montant HT total : <?= htmlspecialchars($note["totaux"]["montant_ht_total"])?></span>
                                             <span class="m-2">Montant TVA total : <?= htmlspecialchars($note["totaux"]["montant_tva_total"])?></span>
                                             <span>Montant TTC total : <?= htmlspecialchars($note["totaux"]["montant_ttc_total"])?></span>

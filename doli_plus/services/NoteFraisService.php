@@ -41,6 +41,7 @@ class NoteFraisService
             $data = json_decode($response, true) ?? [];
 
             $noteFraisFormatees = [];
+            $nb_note = 0;
 
             // Formater la réponse pour extraire les informations pertinentes
             foreach ($data as $note) {
@@ -49,6 +50,7 @@ class NoteFraisService
                 $date_fin = date('d/m/Y', $note['date_fin']);
 
                 $lignesTableau = [];
+                $nb_note += 1;
 
                 // Formater chaque ligne
                 foreach ($note['lines'] as $line) {
@@ -116,10 +118,10 @@ class NoteFraisService
                     'montant_tva' => $note['total_tva'] ?? 0,
                     'montant_ttc' => $note['total_ttc'] ?? 0,
                     'etat' => $status,
-                    'deja_regle' => $note['paid'] ?? '0.0',
                     'montant_reclame' => $note['total_ttc'] ?? 0.0,
                     'reste_a_payer' => $note['total_ttc'] ?? 0.0 - $note['total_paid'] ?? 0.0,
                     'totaux' => $totaux,
+                    'nombre_note' => $nb_note,
                     'lines' => $lignesTableau   // Contient toutes les lignes formatées
                 ];
             }
