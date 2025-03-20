@@ -45,7 +45,7 @@ class NoteFraisController
         $date_debut = HttpHelper::getParam('date_debut');
         $date_fin = HttpHelper::getParam('date_fin');
         $reinitialiser = HttpHelper::getParam('reinitialiser');
-//
+
 //        var_dump($date_debut, $date_fin, $reinitialiser);
         if ($reinitialiser == 1) {
             $date_debut = null;

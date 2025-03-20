@@ -36,6 +36,15 @@ class AuthService
             if (isset($responseData['success']['token'])) {
                 // Stocker le token dans la session pour des appels futurs
                 $_SESSION['api_token'] = $responseData['success']['token'];
+
+                // Vérifier si un message contenant le nom d'utilisateur est présent
+                if (isset($responseData['success']['message'])) {
+                    // Utilisation d'une expression régulière pour extraire le nom d'utilisateur
+                    if (preg_match('/Welcome (\S+) -/', $responseData['success']['message'], $matches)) {
+                        $_SESSION['user_name'] = $matches[1];
+                    }
+                }
+
                 return true;
             }
         }
@@ -56,45 +65,5 @@ class AuthService
         // Supprimer le token de session et le nom d'utilisateur
         unset($_SESSION['api_token']);
         unset($_SESSION['user_name']);
-    }
-
-    /**
-     * Renvoie le nom et prénom de l'utilisateur connecté
-     */
-    public function renvoieUser(): ?string
-    {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        // Vérifier si un token est stocké
-        if (!isset($_SESSION['api_token'])) {
-            return null;
-        }
-
-        // Initialisation de cURL pour récupérer les informations utilisateur
-        $ch = curl_init($apiUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'DOLAPIKEY: ' . $_SESSION['api_token'] // Envoi du token dans l'en-tête
-        ]);
-
-        // Exécuter la requête et récupérer la réponse
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        // Vérifier si la requête a réussi
-        if ($httpCode === 200) {
-            $userData = json_decode($response, true);
-
-            // Vérifier si les informations de l'utilisateur sont présentes
-            if (!empty($userData) && isset($userData[0]['firstname'], $userData[0]['lastname'])) {
-                return $userData[0]['firstname'] . ' ' . $userData[0]['lastname'];
-            }
-        }
-
-        return null; // Retourner null en cas d'erreur
     }
 }

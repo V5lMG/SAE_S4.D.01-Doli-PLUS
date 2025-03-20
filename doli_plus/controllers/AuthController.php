@@ -38,13 +38,6 @@ class AuthController
 
             // Vérifier l'identifiant via l'API Dolibarr
             if ($this->authService->authentification($username, $password)) {
-
-                // Vérifier si le nom est déjà en session
-                if (!isset($_SESSION['user_name'])) {
-                    $userName = $this->authService->renvoieUser() ?? "Utilisateur inconnu";
-                    $_SESSION['user_name'] = $userName;  // Stocker en session
-                }
-
                 // Authentification réussie → Redirection vers accueil.php
                 header("Location: index.php?controller=Accueil&action=index");
                 exit();
