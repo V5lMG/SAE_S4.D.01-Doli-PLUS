@@ -5,8 +5,8 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Convertir le tableau en JSON
-$listeStatJson = json_encode($listStat, true);
-
+$listeStatSectorielle = json_encode($listStat['sectoriel'], true);
+$listeStatHistogramme = json_encode($listStat['histogramme'], true);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -42,17 +42,46 @@ $listeStatJson = json_encode($listStat, true);
                             <div class="col-12 col-md-6 text-center">
                                 <!-- Histogramme Courbe ou Baton -->
                                 <div class="p-4 border rounded shadow-sm bg-light">
-                                    <h3 class="mb-4">Diagramme de comparaison</h3>
-                                    <!-- TODO Mettre le graphique Histogramme ici -->
                                     <canvas id="histogramme" width="400" height="200"></canvas>
-                                    <div class="row justify-content-center mt-3">
-                                        <div class="col-md-4">
-                                            <input type="date" class="form-control" name="date_debut">
+                                    <form method="POST" action="<?= htmlspecialchars('index.php?controller=NoteFrais&action=indexStatistique'); ?>">
+                                        <div class="row justify-content-center mt-3">
+                                            <div class="col-md-3">
+                                                <label for="parMois">Par mois (sur un an)</label>
+                                                <input type="radio" class="form-check-input" name="filtreJour" id="parMois" checked>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="parJour">Par jour (sur un mois)</label>
+                                                <input type="radio" class="form-check-input" name="filtreJour" id="parJour">
+                                            </div>
+                                            <div class="col-md-6" id="mois_div">
+                                                <label for="mois_filtre">Veuillez sélectionner le mois à afficher :</label>
+                                                <select class="form-select" name="mois_filtre" id="mois_filtre">
+                                                    <option value="" >--Sélectionner un mois--</option>
+                                                    <?php
+                                                    // Tableau des mois
+                                                    $mois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+
+                                                    // Boucle pour afficher les mois dans la liste déroulante
+                                                    foreach ($mois as $moisOption) {
+                                                        echo "<option value=\"$moisOption\">$moisOption</option>";
+                                                    }
+                                                    ?>
+                                                </select><br><br>
+                                            </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <input type="date" class="form-control" name="date_fin">
+                                        <div class="row justify-content-center mt-3">
+                                            <div class="col-md-1 col-12">
+                                                <button type="submit" class="btn btn-primary" title="Rechercher">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-1 col-12">
+                                                <button type="reset" class="btn btn-outline-secondary" title="Réinitialiser">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6 text-center">
@@ -93,13 +122,12 @@ $listeStatJson = json_encode($listStat, true);
         </div>
         <script>
             /*---------------------------------------- Graphique Histogramme/Courbe ----------------------------------*/
-
-            // TODO écrire les données brutes et tout le reste ici
             // Récupération des données PHP encodées en JSON
-            // Création des données brutes directement en JavaScript
-            const histogrammeLabels = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-            const datasetMontant = [3000, 2500, 3200, 2800, 3500, 3100, 2900, 2600, 3400, 3300, 3100, 3600];  // Montant total par mois
-            const datasetQuantite = [1500, 1200, 1800, 1400, 2000, 1700, 1300, 1600, 1900, 1800, 1600, 2100];  // Quantité de notes de frais par mois
+            const listeStatHistogramme = <?php echo $listeStatHistogramme; ?>;
+
+            const histogrammeLabels = Object.keys(listeStatHistogramme);
+            const montantTotal = histogrammeLabels.map(mois => listeStatHistogramme[mois]['MontantTotal']); // Montant total par mois
+            const nombreNotes  = histogrammeLabels.map(mois => listeStatHistogramme[mois]['NombreNotes']);  // Quantité de notes de frais par mois
 
             // Configuration des données pour le graphique histogramme
             const histogrammeData = {
@@ -107,16 +135,9 @@ $listeStatJson = json_encode($listStat, true);
                 datasets: [
                     {
                         label: 'Montant total (€)',
-                        data: datasetMontant,
+                        data: montantTotal,
                         backgroundColor: 'rgba(75, 192, 192, 0.6)',
                         borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Quantité de notes de frais',
-                        data: datasetQuantite,
-                        backgroundColor: 'rgba(255, 159, 64, 0.6)',
-                        borderColor: 'rgba(255, 159, 64, 1)',
                         borderWidth: 1
                     }
                 ]
@@ -136,6 +157,22 @@ $listeStatJson = json_encode($listStat, true);
                 plugins: {
                     legend: {
                         position: 'top'
+                    },
+                    tooltip: {
+                        enabled: true,  // Activer les tooltips
+                        callbacks: {
+                            // Ajouter un tooltip personnalisé
+                            label: function(tooltipItem) {
+                                // L'index du mois
+                                const index = tooltipItem.dataIndex;
+
+                                // Nombre de notes de frais correspondant à ce mois
+                                const nombreDeNotes = nombreNotes[index];
+
+                                // Affichage lors du passage de la souris
+                                return 'Montant total : ' + tooltipItem.raw + '€ | ' + nombreDeNotes + ' notes de frais';
+                            }
+                        }
                     }
                 }
             };
@@ -148,14 +185,39 @@ $listeStatJson = json_encode($listStat, true);
                 options: histogrammeOptions
             });
 
+            /*Fonction pour afficher ou masquer la liste déroulante des mois*/
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const parMoisRadio = document.getElementById("parMois");
+                const parJourRadio = document.getElementById("parJour");
+                const moisDiv      = document.getElementById("mois_div");
+
+                moisDiv.style.display = "none";
+
+                // Si l'option "Par jour" est sélectionnée, afficher la liste déroulante
+                parJourRadio.addEventListener("change", function () {
+                    if (parJourRadio.checked) {
+                        moisDiv.style.display = "block";
+                    }
+                });
+
+                // Si l'option "Par mois" est sélectionnée, cacher la liste déroulante
+                parMoisRadio.addEventListener("change", function () {
+                    if (parMoisRadio.checked) {
+                        moisDiv.style.display = "none";
+                    }
+                });
+            });
+
             /*--------------------------------------------- Diagramme Circulaire -------------------------------------*/
+
             // Récupération des données PHP encodées en JSON
-            const listeStat = <?php echo $listeStatJson; ?>;
+            const listeStatSectorielle = <?php echo $listeStatSectorielle; ?>;
 
             // Extraction des labels (types de frais) et des données associées
-            const labels = Object.keys(listeStat); // ["Frais kilométriques", "Repas", "Transport", "Autre"]
-            const montantTotal = labels.map(type => listeStat[type]['MontantTotalType']);
-            const quantite     = labels.map(type => listeStat[type]['Quantite']);
+            const labels       = Object.keys(listeStatSectorielle); // ["Frais kilométriques", "Repas", "Transport", "Autre"]
+            const montantTotalSectoriel = labels.map(type => listeStatSectorielle[type]['MontantTotalType']);
+            const quantite     = labels.map(type => listeStatSectorielle[type]['Quantite']);
 
             // Configuration des données pour le diagramme
             const data = {
@@ -163,7 +225,7 @@ $listeStatJson = json_encode($listStat, true);
                 datasets: [
                     {
                         label: 'Montant total',
-                        data: montantTotal, // Montant total de chaque type de note de frais
+                        data: montantTotalSectoriel, // Montant total de chaque type de note de frais
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.6)',
                             'rgba(54, 162, 235, 0.6)',

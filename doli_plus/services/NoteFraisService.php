@@ -5,6 +5,21 @@ class NoteFraisService
 {
     private string $apiUrl = "http://dolibarr.iut-rodez.fr/G2024-43-SAE/htdocs/api/index.php/expensereports";
 
+    private $moisNoms = [
+        1 => 'Janvier',
+        2 => 'Février',
+        3 => 'Mars',
+        4 => 'Avril',
+        5 => 'Mai',
+        6 => 'Juin',
+        7 => 'Juillet',
+        8 => 'Août',
+        9 => 'Septembre',
+        10 => 'Octobre',
+        11 => 'Novembre',
+        12 => 'Décembre'
+    ];
+
     /**
      * Récupère toutes les notes de frais pour la liste des notes de frais
      */
@@ -226,8 +241,9 @@ class NoteFraisService
             // Décoder la réponse JSON en tableau associatif
             $notesFrais = json_decode($response, true) ?? [];
 
-            // Initialiser un tableau pour stocker les statistiques par type de note de frais
-            $statistiques = [];
+            // Initialiser les tableaux pour stocker les valeurs pour le diagramme
+            $sectoriel = [];
+            $histogramme = array_fill(1, 12, ['MontantTotal' => 0, 'NombreNotes' => 0]);
 
             // Parcourir toutes les notes de frais récupérées
             foreach ($notesFrais as $note) {
@@ -249,26 +265,49 @@ class NoteFraisService
                         'TF_TRIP' => 'Transport',
                         default => 'Autre',
                     };
+
                     $montant = $line['total_ttc'] ?? 0;
+                    $mois = (int)date('n', strtotime($date_frais));
+
 
                     // Vérifier si ce type de note de frais est déjà enregistré
-                    if (!isset($statistiques[$type])) {
+                    if (!isset($sectoriel[$type])) {
                         // Sinon, initialiser le type avec un montant total et un compteur à zéro
-                        $statistiques[$type] = [
+                        $sectoriel[$type] = [
                             'MontantTotalType' => 0,
                             'Quantite' => 0
                         ];
                     }
 
                     // Ajouter le montant de la note de frais au total du type
-                    $statistiques[$type]['MontantTotalType'] += $montant;
+                    $sectoriel[$type]['MontantTotalType'] += $montant;
                     // Incrémenter le nombre de notes de frais de ce type
-                    $statistiques[$type]['Quantite']++;
+                    $sectoriel[$type]['Quantite']++;
+
+                    $histogramme[$mois]['MontantTotal'] += $montant;
+                    $histogramme[$mois]['NombreNotes']++;
                 }
             }
+            // Retourner un tableau contenant deux sous-tableaux, selon le graphique à afficher
+            // return [$sectoriel, $histogramme]
+            // Créer un nouveau tableau avec les clés remplacées par les noms des mois
+            $histogrammeAvecMois = [];
+            foreach ($histogramme as $numeroMois => $valeurs) {
+                $nomMois = $this->moisNoms[$numeroMois]; // Convertir le numéro du mois en nom
+                $histogrammeAvecMois[$nomMois] = $valeurs;
+            }
 
-            // Retourner le tableau formaté contenant les données prêtes à être utilisées pour un diagramme
-            return $statistiques;
+            // Formater les montants dans le tableau sectoriel
+            foreach ($sectoriel as $type => &$data) {
+                $data['MontantTotalType'] = number_format($data['MontantTotalType'], 2, '.', '');
+            }
+
+            // Formater les montants dans le tableau histogramme
+            foreach ($histogrammeAvecMois as $mois => &$data) {
+                $data['MontantTotal'] = number_format($data['MontantTotal'], 2, '.', '');
+            }
+
+            return ['sectoriel' => $sectoriel, 'histogramme' => $histogrammeAvecMois];
         }
 
         return []; // Retourner un tableau vide en cas d'échec

@@ -41,15 +41,24 @@ class NoteFraisController
 
     public function indexStatistique(): View
     {
-        $listStat = [];
+
+        $listStat      = ['sectoriel' => [], 'histogramme' => []];
         $date_debut    = HttpHelper::getParam('date_debut');
         $date_fin      = HttpHelper::getParam('date_fin');
         $reinitialiser = HttpHelper::getParam('reinitialiser');
+        $parMois       = HttpHelper::getParam('parMois');
+        $parJour       = HttpHelper::getParam('parJour');
+        $moisChoisi    = HttpHelper::getParam('mois_filtre');
+
+        var_dump($parMois);
+        var_dump("<br>");
+        var_dump($parJour);
+        var_dump("<br>");
+        var_dump($moisChoisi);
 
         if ($reinitialiser == 1) {
             $date_debut = null;
             $date_fin   = null;
-            $listStat   = $this->noteFraisService->recupererStat($date_debut, $date_fin);
         }
 
         // Récupération de la liste des notes de frais complète
