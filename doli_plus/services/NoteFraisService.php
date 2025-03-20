@@ -19,7 +19,6 @@ class NoteFraisService
         if (!isset($_SESSION['api_token'])) {
             return [];
         }
-        // 2UngH5p63zi45fAxFY19neyZTNLYyS36 clé API admin
 
         // Initialiser cURL
         $requeteCurl = curl_init($this->apiUrl);
@@ -194,7 +193,7 @@ class NoteFraisService
     }
 
     /**
-     * Récupère  les notes de frais pour les statistiques
+     * Récupère les notes de frais pour les statistiques
      */
     public function recupererStat(string $date_debut = null, string $date_fin = null): array
     {
@@ -206,8 +205,6 @@ class NoteFraisService
         if (!isset($_SESSION['api_token'])) {
             return [];
         }
-
-        // 2UngH5p63zi45fAxFY19neyZTNLYyS36
 
         // Initialiser cURL
         $requeteCurl = curl_init($this->apiUrl);
@@ -223,9 +220,6 @@ class NoteFraisService
         $response = curl_exec($requeteCurl);
         $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
         curl_close($requeteCurl);
-
-        //var_dump(json_decode($response, true) ?? []);
-        //var_dump($httpCode);
 
         // Vérifier si la requête a réussi (HTTP 200)
         if ($httpCode === 200) {

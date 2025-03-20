@@ -5,9 +5,8 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Convertir le tableau en JSON
-$listeStatJson = json_encode($listStat);
-var_dump($listStat);
-var_dump($listeStatJson);
+$listeStatJson = json_encode($listStat, true);
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -18,7 +17,7 @@ var_dump($listeStatJson);
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="static/css/styles.css">
         <link rel="stylesheet" href="static/css/sidebar.css">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
         <div class="container-fluid">
@@ -44,7 +43,7 @@ var_dump($listeStatJson);
                                 <!-- Histogramme Courbe ou Baton -->
                                 <div class="p-4 border rounded shadow-sm bg-light">
                                     <h3 class="mb-4">Diagramme de comparaison</h3>
-                                    <div class="row justify-content-center mt-3">
+                                    <div c  lass="row justify-content-center mt-3">
                                         <div class="col-md-4">
                                             <input type="date" class="form-control" name="date_debut">
                                         </div>
@@ -58,7 +57,7 @@ var_dump($listeStatJson);
                                 <!-- Diagramme Circulaire -->
                                 <div class="p-4 border rounded shadow-sm bg-light">
                                     <canvas id="diagramme_sectoriel" width="400" height="200"></canvas>
-                                    <form method="GET" action="index.php?controller=NoteFrais&action=indexStatistique">
+                                    <form method="POST" action="<?= htmlspecialchars('index.php?controller=NoteFrais&action=indexStatistique'); ?>">
                                         <div class="row justify-content-center mt-3">
                                             <div class="col-md-4 col-12">
                                                 <label for="date_debut">Date début :</label>
@@ -97,7 +96,7 @@ var_dump($listeStatJson);
             // Extraction des labels (types de frais) et des données associées
             const labels = Object.keys(listeStat); // ["Frais kilométriques", "Repas", "Transport", "Autre"]
             const montantTotal = labels.map(type => listeStat[type]['MontantTotalType']);
-            const quantite = labels.map(type => listeStat[type]['Quantite']);
+            const quantite     = labels.map(type => listeStat[type]['Quantite']);
 
             // Configuration des données pour le diagramme
             const data = {
