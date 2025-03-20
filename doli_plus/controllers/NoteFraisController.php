@@ -1,6 +1,7 @@
 <?php
 namespace controllers;
 
+use services\AuthService;
 use services\NoteFraisService;
 use yasmf\HttpHelper;
 use yasmf\View;
@@ -23,11 +24,15 @@ class NoteFraisController
      * @return View the default view displaying all users
      */
     public function index(): View {
+        AuthService::checkAuthentication();
+
         return new View("views/liste_note_frais");
     }
 
     public function indexListe(): View
     {
+        AuthService::checkAuthentication();
+
         $listeNoteFrais = [];
 
         // Récupération de la liste des notes de frais complète
@@ -41,6 +46,8 @@ class NoteFraisController
 
     public function indexStatistique(): View
     {
+        AuthService::checkAuthentication();
+
         $listStat = [];
         $date_debut = HttpHelper::getParam('date_debut');
         $date_fin = HttpHelper::getParam('date_fin');

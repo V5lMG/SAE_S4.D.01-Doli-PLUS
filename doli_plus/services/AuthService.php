@@ -53,6 +53,25 @@ class AuthService
     }
 
     /**
+     * Vérifie si l'utilisateur possède bien un token
+     */
+    public static function checkAuthentication() {
+        // Démarre la session si ce n'est pas déjà fait
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Vérifie si le token d'authentification existe dans la session
+        if (!isset($_SESSION['api_token'])) {
+            header('Location: /doli_plus/index.php?controller=Home&action=index');
+            exit();
+        }
+
+        // var_dump($_SESSION['api_token']);
+    }
+
+
+    /**
      * Déconnecte l'utilisateur en supprimant son token de session
      */
     public function deconnexion(): void
