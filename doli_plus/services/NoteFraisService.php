@@ -133,68 +133,6 @@ class NoteFraisService
         return []; // Retourner un tableau vide en cas d'échec
     }
 
-    public function recupererNotesDeFraisFluteJean(): array
-    {
-        // Démarrer la session si elle n'est pas encore démarrée
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        // Vérifier si un token API est disponible
-        if (!isset($_SESSION['api_token'])) {
-            return [];
-        }
-
-        // Timestamp Unix pour 18/02/2025
-        $timestampDateDebut = 1741647600; // Date: 18/02/2025
-        $timestampDateFin = 1741734000;   // Date: 19/02/2025
-
-        // Construire l'URL avec le filtre sur la date de début
-        $url = $this->apiUrl . "?sortfield=t.rowid&user_ids=1&sqlfilters=(t.date_debut>='" . $timestampDateDebut . "')%20and%20(t.date_debut<'". $timestampDateFin . "')";
-
-        // Initialiser cURL pour récupérer les notes de frais filtrées
-        $requeteCurl = curl_init($url);  // URL avec les paramètres de recherche, tri, et filtre
-        curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
-        curl_setopt($requeteCurl, CURLOPT_HTTPHEADER, [
-            'DOLAPIKEY: ' . $_SESSION['api_token'],
-            'Accept: application/json'
-        ]);
-
-        // Exécuter la requête
-        $response = curl_exec($requeteCurl);
-        $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
-        var_dump($response.$httpCode);
-        curl_close($requeteCurl);
-
-        // Vérifier si la requête a réussi (HTTP 200)
-        if ($httpCode === 200) {
-            $data = json_decode($response, true) ?? [];
-
-            $noteFraisFormatees = [];
-
-            // Formater la réponse pour extraire les informations pertinentes
-            foreach ($data as $note) {
-                // Formater les dates
-                $date_debut = date('d/m/Y', strtotime($note['date_debut']));
-                $date_fin = date('d/m/Y', strtotime($note['date_fin']));
-
-                // Ajouter les informations formatées dans le tableau final pour la note de frais
-                $noteFraisFormatees[] = [
-                    'ref' => $note['ref'] ?? 'Inconnu',
-                    'user_author_infos' => $note['user_author_infos'] ?? 'Inconnu',
-                    'date_debut' => $date_debut,
-                    'date_fin' => $date_fin,
-                ];
-            }
-
-            // Retourner le tableau des notes de frais formatées
-            return $noteFraisFormatees;
-        }
-
-        return []; // Retourner un tableau vide en cas d'échec
-    }
-
     /**
      * Récupère  les notes de frais pour les statistiques
      */

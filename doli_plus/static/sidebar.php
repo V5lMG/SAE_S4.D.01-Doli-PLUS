@@ -1,3 +1,12 @@
+<?php
+// Démarrer la session si ce n'est pas fait
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$userName = $_SESSION['user_name'];
+?>
+
 <!-- Barre latérale de la page (affichée sur grands écrans) -->
 <div class="sidebar col-12 col-md-2 p-3 d-none d-md-block">
     <div class="liste-bouton">
@@ -23,8 +32,9 @@
             <p class="error-message"><?php echo htmlspecialchars($error); ?></p>
         <?php endif; ?>
 
+        <!-- Bouton utilisateur avec le nom dynamique -->
         <button class="btn bouton-action w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Id_User <!-- TODO changer avec YASMF -->
+            <?php echo $userName; ?>
         </button>
 
         <ul class="dropdown-menu">

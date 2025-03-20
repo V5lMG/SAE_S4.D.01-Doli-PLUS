@@ -15,7 +15,7 @@ session_start();
     <div class="login_center center" style="background-size: cover; background: linear-gradient(4deg, rgb(60,70,100) 52%, rgb(240,240,240) 52.1%) no-repeat fixed center center;">
         <div class="login_vertical_align">
             <form id="login" name="login" method="post" action="index.php?controller=Home&action=login">
-            <div class="login_table">
+                <div class="login_table">
                     <div id="login_line1">
                         <div id="login_left">
                             <img alt="" src="static/img/doliplus_logo.png" id="img_logo" />
