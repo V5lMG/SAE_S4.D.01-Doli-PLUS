@@ -3,6 +3,12 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+if (session_id() != $_SESSION['session']) {
+    header('Location: ../views/auth_page.php');
+    exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -170,39 +176,6 @@ if (session_status() === PHP_SESSION_NONE) {
                                 <?php endif; ?>
                                 </tbody>
                             </table>
-
-                            <?php
-                            $noteFraisFluteJean = (new services\NoteFraisService())->recupererNotesDeFraisFluteJean();
-                            ?>
-
-                            <!-- Affichage des notes de frais de Flute Jean -->
-                            <?php if (!empty($noteFraisFluteJean)): ?>
-                                <h4>Notes de frais de Flute Jean</h4>
-                                <div class="mt-4 table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead class="table-light">
-                                        <tr>
-                                            <th>Réf.</th>
-                                            <th>Employé</th>
-                                            <th>Date début</th>
-                                            <th>Date fin</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php foreach ($noteFraisFluteJean as $note): ?>
-                                            <tr>
-                                                <td><span class="fw-bold text-decoration-underline text-primary"><?= htmlspecialchars($note['ref']) ?></span></td>
-                                                <td><?= htmlspecialchars($note['user_author_infos']) ?></td>
-                                                <td><?= htmlspecialchars($note['date_debut']) ?></td>
-                                                <td><?= htmlspecialchars($note['date_fin']) ?></td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            <?php else: ?>
-                                <div class="text-muted text-center mt-3">Aucune note de frais trouvée pour Flute Jean</div>
-                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
