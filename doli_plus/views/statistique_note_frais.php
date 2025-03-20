@@ -43,7 +43,9 @@ $listeStatJson = json_encode($listStat, true);
                                 <!-- Histogramme Courbe ou Baton -->
                                 <div class="p-4 border rounded shadow-sm bg-light">
                                     <h3 class="mb-4">Diagramme de comparaison</h3>
-                                    <div c  lass="row justify-content-center mt-3">
+                                    <!-- TODO Mettre le graphique Histogramme ici -->
+                                    <canvas id="histogramme" width="400" height="200"></canvas>
+                                    <div class="row justify-content-center mt-3">
                                         <div class="col-md-4">
                                             <input type="date" class="form-control" name="date_debut">
                                         </div>
@@ -90,6 +92,63 @@ $listeStatJson = json_encode($listStat, true);
             </div>
         </div>
         <script>
+            /*---------------------------------------- Graphique Histogramme/Courbe ----------------------------------*/
+
+            // TODO écrire les données brutes et tout le reste ici
+            // Récupération des données PHP encodées en JSON
+            // Création des données brutes directement en JavaScript
+            const histogrammeLabels = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+            const datasetMontant = [3000, 2500, 3200, 2800, 3500, 3100, 2900, 2600, 3400, 3300, 3100, 3600];  // Montant total par mois
+            const datasetQuantite = [1500, 1200, 1800, 1400, 2000, 1700, 1300, 1600, 1900, 1800, 1600, 2100];  // Quantité de notes de frais par mois
+
+            // Configuration des données pour le graphique histogramme
+            const histogrammeData = {
+                labels: histogrammeLabels,
+                datasets: [
+                    {
+                        label: 'Montant total (€)',
+                        data: datasetMontant,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Quantité de notes de frais',
+                        data: datasetQuantite,
+                        backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            // Configuration des options du graphique
+            const histogrammeOptions = {
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                }
+            };
+
+            // Initialisation du graphique histogramme (barres)
+            const ctxHistogramme = document.getElementById('histogramme').getContext('2d');
+            const histogramme = new Chart(ctxHistogramme, {
+                type: 'bar',
+                data: histogrammeData,
+                options: histogrammeOptions
+            });
+
+            /*--------------------------------------------- Diagramme Circulaire -------------------------------------*/
             // Récupération des données PHP encodées en JSON
             const listeStat = <?php echo $listeStatJson; ?>;
 
