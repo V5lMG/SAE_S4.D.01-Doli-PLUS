@@ -52,6 +52,7 @@ class NoteFraisController
         } else {
             // Sinon, appliquer les filtres
             if (!empty($employe) || $type !== 'TOUS' || !empty($reference) || !empty($date_debut) || !empty($date_fin) || $etat !== 'tous') {
+                $notesFiltrees = [];
                 $listeNoteFrais = $this->noteFraisService->filtrerValeurs(
                     $listeNoteFraisNonTrie,
                     $employe,
@@ -59,7 +60,8 @@ class NoteFraisController
                     $reference,
                     $date_debut,
                     $date_fin,
-                    $etat
+                    $etat,
+                    $notesFiltrees
                 );
             }
         }
