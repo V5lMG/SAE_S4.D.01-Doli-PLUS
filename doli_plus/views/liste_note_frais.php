@@ -30,71 +30,97 @@ if (session_id() != $_SESSION['session']) {
                 <!-- Contenu principal -->
                 <div class="contenu-principal">
                     <div class="container-fluid mt-3">
-                        <!-- Barre de filtres -->
-                        <form method="GET" action="index.php?controller=NoteFrais&action=indexListe" class="bg-light p-3 rounded shadow-sm">
-                            <!-- Première ligne -->
-                            <div class="row g-3 align-items-center">
 
-                                <!-- Employé -->
+                        <!-- Barre de filtres -->
+                        <form method="POST" action="index.php?controller=NoteFrais&action=indexListe" class="bg-light p-3 rounded shadow-sm">
+                            <?php
+                            // Récupération des filtres précédents si existants
+                            $employe = isset($_POST['employe']) ? htmlspecialchars($_POST['employe']) : "";
+                            $type = isset($_POST['type']) ? htmlspecialchars($_POST['type']) : "TOUS";
+                            $reference = isset($_POST['reference']) ? htmlspecialchars($_POST['reference']) : "";
+                            $date_debut = isset($_POST['date_debut']) ? htmlspecialchars($_POST['date_debut']) : "";
+                            $date_fin = isset($_POST['date_fin']) ? htmlspecialchars($_POST['date_fin']) : "";
+                            $etat = isset($_POST['etat']) ? htmlspecialchars($_POST['etat']) : "tous";
+                            ?>
+
+                            <div class="row g-3 align-items-center">
                                 <div class="col-md-2 text-center d-flex flex-column align-items-start">
                                     <label for="employe" class="fw-bold">Employé :</label>
-                                    <input type="text" class="form-control" id="employe" name="employe" placeholder="Ex : Dupond Pierre">
+                                    <input type="text" class="form-control" id="employe" name="employe" value="<?= $employe ?>" placeholder="Ex : Dupond Pierre">
                                 </div>
 
-                                <!-- Type -->
                                 <div class="col-md-2 text-center d-flex flex-column align-items-start">
                                     <label for="type" class="fw-bold">Type de la note :</label>
                                     <select class="form-control" id="type" name="type">
-                                        <option value="TOUS">Tous</option>
-                                        <option value="EX_KME"  > Frais kilométrique</option>
-                                        <option value="Tf_OTHER"> Autre</option>
-                                        <option value="TF_LUNCH"> Repas</option>
-                                        <option value="TF_TRIP" > Transport</option>
+                                        <option value="TOUS" <?= ($type == "TOUS") ? "selected" : "" ?>>Tous</option>
+                                        <option value="Frais kilométrique" <?= ($type == "Frais kilométrique") ? "selected" : "" ?>>Frais kilométrique</option>
+                                        <option value="Autre" <?= ($type == "Autre") ? "selected" : "" ?>>Autre</option>
+                                        <option value="Repas" <?= ($type == "Repas") ? "selected" : "" ?>>Repas</option>
+                                        <option value="Transport" <?= ($type == "Transport") ? "selected" : "" ?>>Transport</option>
                                     </select>
                                 </div>
 
-                                <!-- Référence -->
                                 <div class="col-md-2 text-center d-flex flex-column align-items-start">
                                     <label for="reference" class="fw-bold">Référence de la note :</label>
-                                    <input type="text" class="form-control" id="reference" name="reference" placeholder="Ex : PROV1">
+                                    <input type="text" class="form-control" id="reference" name="reference" value="<?= $reference ?>" placeholder="Ex : PROV1">
                                 </div>
 
-                                <!-- Date -->
                                 <div class="col-md-2 text-center">
                                     <div class="d-flex flex-column align-items-start">
                                         <label for="date_debut" class="fw-bold">Du :</label>
-                                        <input type="date" id="date_debut" class="form-control mb-2" name="date_debut">
-
+                                        <input type="date" id="date_debut" class="form-control mb-2" name="date_debut" value="<?= $date_debut ?>">
                                         <label for="date_fin" class="fw-bold">Au :</label>
-                                        <input type="date" id="date_fin" class="form-control" name="date_fin">
+                                        <input type="date" id="date_fin" class="form-control" name="date_fin" value="<?= $date_fin ?>">
                                     </div>
                                 </div>
 
-                                <!-- État -->
                                 <div class="col-md-2 text-center d-flex flex-column align-items-start">
                                     <label for="etat" class="fw-bold">État de la note :</label>
                                     <select class="form-select" name="etat" id="etat">
-                                        <option value="tous">Tous</option>
-                                        <option value="brouillon">Brouillon</option>
-                                        <option value="valider">Validé</option>
-                                        <option value="annuler">Annulé</option>
-                                        <option value="approuver">Approuvé</option>
-                                        <option value="payer">Payé</option>
-                                        <option value="refuser">Refusé</option>
+                                        <option value="tous" <?= ($etat == "tous") ? "selected" : "" ?>>Tous</option>
+                                        <option value="Brouillon" <?= ($etat == "Brouillon") ? "selected" : "" ?>>Brouillon</option>
+                                        <option value="Validé" <?= ($etat == "Validé") ? "selected" : "" ?>>Validé</option>
+                                        <option value="Annulé" <?= ($etat == "Annulé") ? "selected" : "" ?>>Annulé</option>
+                                        <option value="Approuvé" <?= ($etat == "Approuvé") ? "selected" : "" ?>>Approuvé</option>
+                                        <option value="Payé" <?= ($etat == "Payé") ? "selected" : "" ?>>Payé</option>
+                                        <option value="Refusé" <?= ($etat == "Refusé") ? "selected" : "" ?>>Refusé</option>
                                     </select>
                                 </div>
 
-                                <!-- Boutons -->
                                 <div class="col-md-2 d-flex align-self-center bouton-recherche">
                                     <button type="submit" class="btn btn-primary" title="Rechercher">
                                         <i class="fa fa-search"></i>
                                     </button>
-                                    <button type="reset" class="btn btn-outline-secondary ms-2" title="Réinitialiser">
+                                    <button type="button" class="btn btn-outline-secondary ms-2" title="Réinitialiser" onclick="resetFilters()">
                                         <i class="fa fa-times"></i>
                                     </button>
                                 </div>
                             </div>
+                            <!-- Affichage d'un message d'erreur si aucun filtre n'est sélectionné -->
+                            <?php if (empty($employe) && $type == 'TOUS' && empty($reference) && empty($date_debut) && empty($date_fin) && $etat == 'tous'): ?>
+                                <div class="alert alert-warning mt-3" role="alert">
+                                    Sélectionnez au moins un filtre pour afficher les résultats.
+                                    <a href="index.php?controller=NoteFrais&action=indexListe&afficherTous=1">
+                                        [Afficher toutes les notes de frais]
+                                    </a>
+                                </div>
+                            <?php endif; ?>
                         </form>
+
+                        <script>
+                            // Fonction pour réinitialiser les filtres
+                            function resetFilters() {
+                                document.getElementById("employe").value = "";
+                                document.getElementById("type").value = "TOUS";
+                                document.getElementById("reference").value = "";
+                                document.getElementById("date_debut").value = "";
+                                document.getElementById("date_fin").value = "";
+                                document.getElementById("etat").value = "tous";
+
+                                // Soumettre le formulaire après la réinitialisation
+                                document.querySelector("form").submit();
+                            }
+                        </script>
 
                         <!-- Tableau des notes de frais -->
                         <div class="mt-4 table-responsive">

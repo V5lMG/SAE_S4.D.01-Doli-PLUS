@@ -1,10 +1,6 @@
 <?php
-// Démarrer la session si ce n'est pas fait
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-$userName = $_SESSION['user_name'];
+// La session doit être lancé dans chaque vue
+$userName = $_SESSION['user_name'] ?? 'Erreur';
 ?>
 
 <!-- Barre latérale de la page (affichée sur grands écrans) -->
