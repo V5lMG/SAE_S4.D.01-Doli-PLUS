@@ -6,8 +6,8 @@ if (session_status() === PHP_SESSION_NONE) {
 
 
 // Convertir le tableau en JSON
-$listeStatSectorielle = json_encode($listSectoriel);
-$listeStatHistogramme = json_encode($listHistogramme);
+$listeStatSectorielle = isset($_SESSION['listSectoriel']) ? json_encode($_SESSION['listSectoriel']) : '[]';
+$listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESSION['listHistogramme']) : '[]';
 
 // TODO Mettre des titres au deux graphique
 ?>
@@ -45,6 +45,8 @@ $listeStatHistogramme = json_encode($listHistogramme);
                             <div class="col-12 col-md-6 text-center">
                                 <!-- Histogramme Baton -->
                                 <div class="p-4 border rounded shadow-sm bg-light">
+                                    <h5>Evolution des notes de frais</h5>
+                                    <br>
                                     <canvas id="histogramme" width="400" height="200"></canvas>
                                     <form method="POST" action="<?= htmlspecialchars('index.php?controller=NoteFrais&action=indexStatistique'); ?>">
                                         <!-- Bouton radio -->

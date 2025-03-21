@@ -74,6 +74,11 @@ class NoteFraisController
     {
         AuthService::checkAuthentication();
 
+        // Démarrer la session si elle n'est pas déjà démarrée
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         // Initialisation des listes histogramme et sectoriel
         $listHistogramme = [];
         $listSectoriel = [];
@@ -81,6 +86,15 @@ class NoteFraisController
         // Vérification des paramètres sectoriel et histogramme
         $sectoriel   = HttpHelper::getParam('sectoriel') ?? false;
         $histogramme = HttpHelper::getParam('histogramme') ?? false;
+
+        // Vérification de la session pour les données
+        if (isset($_SESSION['listSectoriel'])) {
+            $listSectoriel = $_SESSION['listSectoriel'];
+        }
+
+        if (isset($_SESSION['listHistogramme'])) {
+            $listHistogramme = $_SESSION['listHistogramme'];
+        }
 
         // Récupération des paramètres de dates et filtres
         $date_debut = HttpHelper::getParam('date_debut');
@@ -94,12 +108,16 @@ class NoteFraisController
         if ($sectoriel || !($sectoriel || $histogramme)) {
             // Récupération des statistiques sectorielles
             $listSectoriel = $this->noteFraisService->recupererStatSectorielle($date_debut, $date_fin);
+            // Sauvegarde dans la session
+            $_SESSION['listSectoriel'] = $listSectoriel;
         }
 
         // Si aucune donnée histogramme n'est disponible ou si le paramètre 'histogramme' est activé
         if ($histogramme || !($sectoriel || $histogramme)) {
             // Récupération des statistiques pour l'histogramme
             $listHistogramme = $this->noteFraisService->recupererStatHistogramme($parMois, $parJour, $moisChoisi, $anneeChoisi);
+            // Sauvegarde dans la session
+            $_SESSION['listHistogramme'] = $listHistogramme;
         }
 
         // Attribution du résultat à la vue, en passant les deux listes séparément
