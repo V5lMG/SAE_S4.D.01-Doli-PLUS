@@ -160,24 +160,25 @@ class NoteFraisService
      *
      * @return array Notes de frais filtrées ou message si aucun filtre n'est sélectionné
      */
-    public function filtrerValeurs(array $notes, ?string $employe = null, ?string $type = 'TOUS', ?string $reference = null, ?string $date_debut = null, ?string $date_fin = null, ?string $etat = 'tous'): array
+    public function filtrerValeurs(array $notes, ?string $employe = null, ?string $type = 'TOUS', ?string $reference = null, ?string $date_debut = null, ?string $date_fin = null, ?string $etat = 'tous', $notesFiltrees): array
     {
-        // Démarrer la session si elle n'est pas encore démarrée
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        // Vérifier si un token API est disponible
         if (!isset($_SESSION['api_token'])) {
             return [];
         }
 
-        // Vérifier si des filtres sont sélectionnés
         if (empty($employe) && $type === 'TOUS' && empty($reference) && empty($date_debut) && empty($date_fin) && $etat === 'tous') {
             return ['message' => 'Sélectionnez au moins un filtre'];
         }
 
         $notesFiltrees = [];
+        $total_ht_global = 0.0;
+        $total_tva_global = 0.0;
+        $total_ttc_global = 0.0;
+
         foreach ($notes as $note) {
             // Filtrer par employé
             if (!empty($employe) && stripos($note['user_author_infos'], $employe) === false) {
@@ -191,7 +192,7 @@ class NoteFraisService
 
             // Filtrer par date de début et de fin
             $noteDateDebut = \DateTime::createFromFormat('d/m/Y', $note['date_debut']);
-            $noteDateFin   = \DateTime::createFromFormat('d/m/Y', $note['date_fin']);
+            $noteDateFin = \DateTime::createFromFormat('d/m/Y', $note['date_fin']);
 
             if (!empty($date_debut)) {
                 $filtreDateDebut = \DateTime::createFromFormat('Y-m-d', $date_debut);
@@ -226,11 +227,26 @@ class NoteFraisService
                 continue;
             }
 
+            // Ajouter la note filtrée
             $notesFiltrees[] = $note;
+
+            // Calcul des totaux
+            $total_ht_global += $note['total_ht'] ?? 0.0;
+            $total_tva_global += $note['total_tva'] ?? 0.0;
+            $total_ttc_global += $note['total_ttc'] ?? 0.0;
         }
 
-        return $notesFiltrees;
+        // Retourner les notes filtrées avec les totaux
+        return [
+            'notes_filtrees' => $notesFiltrees,
+            'totaux' => [
+                'total_ht' => number_format($total_ht_global, 2, ',', ' ') . ' €',
+                'total_tva' => number_format($total_tva_global, 2, ',', ' ') . ' €',
+                'total_ttc' => number_format($total_ttc_global, 2, ',', ' ') . ' €'
+            ]
+        ];
     }
+
 
     /**
      * Récupère les notes de frais pour les statistiques
@@ -371,4 +387,7 @@ class NoteFraisService
 
         return []; // Retourner un tableau vide en cas d'échec
     }
+
+
+
 }
