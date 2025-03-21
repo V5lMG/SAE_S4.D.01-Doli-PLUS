@@ -74,32 +74,44 @@ class NoteFraisController
     {
         AuthService::checkAuthentication();
 
-        $listStat      = ['sectoriel' => [], 'histogramme' => []];
-        $date_debut    = HttpHelper::getParam('date_debut');
-        $date_fin      = HttpHelper::getParam('date_fin');
-        $reinitialiser = HttpHelper::getParam('reinitialiser');
+        // Initialisation des listes histogramme et sectoriel
+        $listHistogramme = [];
+        $listSectoriel = [];
 
-        // j'ai toucher en dessous
+        // Vérification des paramètres sectoriel et histogramme
+        $sectoriel   = HttpHelper::getParam('sectoriel') ?? false;
+        $histogramme = HttpHelper::getParam('histogramme') ?? false;
+
+        // Récupération des paramètres de dates et filtres
+        $date_debut = HttpHelper::getParam('date_debut');
+        $date_fin = HttpHelper::getParam('date_fin');
         $parMois = HttpHelper::getParam('filtreJour') === 'mois' || HttpHelper::getParam('filtreJour') === null;
-        $parJour       = HttpHelper::getParam('filtreJour') === 'jour';
-        $moisChoisi    = HttpHelper::getParam('mois_filtre') ?? 0;
+        $parJour = HttpHelper::getParam('filtreJour') === 'jour';
+        $moisChoisi = HttpHelper::getParam('mois_filtre') ?? 0;
+        $anneeChoisi = HttpHelper::getParam('annee_filtre') ?? date("Y");
 
-        if ($reinitialiser == 1) {
-            $date_debut = null;
-            $date_fin   = null;
+        // Si aucune donnée sectorielle n'est disponible ou si le paramètre 'sectoriel' est activé
+        if ($sectoriel || !($sectoriel || $histogramme)) {
+            // Récupération des statistiques sectorielles
+            $listSectoriel = $this->noteFraisService->recupererStatSectorielle($date_debut, $date_fin);
         }
 
-        // Récupération de la liste des notes de frais complète
-        $listStat = $this->noteFraisService->recupererStat($date_debut, $date_fin, $parMois, $parJour, $moisChoisi);
+        // Si aucune donnée histogramme n'est disponible ou si le paramètre 'histogramme' est activé
+        if ($histogramme || !($sectoriel || $histogramme)) {
+            // Récupération des statistiques pour l'histogramme
+            $listHistogramme = $this->noteFraisService->recupererStatHistogramme($parMois, $parJour, $moisChoisi, $anneeChoisi);
+        }
 
-        // Attribution du résultat de la requête à la variable de la vue
+        // Attribution du résultat à la vue, en passant les deux listes séparément
         $view = new View("views/statistique_note_frais");
-        $view->setVar('listStat'   , $listStat);
-        $view->setVar('date_debut' , $date_debut);
-        $view->setVar('date_fin'   , $date_fin);
-        $view->setVar('parMois'    , $parMois);
-        $view->setVar('parJour'    , $parJour);
-        $view->setVar('moisChoisi' , $moisChoisi);
+        $view->setVar('listHistogramme', $listHistogramme);
+        $view->setVar('listSectoriel'  , $listSectoriel);
+        $view->setVar('date_debut'     , $date_debut);
+        $view->setVar('date_fin'       , $date_fin);
+        $view->setVar('parMois'        , $parMois);
+        $view->setVar('parJour'        , $parJour);
+        $view->setVar('moisChoisi'     , $moisChoisi);
+
         return $view;
     }
 }

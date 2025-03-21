@@ -6,8 +6,10 @@ if (session_status() === PHP_SESSION_NONE) {
 
 
 // Convertir le tableau en JSON
-$listeStatSectorielle = json_encode($listStat['sectoriel'], true);
-$listeStatHistogramme = json_encode($listStat['histogramme'], true);
+$listeStatSectorielle = json_encode($listSectoriel);
+$listeStatHistogramme = json_encode($listHistogramme);
+
+// TODO Mettre des titres au deux graphique
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -41,22 +43,39 @@ $listeStatHistogramme = json_encode($listStat['histogramme'], true);
                         <!-- Information de la page -->
                         <div class="row justify-content-center">
                             <div class="col-12 col-md-6 text-center">
-                                <!-- Histogramme Courbe ou Baton -->
+                                <!-- Histogramme Baton -->
                                 <div class="p-4 border rounded shadow-sm bg-light">
                                     <canvas id="histogramme" width="400" height="200"></canvas>
                                     <form method="POST" action="<?= htmlspecialchars('index.php?controller=NoteFrais&action=indexStatistique'); ?>">
+                                        <!-- Bouton radio -->
                                         <div class="row justify-content-center mt-3">
-                                            <div class="col-md-3">
+                                            <div class="col-md-6">
                                                 <label for="parMois">Par mois (sur un an)</label>
-                                                <!-- j'ai toucher aux deux isset -->
                                                 <input type="radio" class="form-check-input" name="filtreJour" id="parMois" value="mois" <?= isset($parMois) && $parMois ? 'checked' : '' ?>>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-6">
                                                 <label for="parJour">Par jour (sur un mois)</label>
                                                 <input type="radio" class="form-check-input" name="filtreJour" id="parJour" value="jour" <?= isset($parJour) && $parJour ? 'checked' : '' ?>>
                                             </div>
+                                        </div>
+                                        <!-- Liste déroulante des années et des mois -->
+                                        <div class="row justify-content-center mt-3">
+                                            <div class="col-md-6" >
+                                                <label for="annee_filtre">Veuillez sélectionner <u>l'année</u> à afficher :</label>
+                                                <select class="form-select" id="annee_filtre" name="annee_filtre">
+                                                    <option value="" >--Sélectionner une année--</option>
+                                                    <?php
+                                                    // TODO à régler
+                                                    $currentYear = date("Y");
+                                                    for ($year = $currentYear; $year >= 1900; $year--) {?>
+                                                        <option value="<?= $year ?>" <?= $year == $currentYear ? 'selected' : '' ?> > <?= $year ?> </option>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
                                             <div class="col-md-6" id="mois_div">
-                                                <label for="mois_filtre">Veuillez sélectionner le mois à afficher :</label>
+                                                <label for="mois_filtre">Veuillez sélectionner <u>le mois</u> à afficher :</label>
                                                 <select class="form-select" name="mois_filtre" id="mois_filtre">
                                                     <option value="" >--Sélectionner un mois--</option>
                                                     <?php
@@ -78,20 +97,22 @@ $listeStatHistogramme = json_encode($listStat['histogramme'], true);
                                                     // Boucle pour afficher les mois dans la liste déroulante
                                                     foreach ($mois as $moisNum => $moisOption) { ?>
                                                         <option value="<?= $moisNum ?>" <?= $moisNum == $moisChoisi ? 'selected' : '' ?> > <?= $moisOption ?> </option>
-                                                    <?php
+                                                        <?php
                                                     }
                                                     ?>
-                                                </select><br><br>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="row justify-content-center mt-3">
                                             <div class="col-md-1 col-12">
+                                                <input type="hidden" name="histogramme" value="true"/>
+                                                <input type="hidden" name="listeStatSectorielle" value="<?= $listSectorielle ?>"/>
                                                 <button type="submit" class="btn btn-primary" title="Rechercher">
                                                     <i class="fa fa-search"></i>
                                                 </button>
                                             </div>
                                             <div class="col-md-1 col-12">
-                                                <button type="reset" class="btn btn-outline-secondary" title="Réinitialiser">
+                                                <button type="reset" class="btn btn-outline-secondary" title="Réinitialiser" onclick="resetFiltersHisto()">
                                                     <i class="fa fa-times"></i>
                                                 </button>
                                             </div>
@@ -102,6 +123,12 @@ $listeStatHistogramme = json_encode($listStat['histogramme'], true);
                             <div class="col-12 col-md-6 text-center">
                                 <!-- Diagramme Circulaire -->
                                 <div class="p-4 border rounded shadow-sm bg-light">
+                                    <?php if (isset($date_debut) && isset ($date_fin)) { ?>
+                                        <h5>Diagramme sectoriel des notes de frais entre <?= htmlspecialchars((new DateTime($date_debut))->format('d/m/Y')); ?> et <?= htmlspecialchars((new DateTime($date_fin))->format('d/m/Y')); ?> compris </h5>
+                                    <?php } else { ?>
+                                        <h5>Diagramme sectoriel de la totalité des notes de frais</h5>
+                                    <?php } ?>
+                                    <br>
                                     <canvas id="diagramme_sectoriel" width="400" height="200"></canvas>
                                     <form method="POST" action="<?= htmlspecialchars('index.php?controller=NoteFrais&action=indexStatistique'); ?>">
                                         <div class="row justify-content-center mt-3">
@@ -115,13 +142,16 @@ $listeStatHistogramme = json_encode($listStat['histogramme'], true);
                                             </div>
                                             <div class="col-md-1 col-12">
                                                 <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
+                                                <input type="hidden" name="sectoriel" value="true"/>
+                                                <input type="hidden" name="listeStatHistogramme" value="<?= $listHistogramme?>"/>
                                                 <button type="submit" class="btn btn-primary" title="Rechercher">
                                                     <i class="fa fa-search"></i>
                                                 </button>
                                             </div>
                                             <div class="col-md-1 col-12">
                                                 <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
-                                                <button type="reset" class="btn btn-outline-secondary" title="Réinitialiser" onclick="window.location.href='index.php?controller=NoteFrais&action=indexStatistique&reinitialiser=<?php echo $reintialiser = true ?>'">
+
+                                                <button type="reset" class="btn btn-outline-secondary" title="Réinitialiser" onclick="resetFiltersSectoriel()">
                                                     <i class="fa fa-times"></i>
                                                 </button>
                                             </div>
@@ -136,6 +166,25 @@ $listeStatHistogramme = json_encode($listStat['histogramme'], true);
             </div>
         </div>
         <script>
+            /*------------------------------Fonction pour réinitialiser les filtres  ---------------------------------*/
+            function resetFiltersHisto() {
+                document.getElementById("parMois").checked = true;
+                document.getElementById("parJour").checked = false;
+                document.getElementById("annee_filtre").value = "";
+                document.getElementById("mois_filtre").value = "";
+
+                // Soumettre le formulaire après la réinitialisation
+                document.querySelector("form").submit();
+            }
+
+            function resetFiltersSectoriel() {
+                document.getElementById("date_debut").value = "";
+                document.getElementById("date_fin").value = "";
+
+                // Soumettre le formulaire après la réinitialisation
+                document.querySelector("form").submit();
+            }
+
             /*---------------------------------------- Graphique Histogramme/Courbe ----------------------------------*/
             // Récupération des données PHP encodées en JSON
             const listeStatHistogramme = <?php echo $listeStatHistogramme; ?>;
