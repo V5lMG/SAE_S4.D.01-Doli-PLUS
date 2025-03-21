@@ -41,27 +41,32 @@ class NoteFraisController
 
     public function indexStatistique(): View
     {
-        $listStat = [];
-        $date_debut = HttpHelper::getParam('date_debut');
-        $date_fin = HttpHelper::getParam('date_fin');
+
+        $listStat      = ['sectoriel' => [], 'histogramme' => []];
+        $date_debut    = HttpHelper::getParam('date_debut');
+        $date_fin      = HttpHelper::getParam('date_fin');
         $reinitialiser = HttpHelper::getParam('reinitialiser');
-//
-//        var_dump($date_debut, $date_fin, $reinitialiser);
+        // j'ai toucher en dessous
+        $parMois = HttpHelper::getParam('filtreJour') === 'mois' || HttpHelper::getParam('filtreJour') === null;
+        $parJour       = HttpHelper::getParam('filtreJour') === 'jour';
+        $moisChoisi    = HttpHelper::getParam('mois_filtre') ?? 0;
+
         if ($reinitialiser == 1) {
             $date_debut = null;
             $date_fin   = null;
-            $listStat   = $this->noteFraisService->recupererStat($date_debut, $date_fin);
         }
 
         // Récupération de la liste des notes de frais complète
-        $listStat = $this->noteFraisService->recupererStat($date_debut, $date_fin);
+        $listStat = $this->noteFraisService->recupererStat($date_debut, $date_fin, $parMois, $parJour, $moisChoisi);
 
-        //var_dump($listStat);
         // Attribution du résultat de la requête à la variable de la vue
         $view = new View("views/statistique_note_frais");
-        $view->setVar('listStat' , $listStat);
-        $view->setVar('date_debut', $date_debut);
-        $view->setVar('date_fin'  , $date_fin);
+        $view->setVar('listStat'   , $listStat);
+        $view->setVar('date_debut' , $date_debut);
+        $view->setVar('date_fin'   , $date_fin);
+        $view->setVar('parMois'    , $parMois);
+        $view->setVar('parJour'    , $parJour);
+        $view->setVar('moisChoisi' , $moisChoisi);
         return $view;
     }
 }

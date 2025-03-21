@@ -5,6 +5,21 @@ class NoteFraisService
 {
     private string $apiUrl = "http://dolibarr.iut-rodez.fr/G2024-43-SAE/htdocs/api/index.php/expensereports";
 
+    private $moisNoms = [
+        1 => 'Janvier',
+        2 => 'Février',
+        3 => 'Mars',
+        4 => 'Avril',
+        5 => 'Mai',
+        6 => 'Juin',
+        7 => 'Juillet',
+        8 => 'Août',
+        9 => 'Septembre',
+        10 => 'Octobre',
+        11 => 'Novembre',
+        12 => 'Décembre'
+    ];
+
     /**
      * Récupère toutes les notes de frais pour la liste des notes de frais
      */
@@ -19,7 +34,6 @@ class NoteFraisService
         if (!isset($_SESSION['api_token'])) {
             return [];
         }
-        // 2UngH5p63zi45fAxFY19neyZTNLYyS36 clé API admin
 
         // Initialiser cURL
         $requeteCurl = curl_init($this->apiUrl);
@@ -134,9 +148,19 @@ class NoteFraisService
     }
 
     /**
-     * Récupère  les notes de frais pour les statistiques
+     * Récupère les notes de frais pour les statistiques
+     * @param string|null $date_debut
+     * @param string|null $date_fin
+     * @param bool $parMois
+     * @param bool $parJour
+     * @param string $moisChoisi
+     * @return array
      */
-    public function recupererStat(string $date_debut = null, string $date_fin = null): array
+    public function recupererStat(string  $date_debut = null,
+                                  string  $date_fin = null,
+                                  bool $parMois,
+                                  bool $parJour,
+                                  string  $moisChoisi): array
     {
         // Démarrer la session si elle n'est pas encore démarrée
         if (session_status() === PHP_SESSION_NONE) {
@@ -146,8 +170,6 @@ class NoteFraisService
         if (!isset($_SESSION['api_token'])) {
             return [];
         }
-
-        // 2UngH5p63zi45fAxFY19neyZTNLYyS36
 
         // Initialiser cURL
         $requeteCurl = curl_init($this->apiUrl);
@@ -164,16 +186,23 @@ class NoteFraisService
         $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
         curl_close($requeteCurl);
 
-        //var_dump(json_decode($response, true) ?? []);
-        //var_dump($httpCode);
-
         // Vérifier si la requête a réussi (HTTP 200)
         if ($httpCode === 200) {
             // Décoder la réponse JSON en tableau associatif
             $notesFrais = json_decode($response, true) ?? [];
 
-            // Initialiser un tableau pour stocker les statistiques par type de note de frais
-            $statistiques = [];
+            // Initialiser les tableaux pour stocker les valeurs pour le diagramme
+            $sectoriel = [];
+            $histogramme = array_fill(1, 12, ['MontantTotal' => 0, 'NombreNotes' => 0]);
+
+            // Si parJour est sélectionné, initialiser un tableau pour les jours du mois
+            $histogrammeJour = [];
+            if ($parJour && $moisChoisi) {
+                // Initialiser l'histogramme pour chaque jour du mois choisi (1 à 31)
+                for ($i = 1; $i <= 31; $i++) {
+                    $histogrammeJour[$i] = ['MontantTotal' => 0, 'NombreNotes' => 0];
+                }
+            }
 
             // Parcourir toutes les notes de frais récupérées
             foreach ($notesFrais as $note) {
@@ -195,26 +224,64 @@ class NoteFraisService
                         'TF_TRIP' => 'Transport',
                         default => 'Autre',
                     };
+
                     $montant = $line['total_ttc'] ?? 0;
+                    $mois = (int)date('n', strtotime($date_frais));
+                    $jour = (int)date('j', strtotime($date_frais));
 
                     // Vérifier si ce type de note de frais est déjà enregistré
-                    if (!isset($statistiques[$type])) {
+                    if (!isset($sectoriel[$type])) {
                         // Sinon, initialiser le type avec un montant total et un compteur à zéro
-                        $statistiques[$type] = [
+                        $sectoriel[$type] = [
                             'MontantTotalType' => 0,
                             'Quantite' => 0
                         ];
                     }
 
                     // Ajouter le montant de la note de frais au total du type
-                    $statistiques[$type]['MontantTotalType'] += $montant;
+                    $sectoriel[$type]['MontantTotalType'] += $montant;
                     // Incrémenter le nombre de notes de frais de ce type
-                    $statistiques[$type]['Quantite']++;
+                    $sectoriel[$type]['Quantite']++;
+
+                    // Calculer pour l'histogramme
+                    if ($parMois) {
+                        // Remplir l'histogramme par mois (1 à 12)
+                        $histogramme[$mois]['MontantTotal'] += $montant;
+                        $histogramme[$mois]['NombreNotes']++;
+                    }
+
+                    if ($parJour && $mois === (int)$moisChoisi) {
+                        // Remplir l'histogramme pour les jours du mois sélectionné
+                        $histogrammeJour[$jour]['MontantTotal'] += $montant;
+                        $histogrammeJour[$jour]['NombreNotes']++;
+                    }
                 }
             }
+            // Retourner un tableau contenant deux sous-tableaux, selon le graphique à afficher
+            // return [$sectoriel, $histogramme]
+            // Créer un nouveau tableau avec les clés remplacées par les noms des mois
+            $histogrammeAvecMois = [];
+            foreach ($histogramme as $numeroMois => $valeurs) {
+                $nomMois = $this->moisNoms[$numeroMois]; // Convertir le numéro du mois en nom
+                $histogrammeAvecMois[$nomMois] = $valeurs;
+            }
 
-            // Retourner le tableau formaté contenant les données prêtes à être utilisées pour un diagramme
-            return $statistiques;
+            // Formater les montants dans le tableau sectoriel
+            foreach ($sectoriel as $type => &$data) {
+                $data['MontantTotalType'] = number_format($data['MontantTotalType'], 2, '.', '');
+            }
+
+            // Formater les montants dans le tableau histogramme
+            foreach ($histogrammeAvecMois as $mois => &$data) {
+                $data['MontantTotal'] = number_format($data['MontantTotal'], 2, '.', '');
+            }
+
+            // Formater les montants dans l'histogrammeJour
+            foreach ($histogrammeJour as $jour => &$data) {
+                $data['MontantTotal'] = number_format($data['MontantTotal'], 2, '.', '');
+            }
+
+            return ['sectoriel' => $sectoriel, 'histogramme' => $parMois ? $histogrammeAvecMois : $histogrammeJour];
         }
 
         return []; // Retourner un tableau vide en cas d'échec
