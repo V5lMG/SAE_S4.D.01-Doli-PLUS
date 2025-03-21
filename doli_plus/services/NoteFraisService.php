@@ -148,19 +148,20 @@ class NoteFraisService
     }
 
     /**
-     * Applique les filtres sur la liste des notes de frais.
+     * Filtre une liste de notes de frais en fonction des critères fournis.
      *
-     * @param array  $notes       Liste complète des notes de frais
-     * @param string|null $employe Filtre par nom d'employé
-     * @param string|null $type   Filtre par type de note
-     * @param string|null $reference   Filtre par référence
-     * @param string|null $date_debut  Filtre par date de début
-     * @param string|null $date_fin    Filtre par date de fin
-     * @param string|null $etat        Filtre par état de la note
+     * @param array       $notes       Liste complète des notes de frais.
+     * @param string|null $employe     Nom ou identifiant de l'employé associé à la note (filtrage partiel).
+     * @param string|null $type        Type de frais (ex: "REPAS", "TRANSPORT"), par défaut 'TOUS' (aucun filtre appliqué).
+     * @param string|null $reference   Référence unique de la note de frais (filtrage partiel).
+     * @param string|null $date_debut  Date minimale de début au format 'Y-m-d' (ex: '2024-01-01').
+     * @param string|null $date_fin    Date maximale de fin au format 'Y-m-d' (ex: '2024-12-31').
+     * @param string|null $etat        État de la note de frais (ex: "validé", "en attente"), par défaut 'tous' (aucun filtre appliqué).
+     * @param array       $notesFiltrees Référence vers le tableau où seront stockées les notes filtrées.
      *
-     * @return array Notes de frais filtrées ou message si aucun filtre n'est sélectionné
+     * @return array Retourne un tableau contenant les notes filtrées, ou un message d'erreur si aucun filtre n'est utilisé.
      */
-    public function filtrerValeurs(array $notes, ?string $employe = null, ?string $type = 'TOUS', ?string $reference = null, ?string $date_debut = null, ?string $date_fin = null, ?string $etat = 'tous', $notesFiltrees): array
+    public function filtrerValeurs(array $notes, ?string $employe = null, ?string $type = 'TOUS', ?string $reference = null, ?string $date_debut = null, ?string $date_fin = null, ?string $etat = 'tous'): array
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -175,22 +176,25 @@ class NoteFraisService
         }
 
         $notesFiltrees = [];
-        $total_ht_global = 0.0;
-        $total_tva_global = 0.0;
-        $total_ttc_global = 0.0;
+        $totaux = [
+            'nombre_note' => 0,
+            'montant_ht_total' => 0,
+            'montant_tva_total' => 0,
+            'montant_ttc_total' => 0
+        ];
 
         foreach ($notes as $note) {
-            // Filtrer par employé
+            // Filtre par employé
             if (!empty($employe) && stripos($note['user_author_infos'], $employe) === false) {
                 continue;
             }
 
-            // Filtrer par référence
+            // Filtre par référence
             if (!empty($reference) && stripos($note['ref'], $reference) === false) {
                 continue;
             }
 
-            // Filtrer par date de début et de fin
+            // Gestion des dates
             $noteDateDebut = \DateTime::createFromFormat('d/m/Y', $note['date_debut']);
             $noteDateFin = \DateTime::createFromFormat('d/m/Y', $note['date_fin']);
 
@@ -208,11 +212,11 @@ class NoteFraisService
                 }
             }
 
-            // Filtrer par type de note
+            // Filtre par type (au moins une ligne doit correspondre au type sélectionné)
             if ($type !== 'TOUS') {
                 $typeMatch = false;
                 foreach ($note['lines'] as $line) {
-                    if (($line['type_fees_code'] ?? '') === $type) {
+                    if (isset($line['type']) && $line['type'] === $type) {
                         $typeMatch = true;
                         break;
                     }
@@ -222,29 +226,22 @@ class NoteFraisService
                 }
             }
 
-            // Filtrer par état
+            // Filtre par état
             if ($etat !== 'tous' && !empty($etat) && stripos($note['etat'], $etat) === false) {
                 continue;
             }
 
-            // Ajouter la note filtrée
+            // Ajout de la note filtrée
             $notesFiltrees[] = $note;
 
-            // Calcul des totaux
-            $total_ht_global += $note['total_ht'] ?? 0.0;
-            $total_tva_global += $note['total_tva'] ?? 0.0;
-            $total_ttc_global += $note['total_ttc'] ?? 0.0;
+            // Mise à jour des totaux
+            $totaux['nombre_note']++;
+            $totaux['montant_ht_total'] += $note['montant_ht'];
+            $totaux['montant_tva_total'] += $note['montant_tva'];
+            $totaux['montant_ttc_total'] += $note['montant_ttc'];
         }
 
-        // Retourner les notes filtrées avec les totaux
-        return [
-            'notes_filtrees' => $notesFiltrees,
-            'totaux' => [
-                'total_ht' => number_format($total_ht_global, 2, ',', ' ') . ' €',
-                'total_tva' => number_format($total_tva_global, 2, ',', ' ') . ' €',
-                'total_ttc' => number_format($total_ttc_global, 2, ',', ' ') . ' €'
-            ]
-        ];
+        return ['notes' => $notesFiltrees, 'totaux' => $totaux];
     }
 
 

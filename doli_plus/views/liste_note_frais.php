@@ -3,12 +3,6 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-if (session_id() != $_SESSION['session']) {
-    header('Location: ../views/auth_page.php');
-    exit();
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -53,7 +47,7 @@ if (session_id() != $_SESSION['session']) {
                                     <label for="type" class="fw-bold">Type de la note :</label>
                                     <select class="form-control" id="type" name="type">
                                         <option value="TOUS" <?= ($type == "TOUS") ? "selected" : "" ?>>Tous</option>
-                                        <option value="Frais kilométrique" <?= ($type == "Frais kilométrique") ? "selected" : "" ?>>Frais kilométrique</option>
+                                        <option value="Frais kilométriques" <?= ($type == "Frais kilométriques") ? "selected" : "" ?>>Frais kilométriques</option>
                                         <option value="Autre" <?= ($type == "Autre") ? "selected" : "" ?>>Autre</option>
                                         <option value="Repas" <?= ($type == "Repas") ? "selected" : "" ?>>Repas</option>
                                         <option value="Transport" <?= ($type == "Transport") ? "selected" : "" ?>>Transport</option>
@@ -135,8 +129,6 @@ if (session_id() != $_SESSION['session']) {
                                     <th>Montant TVA</th>
                                     <th>Montant TTC</th>
                                     <th>État</th>
-                                    <th>Montant réclamé</th>
-                                    <th>Reste à payer</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -152,8 +144,6 @@ if (session_id() != $_SESSION['session']) {
                                             <td><?= number_format($note['montant_tva'], 2, ',', ' ') ?> €</td>
                                             <td><?= number_format($note['montant_ttc'], 2, ',', ' ') ?> €</td>
                                             <td><?= htmlspecialchars($note['etat']) ?></td>
-                                            <td><?= number_format($note['montant_reclame'], 2, ',', ' ') ?> €</td>
-                                            <td><?= number_format($note['reste_a_payer'], 2, ',', ' ') ?> €</td>
                                         </tr>
                                         <!-- Sous-tableau pour afficher les lignes de la note de frais -->
                                         <tr class="collapse" id="collapse-<?= $note['ref'] ?>">
@@ -189,17 +179,25 @@ if (session_id() != $_SESSION['session']) {
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
-<!--                                        <td colspan="11" class="text-center">-->
-<!--                                            <span class="m-2">Nombre de notes de frais : --><?php //= htmlspecialchars($note["nombre_note"])?><!--</span>-->
-<!--                                            <span class="m-2">Montant HT total : --><?php //= htmlspecialchars($note["totaux"]["montant_ht_total"])?><!--</span>-->
-<!--                                            <span class="m-2">Montant TVA total : --><?php //= htmlspecialchars($note["totaux"]["montant_tva_total"])?><!--</span>-->
-<!--                                            <span>Montant TTC total : --><?php //= htmlspecialchars($note["totaux"]["montant_ttc_total"])?><!--</span>-->
-<!--                                        </td>-->
+                                        <td colspan="2" class="text-center">
+                                            Nombre de notes de frais : <?= htmlspecialchars($totaux['nombre_note']) ?>
+                                        </td>
+                                        <td colspan="2"></td>
+                                        <td class="text-center">
+                                            Montant HT total : <?= number_format($totaux['montant_ht_total'], 2, ',', ' ') ?> €
+                                        </td>
+                                        <td class="text-center">
+                                            Montant TVA total : <?= number_format($totaux['montant_tva_total'], 2, ',', ' ') ?> €
+                                        </td>
+                                        <td class="text-center">
+                                            Montant TTC total : <?= number_format($totaux['montant_ttc_total'], 2, ',', ' ') ?> €
+                                        </td>
+                                        <td></td>
                                     <?php else: ?>
                                     <tr>
                                         <td colspan="11" class="text-center text-muted">Aucune note de frais trouvée</td>
                                     </tr>
-                                <?php endif; ?>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>

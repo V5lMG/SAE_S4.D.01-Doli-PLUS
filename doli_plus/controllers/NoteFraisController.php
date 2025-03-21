@@ -32,43 +32,41 @@ class NoteFraisController
     {
         AuthService::checkAuthentication();
 
-        // Récupérer la liste complète des notes de frais
         $listeNoteFraisNonTrie = $this->noteFraisService->recupererListeComplete();
 
-        // Récupérer les paramètres de filtre envoyés en GET
         $employe    = HttpHelper::getParam('employe', '');
         $type       = HttpHelper::getParam('type', 'TOUS');
         $reference  = HttpHelper::getParam('reference', '');
         $date_debut = HttpHelper::getParam('date_debut', '');
         $date_fin   = HttpHelper::getParam('date_fin', '');
         $etat       = HttpHelper::getParam('etat', 'tous');
-
-        // Vérifier si le paramètre pour afficher toutes les notes est présent
         $afficherTous = HttpHelper::getParam('afficherTous', '');
 
-        // Si le paramètre "afficherTous" est défini, on n'applique pas de filtre
         if ($afficherTous) {
             $listeNoteFrais = $listeNoteFraisNonTrie;
+            $totaux = [
+                'nombre_note' => count($listeNoteFrais),
+                'montant_ht_total' => array_sum(array_column($listeNoteFrais, 'montant_ht')),
+                'montant_tva_total' => array_sum(array_column($listeNoteFrais, 'montant_tva')),
+                'montant_ttc_total' => array_sum(array_column($listeNoteFrais, 'montant_ttc'))
+            ];
         } else {
-            // Sinon, appliquer les filtres
-            if (!empty($employe) || $type !== 'TOUS' || !empty($reference) || !empty($date_debut) || !empty($date_fin) || $etat !== 'tous') {
-                $notesFiltrees = [];
-                $listeNoteFrais = $this->noteFraisService->filtrerValeurs(
-                    $listeNoteFraisNonTrie,
-                    $employe,
-                    $type,
-                    $reference,
-                    $date_debut,
-                    $date_fin,
-                    $etat,
-                    $notesFiltrees
-                );
-            }
+            $filteredData = $this->noteFraisService->filtrerValeurs(
+                $listeNoteFraisNonTrie,
+                $employe,
+                $type,
+                $reference,
+                $date_debut,
+                $date_fin,
+                $etat
+            );
+            $listeNoteFrais = $filteredData['notes'];
+            $totaux = $filteredData['totaux'];
         }
 
-        // Retourner la vue avec les notes de frais filtrées ou toutes les notes
         $view = new View("views/liste_note_frais");
         $view->setVar('listeNoteFrais', $listeNoteFrais);
+        $view->setVar('totaux', $totaux);
         return $view;
     }
 
