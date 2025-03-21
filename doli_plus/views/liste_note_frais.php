@@ -189,12 +189,12 @@ if (session_id() != $_SESSION['session']) {
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
-                                        <td colspan="11" class="text-center">
-                                            <span class="m-2">Nombre de notes de frais : <?= htmlspecialchars($note["nombre_note"])?></span>
-                                            <span class="m-2">Montant HT total : <?= htmlspecialchars($note["totaux"]["montant_ht_total"])?></span>
-                                            <span class="m-2">Montant TVA total : <?= htmlspecialchars($note["totaux"]["montant_tva_total"])?></span>
-                                            <span>Montant TTC total : <?= htmlspecialchars($note["totaux"]["montant_ttc_total"])?></span>
-                                        </td>
+<!--                                        <td colspan="11" class="text-center">-->
+<!--                                            <span class="m-2">Nombre de notes de frais : --><?php //= htmlspecialchars($note["nombre_note"])?><!--</span>-->
+<!--                                            <span class="m-2">Montant HT total : --><?php //= htmlspecialchars($note["totaux"]["montant_ht_total"])?><!--</span>-->
+<!--                                            <span class="m-2">Montant TVA total : --><?php //= htmlspecialchars($note["totaux"]["montant_tva_total"])?><!--</span>-->
+<!--                                            <span>Montant TTC total : --><?php //= htmlspecialchars($note["totaux"]["montant_ttc_total"])?><!--</span>-->
+<!--                                        </td>-->
                                     <?php else: ?>
                                     <tr>
                                         <td colspan="11" class="text-center text-muted">Aucune note de frais trouvée</td>

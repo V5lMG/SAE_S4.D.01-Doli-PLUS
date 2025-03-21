@@ -387,7 +387,4 @@ class NoteFraisService
 
         return []; // Retourner un tableau vide en cas d'échec
     }
-
-
-
 }
