@@ -8,7 +8,6 @@ if (session_status() === PHP_SESSION_NONE) {
 // Convertir le tableau en JSON
 $listeStatSectorielle = isset($_SESSION['listSectoriel']) ? json_encode($_SESSION['listSectoriel']) : '[]';
 $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESSION['listHistogramme']) : '[]';
-
 // TODO Mettre des titres au deux graphique
 ?>
 <!DOCTYPE html>
@@ -48,16 +47,16 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
                                     <h5>Evolution des notes de frais</h5>
                                     <br>
                                     <canvas id="histogramme" width="400" height="200"></canvas>
-                                    <form method="POST" action="<?= htmlspecialchars('index.php?controller=NoteFrais&action=indexStatistique'); ?>">
+                                    <form id="formHistogramme" method="POST" action="<?= htmlspecialchars('index.php?controller=NoteFrais&action=indexStatistique'); ?>">
                                         <!-- Bouton radio -->
                                         <div class="row justify-content-center mt-3">
                                             <div class="col-md-6">
                                                 <label for="parMois">Par mois (sur un an)</label>
-                                                <input type="radio" class="form-check-input" name="filtreJour" id="parMois" value="mois" <?= isset($parMois) && $parMois ? 'checked' : '' ?>>
+                                                <input type="radio" class="form-check-input" name="filtreJour" id="parMois" value="mois" <?= ((substr_count($listeStatHistogramme, ',') + 1) / 2) === 12 ? 'checked' : '' ?>>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="parJour">Par jour (sur un mois)</label>
-                                                <input type="radio" class="form-check-input" name="filtreJour" id="parJour" value="jour" <?= isset($parJour) && $parJour ? 'checked' : '' ?>>
+                                                <input type="radio" class="form-check-input" name="filtreJour" id="parJour" value="jour" <?= ((substr_count($listeStatHistogramme, ',') + 1) / 2) === 31 ? 'checked' : '' ?>>
                                             </div>
                                         </div>
                                         <!-- Liste déroulante des années et des mois -->
@@ -70,7 +69,7 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
                                                     // TODO à régler
                                                     $currentYear = date("Y");
                                                     for ($year = $currentYear; $year >= 1900; $year--) {?>
-                                                        <option value="<?= $year ?>" <?= $year == $currentYear ? 'selected' : '' ?> > <?= $year ?> </option>
+                                                        <option value="<?= $year ?>" <?= $year == $anneeChoisi ? 'selected' : '' ?> > <?= $year ?> </option>
                                                         <?php
                                                     }
                                                     ?>
@@ -108,13 +107,15 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
                                         <div class="row justify-content-center mt-3">
                                             <div class="col-md-1 col-12">
                                                 <input type="hidden" name="histogramme" value="true"/>
+                                                <input type="hidden" name="date_debut" id="date_debut" value="<?= $date_debut?>"/>
+                                                <input type="hidden" name="date_fin" id="date_fin" value="<?= $date_fin?>"/>
                                                 <input type="hidden" name="listeStatSectorielle" value="<?= $listSectorielle ?>"/>
                                                 <button type="submit" class="btn btn-primary" title="Rechercher">
                                                     <i class="fa fa-search"></i>
                                                 </button>
                                             </div>
                                             <div class="col-md-1 col-12">
-                                                <button type="reset" class="btn btn-outline-secondary" title="Réinitialiser" onclick="resetFiltersHisto()">
+                                                <button type="reset" class="btn btn-outline-secondary" title="RéinitialiserHistogramme" onclick="resetFiltersHistogramme()">
                                                     <i class="fa fa-times"></i>
                                                 </button>
                                             </div>
@@ -132,7 +133,7 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
                                     <?php } ?>
                                     <br>
                                     <canvas id="diagramme_sectoriel" width="400" height="200"></canvas>
-                                    <form method="POST" action="<?= htmlspecialchars('index.php?controller=NoteFrais&action=indexStatistique'); ?>">
+                                    <form id="formSectoriel" method="POST" action="<?= htmlspecialchars('index.php?controller=NoteFrais&action=indexStatistique'); ?>">
                                         <div class="row justify-content-center mt-3">
                                             <div class="col-md-4 col-12">
                                                 <label for="date_debut">Date début :</label>
@@ -145,6 +146,8 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
                                             <div class="col-md-1 col-12">
                                                 <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
                                                 <input type="hidden" name="sectoriel" value="true"/>
+                                                <input type="hidden" name="annee_filtre" id="annee_filtre" value="<?= $anneeChoisi?>"/>
+                                                <input type="hidden" name="mois_filtre" id="mois_filtre" value="<?= $moisChoisi?>"/>
                                                 <input type="hidden" name="listeStatHistogramme" value="<?= $listHistogramme?>"/>
                                                 <button type="submit" class="btn btn-primary" title="Rechercher">
                                                     <i class="fa fa-search"></i>
@@ -152,8 +155,7 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
                                             </div>
                                             <div class="col-md-1 col-12">
                                                 <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
-
-                                                <button type="reset" class="btn btn-outline-secondary" title="Réinitialiser" onclick="resetFiltersSectoriel()">
+                                                <button type="reset" class="btn btn-outline-secondary" title="RéinitialiserSectoriel" onclick="resetFiltersSectoriel()">
                                                     <i class="fa fa-times"></i>
                                                 </button>
                                             </div>
@@ -169,22 +171,23 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
         </div>
         <script>
             /*------------------------------Fonction pour réinitialiser les filtres  ---------------------------------*/
-            function resetFiltersHisto() {
+            function resetFiltersHistogramme() {
                 document.getElementById("parMois").checked = true;
                 document.getElementById("parJour").checked = false;
                 document.getElementById("annee_filtre").value = "";
                 document.getElementById("mois_filtre").value = "";
 
                 // Soumettre le formulaire après la réinitialisation
-                document.querySelector("form").submit();
+                document.getElementById("formHistogramme").submit();
             }
 
             function resetFiltersSectoriel() {
                 document.getElementById("date_debut").value = "";
                 document.getElementById("date_fin").value = "";
 
+                console.log("par ici")
                 // Soumettre le formulaire après la réinitialisation
-                document.querySelector("form").submit();
+                document.getElementById("formSectoriel").submit();
             }
 
             /*---------------------------------------- Graphique Histogramme/Courbe ----------------------------------*/

@@ -129,6 +129,7 @@ class NoteFraisController
         $view->setVar('parMois'        , $parMois);
         $view->setVar('parJour'        , $parJour);
         $view->setVar('moisChoisi'     , $moisChoisi);
+        $view->setVar('anneeChoisi'    , $anneeChoisi);
 
         return $view;
     }
