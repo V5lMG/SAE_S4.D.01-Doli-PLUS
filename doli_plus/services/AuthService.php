@@ -14,16 +14,13 @@ class AuthService
             session_start();
         }
 
-        // enregistrer l'url dans le fichier de config
-        self::setUrlFichier($url);
-
         // Construire l'URL de l'API Dolibarr pour l'authentification avec les identifiants
         $urlContruite = $url . "/login?login=" . urlencode($username) . "&password=" . urlencode($password);
 
         // Initialiser cURL pour l'authentification
         $requeteCurl = curl_init($urlContruite);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);          // Utiliser la méthode GET
+        curl_setopt($requeteCurl, CURLOPT_HTTPGET, true); // Utiliser la méthode GET
 
         // Exécuter la requête et récupérer la réponse
         $response = curl_exec($requeteCurl);
@@ -78,29 +75,26 @@ class AuthService
         // Ajouter l'URL en haut du tableau
         array_unshift($lines, $url);
 
-        // Écrire de nouveau tout le contenu dans le fichier
+        // Écrire de nouveau tout le contenu dans le fichier (EOL = end of line)
         file_put_contents($filePath, implode(PHP_EOL, $lines) . PHP_EOL);
     }
 
     /**
      * Récupère toutes les URLs du fichier url.conf
-     * @return string Retourne toutes les URLs sous forme de chaîne de caractères, séparées par des retours à la ligne
+     * @return array Retourne toutes les URLs sous forme de tableau
      */
-    public static function getUrlFichier(): string
+    public static function getUrlFichier(): array
     {
         // Définir le chemin du fichier
         $filePath = 'static/config/url.conf';
 
         // Vérifier si le fichier existe
         if (!file_exists($filePath)) {
-            return '';
+            return []; // Retourne un tableau vide si le fichier n'existe pas
         }
 
-        // Lire le contenu du fichier et ignorer les nouvelles lignes
-        $lines = file($filePath, FILE_IGNORE_NEW_LINES);
-
-        // Retourner toutes les URLs sous forme de chaîne, séparées par des retours à la ligne
-        return implode(PHP_EOL, $lines);
+        // Lire le contenu du fichier ligne par ligne sans les retours à la ligne
+        return file($filePath, FILE_SKIP_EMPTY_LINES);
     }
 
     /**

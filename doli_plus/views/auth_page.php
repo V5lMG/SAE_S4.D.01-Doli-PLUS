@@ -29,27 +29,31 @@ if (session_status() === PHP_SESSION_NONE) {
                             <div class="trinputlogin">
                                 <div class="center tdinputlogin">
                                     <span class="fa fa-user"></span>
-                                    <input type="text" id="username" maxlength="255" placeholder="Identifiant" name="username" class="flat minwidth150" required />
+                                    <input type="text" id="username" maxlength="255" placeholder="Identifiant" name="username" required />
                                 </div>
                             </div>
                             <div class="trinputlogin">
                                 <div class="center tdinputlogin">
                                     <span class="fa fa-key"></span>
-                                    <input type="password" id="password" maxlength="128" placeholder="Mot de passe" name="password" class="flat minwidth150" required />
+                                    <input type="password" id="password" maxlength="128" placeholder="Mot de passe" name="password" required />
                                 </div>
                             </div>
-                            <!-- URL input with dropdown using datalist -->
-                            <div class="trinputlogin">
-                                <div class="center tdinputlogin d-flex align-items-center">
-                                    <i class="fa-solid fa-link me-2"></i>
-                                    <input type="url" id="url" maxlength="255" name="url" class="flat minwidth150" placeholder="URL" list="urlList" required/>
+                            <!-- URL -->
+                            <div class="trinputlogin max-longueur">
+                                <div class="left tdinputlogin d-flex align-items-center">
+                                    <i class="fa-solid fa-link"></i>
+                                    <input type="url" id="url" maxlength="255" name="url" placeholder="URL" required/>
                                     <!-- Bouton déroulant placé à droite de l'input -->
-                                    <div class="dropdown ms-2">
+                                    <div class="dropdown ms-1">
                                         <button class="btn bouton-url dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"></button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <li><a class="dropdown-item" href="#">Option 1</a></li>
-                                            <li><a class="dropdown-item" href="#">Option 2</a></li>
-                                            <li><a class="dropdown-item" href="#">Option 3</a></li>
+                                            <?php if (!empty($urls) && is_array($urls)): ?>
+                                                <?php foreach ($urls as $url): ?>
+                                                    <li><span class="dropdown-item"><?= htmlspecialchars(trim($url)) ?></span></li>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <li><span class="dropdown-item">Aucune URL disponible</span></li>
+                                            <?php endif; ?>
                                         </ul>
                                     </div>
                                 </div>
@@ -66,9 +70,23 @@ if (session_status() === PHP_SESSION_NONE) {
                 </div>
             </form>
             <!-- Message d'erreur de connexion -->
-            <?php if (isset($error)) { ?>
-                <p style="color: red;"><?php echo $error; ?></p>
-            <?php } ?>
+            <?php
+            if (isset($_SESSION['error_message'])):
+                // Ajouter une div avec la structure et un petit bandeau à gauche
+                echo '<div class="erreur-table">';
+
+                    // Bandeau à gauche plus foncé
+                    echo '<div style="background-color: #B77F7F; width: 10px;"></div>';
+
+                    // Message d'erreur à droite du bandeau
+                    echo '<div style="padding-left: 10px; flex-grow: 1; display: flex;">';
+                        echo '<p style="font-weight: bold;">' . htmlspecialchars($_SESSION['error_message']) . '</p>';
+                    echo '</div>';
+
+                echo '</div>';
+                unset($_SESSION['error_message']);
+            endif;
+            ?>
             <!-- SubTitle with version -->
             <div class="login_table_title center" title="DoliPlus 1.0.0">
                 <a class="login_table_title" href="https://www.dolibarr.org" target="_blank" rel="noopener noreferrer external">DoliPlus 1.0.0</a>
@@ -77,15 +95,21 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Sélectionner les éléments nécessaires
-        const inputUrl = document.getElementById('url');
-        const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+        document.addEventListener("DOMContentLoaded", function () {
+            const inputUrl = document.getElementById("url");
+            const dropdownItems = document.querySelectorAll(".dropdown-menu .dropdown-item");
 
-        // Ajouter un écouteur d'événement sur chaque élément du menu déroulant
-        dropdownItems.forEach(item => {
-            item.addEventListener('click', function(event) {
-                event.preventDefault();  // Empêche le comportement par défaut du lien
-                inputUrl.value = this.textContent;  // Affecte la valeur sélectionnée à l'input URL
+            // Mettre la première URL par défaut dans l'input s'il y en a
+            if (dropdownItems.length > 0) {
+                inputUrl.value = dropdownItems[0].textContent.trim();
+            }
+
+            // Ajouter un écouteur pour changer la valeur quand on clique sur une URL
+            document.querySelector(".dropdown-menu").addEventListener("click", function (event) {
+                if (event.target.classList.contains("dropdown-item")) {
+                    event.preventDefault(); // Empêche le comportement par défaut
+                    inputUrl.value = event.target.textContent.trim(); // Met à jour l'input
+                }
             });
         });
     </script>

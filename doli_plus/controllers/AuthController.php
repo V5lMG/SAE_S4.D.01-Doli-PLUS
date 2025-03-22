@@ -17,9 +17,12 @@ class AuthController
     }
 
     /**
-     * Default action
+     * Action par défaut pour afficher la page d'authentification avec la liste des URLs.
      *
-     * @return View the default view displaying all users
+     * Cette méthode récupère les URLs enregistrées dans le fichier `url.conf` via la méthode
+     * `getUrlFichier()` du service d'authentification, puis les passe à la vue pour affichage.
+     *
+     * @return View La vue contenant le formulaire de connexion et la liste des URLs.
      */
     public function index(): View {
 
@@ -50,13 +53,13 @@ class AuthController
                 exit();
             } else {
                 // Authentification échouée → Retour à la page de connexion avec un message d'erreur
-                $view = new View("views/auth_page");
-                $view->setVar("error", "Identifiant, mot de passe ou URL incorrect.");
-                return $view;
+                $_SESSION['error_message'] = "Identifiant, mot de passe ou URL incorrect";
+                header("Location: index.php");
+                exit();
             }
         }
 
-        return new View("views/auth_page");
+        return new View("index"); // défaut si aucune soumission n'est faites
     }
 
     /**
