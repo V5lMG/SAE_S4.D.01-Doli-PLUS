@@ -4,11 +4,43 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+$filtreJour = isset($_POST['filtreJour']) ? $_POST['filtreJour'] : 'mois'; // 'mois' par défaut
 
 // Convertir le tableau en JSON
 $listeStatSectorielle = isset($_SESSION['listSectoriel']) ? json_encode($_SESSION['listSectoriel']) : '[]';
 $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESSION['listHistogramme']) : '[]';
-// TODO Mettre des titres au deux graphique
+
+// Décoder le JSON pour pouvoir accéder aux données comme tableau PHP
+$listeStatHistogrammeDecoded = json_decode($listeStatHistogramme, true);
+
+// Vérifier si les données ont bien été décodées
+if (isset($listeStatHistogrammeDecoded['actuel'])) {
+    $listeStatHistogrammeActuel = $listeStatHistogrammeDecoded['actuel'];
+} else {
+    $listeStatHistogrammeActuel = [];
+}
+
+if (isset($listeStatHistogrammeDecoded['comparaison'])) {
+    $listeStatHistogrammeComparaison = $listeStatHistogrammeDecoded['comparaison'];
+} else {
+    $listeStatHistogrammeComparaison = [];
+}
+
+// Tableau des mois
+$mois = [
+    1 => 'Janvier',
+    2 => 'Février',
+    3 => 'Mars',
+    4 => 'Avril',
+    5 => 'Mai',
+    6 => 'Juin',
+    7 => 'Juillet',
+    8 => 'Août',
+    9 => 'Septembre',
+    10 => 'Octobre',
+    11 => 'Novembre',
+    12 => 'Décembre'
+];
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -36,15 +68,31 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
                         <!-- Titre -->
                         <div class="row">
                             <div class="col text-center">
-                                <h1 class="mb-4">Statistiques</h1>
+                                <h2 class="mb-4 titre_page"><span class="fas fa-wallet beige"></span> Statistiques</h2>
                             </div>
                         </div>
+                        <br>
                         <!-- Information de la page -->
                         <div class="row justify-content-center">
                             <div class="col-12 col-md-6 text-center">
                                 <!-- Histogramme Baton -->
                                 <div class="p-4 border rounded shadow-sm bg-light">
-                                    <h5>Evolution des notes de frais</h5>
+                                    <?php
+                                    // Variables pour le titre
+                                    $titre = "Evolution des notes de frais";
+
+                                    if ($filtreJour === 'mois') {
+                                        $titre .= " sur l'année " . (isset($anneeChoisi) ? $anneeChoisi : date("Y"));
+                                    } elseif ($filtreJour === 'jour') {
+                                        $titre .= " pour le mois de " . (isset($moisChoisi) ? $mois[$moisChoisi]: 'Sélectionner un mois') . " de l'année " . (isset($anneeChoisi) ? $anneeChoisi : date("Y"));
+                                    }
+
+                                    // Vérification si la comparaison est activée
+                                    if (isset($_POST['comparaison']) && $_POST['comparaison'] == 'on') {
+                                        $titre .= " (Comparaison avec l'année précédente)";
+                                    }
+                                    ?>
+                                    <h5><?= $titre ?></h5>
                                     <br>
                                     <canvas id="histogramme" width="400" height="200"></canvas>
                                     <form id="formHistogramme" method="POST" action="<?= htmlspecialchars('index.php?controller=NoteFrais&action=indexStatistique'); ?>">
@@ -52,11 +100,11 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
                                         <div class="row justify-content-center mt-3">
                                             <div class="col-md-6">
                                                 <label for="parMois">Par mois (sur un an)</label>
-                                                <input type="radio" class="form-check-input" name="filtreJour" id="parMois" value="mois" <?= ((substr_count($listeStatHistogramme, ',') + 1) / 2) === 12 ? 'checked' : '' ?>>
+                                                <input type="radio" class="form-check-input" name="filtreJour" id="parMois" value="mois" <?= $filtreJour === 'mois' ? 'checked' : '' ?>>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="parJour">Par jour (sur un mois)</label>
-                                                <input type="radio" class="form-check-input" name="filtreJour" id="parJour" value="jour" <?= ((substr_count($listeStatHistogramme, ',') + 1) / 2) === 31 ? 'checked' : '' ?>>
+                                                <input type="radio" class="form-check-input" name="filtreJour" id="parJour" value="jour" <?= $filtreJour === 'jour' ? 'checked' : '' ?>>
                                             </div>
                                         </div>
                                         <!-- Liste déroulante des années et des mois -->
@@ -80,21 +128,6 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
                                                 <select class="form-select" name="mois_filtre" id="mois_filtre">
                                                     <option value="" >--Sélectionner un mois--</option>
                                                     <?php
-                                                    // Tableau des mois
-                                                    $mois = [
-                                                        1 => 'Janvier',
-                                                        2 => 'Février',
-                                                        3 => 'Mars',
-                                                        4 => 'Avril',
-                                                        5 => 'Mai',
-                                                        6 => 'Juin',
-                                                        7 => 'Juillet',
-                                                        8 => 'Août',
-                                                        9 => 'Septembre',
-                                                        10 => 'Octobre',
-                                                        11 => 'Novembre',
-                                                        12 => 'Décembre'
-                                                    ];
                                                     // Boucle pour afficher les mois dans la liste déroulante
                                                     foreach ($mois as $moisNum => $moisOption) { ?>
                                                         <option value="<?= $moisNum ?>" <?= $moisNum == $moisChoisi ? 'selected' : '' ?> > <?= $moisOption ?> </option>
@@ -126,7 +159,7 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
                             <div class="col-12 col-md-6 text-center">
                                 <!-- Diagramme Circulaire -->
                                 <div class="p-4 border rounded shadow-sm bg-light">
-                                    <?php if (isset($date_debut) && isset ($date_fin)) { ?>
+                                    <?php if (isset($date_debut) && isset ($date_fin) && !empty($date_debut) && !empty($date_fin)) { ?>
                                         <h5>Diagramme sectoriel des notes de frais entre <?= htmlspecialchars((new DateTime($date_debut))->format('d/m/Y')); ?> et <?= htmlspecialchars((new DateTime($date_fin))->format('d/m/Y')); ?> compris </h5>
                                     <?php } else { ?>
                                         <h5>Diagramme sectoriel de la totalité des notes de frais</h5>
@@ -176,27 +209,49 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
                 document.getElementById("parJour").checked = false;
                 document.getElementById("annee_filtre").value = "";
                 document.getElementById("mois_filtre").value = "";
+                document.getElementById("comparaison").checked = false;
 
                 // Soumettre le formulaire après la réinitialisation
                 document.getElementById("formHistogramme").submit();
             }
 
             function resetFiltersSectoriel() {
-                document.getElementById("date_debut").value = "";
-                document.getElementById("date_fin").value = "";
+                /*En ce qui concerne la réinitialisation du formulaire du diagramme sectoriel,
+                  on doit récupèrer le formulaire directement, car si l'on récupère seulement
+                  les champs avec leur ID, des conflits ont lieu avec les "input" de type
+                  "hidden" du formulaire de l'histogramme.
+                 */
 
-                console.log("par ici")
-                // Soumettre le formulaire après la réinitialisation
-                document.getElementById("formSectoriel").submit();
+                let form = document.getElementById("formSectoriel");
+
+                // Réinitialiser uniquement les champs de ce formulaire
+                form.querySelector("#date_debut").value = "";
+                form.querySelector("#date_fin").value = "";
+
+                form.submit();
             }
 
             /*---------------------------------------- Graphique Histogramme/Courbe ----------------------------------*/
             // Récupération des données PHP encodées en JSON
-            const listeStatHistogramme = <?php echo $listeStatHistogramme; ?>;
+            const listeStatHistogrammeActuel = <?php echo json_encode($listeStatHistogrammeActuel); ?>;
+            const listeStatHistogrammeComparaison = <?php echo json_encode($listeStatHistogrammeComparaison); ?>;
 
-            const histogrammeLabels = Object.keys(listeStatHistogramme);
-            const montantTotal = histogrammeLabels.map(mois => listeStatHistogramme[mois]['MontantTotal']); // Montant total par mois
-            const nombreNotes  = histogrammeLabels.map(mois => listeStatHistogramme[mois]['NombreNotes']);  // Quantité de notes de frais par mois
+            const histogrammeLabels = Object.keys(listeStatHistogrammeActuel);
+            const montantTotalActuel = histogrammeLabels.map(mois => listeStatHistogrammeActuel[mois]['MontantTotal']); // Montant total par mois
+            const nombreNotesActuel  = histogrammeLabels.map(mois => listeStatHistogrammeActuel[mois]['NombreNotes']);  // Quantité de notes de frais par mois
+
+            // Données de comparaison
+            const montantTotalComparaison = histogrammeLabels.map(mois => {
+                // Si les données de comparaison existent, les récupérer, sinon mettre 0
+                return listeStatHistogrammeComparaison[mois] ? listeStatHistogrammeComparaison[mois]['MontantTotal'] : 0;
+            });
+
+            const nombreNotesComparaison = histogrammeLabels.map(mois => {
+                // Si les données de comparaison existent, les récupérer, sinon mettre 0
+                return listeStatHistogrammeComparaison[mois] ? listeStatHistogrammeComparaison[mois]['NombreNotes'] : 0;
+            });
+
+            const comparaisonCheckbox = document.getElementById('comparaison').checked;
 
             // Configuration des données pour le graphique histogramme
             const histogrammeData = {
@@ -204,11 +259,18 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
                 datasets: [
                     {
                         label: 'Montant total (€)',
-                        data: montantTotal,
+                        data: montantTotalActuel,
                         backgroundColor: 'rgba(75, 192, 192, 0.6)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1
-                    }
+                    },
+                    ...(comparaisonCheckbox ? [{
+                        label: 'Montant total (Comparaison)',
+                        data: montantTotalComparaison,
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)', // Couleur pour les données de comparaison
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }] : [] )
                 ]
             };
 
@@ -236,10 +298,15 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
                                 const index = tooltipItem.dataIndex;
 
                                 // Nombre de notes de frais correspondant à ce mois
-                                const nombreDeNotes = nombreNotes[index];
+                                const nombreDeNotesActuel = nombreNotesActuel[index];
+                                const nombreDeNotesComparaison = nombreNotesComparaison[index];
 
                                 // Affichage lors du passage de la souris
-                                return 'Montant total : ' + tooltipItem.raw + '€ | ' + nombreDeNotes + ' notes de frais';
+                                if (tooltipItem.datasetIndex === 0) {
+                                    return 'Montant total : ' + tooltipItem.raw + '€ | ' + nombreDeNotesActuel + ' notes de frais (Actuel)';
+                                } else {
+                                    return 'Montant total : ' + tooltipItem.raw + '€ | ' + nombreDeNotesComparaison + ' notes de frais (Comparaison)';
+                                }
                             }
                         }
                     }

@@ -6,3 +6,13 @@ body {
 .bouton-recherche {
     margin-top: 40px;
 }
+
+/* Titre des pages */
+.titre_page {
+    color : #22878c;
+}
+
+/* logo notes de frais Dolibarr */
+.beige {
+    color : #8c7c5c
+}
