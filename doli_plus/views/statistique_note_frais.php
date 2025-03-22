@@ -138,6 +138,13 @@ $mois = [
                                             </div>
                                         </div>
                                         <div class="row justify-content-center mt-3">
+                                            <div class="col-md-6 col-12">
+                                                <label class="form-check-label">Comparaison avec l'année précédente : </label>
+                                                <input class="form-check-input" type="checkbox" id="comparaison" name="comparaison" <?php echo isset($_POST['comparaison']) ? 'checked' : ''; ?>>
+                                            </div>
+                                        </div>
+                                        <div class="row justify-content-center mt-3">
+
                                             <div class="col-md-1 col-12">
                                                 <input type="hidden" name="histogramme" value="true"/>
                                                 <input type="hidden" name="date_debut" id="date_debut" value="<?= $date_debut?>"/>
