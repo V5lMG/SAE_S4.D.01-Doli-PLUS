@@ -29,13 +29,29 @@ if (session_status() === PHP_SESSION_NONE) {
                             <div class="trinputlogin">
                                 <div class="center tdinputlogin">
                                     <span class="fa fa-user"></span>
-                                    <input type="text" id="username" maxlength="255" placeholder="Identifiant" name="username" class="flat input-icon-user minwidth150" required />
+                                    <input type="text" id="username" maxlength="255" placeholder="Identifiant" name="username" class="flat minwidth150" required />
                                 </div>
                             </div>
                             <div class="trinputlogin">
                                 <div class="center tdinputlogin">
                                     <span class="fa fa-key"></span>
-                                    <input type="password" id="password" maxlength="128" placeholder="Mot de passe" name="password" class="flat input-icon-password minwidth150" required />
+                                    <input type="password" id="password" maxlength="128" placeholder="Mot de passe" name="password" class="flat minwidth150" required />
+                                </div>
+                            </div>
+                            <!-- URL input with dropdown using datalist -->
+                            <div class="trinputlogin">
+                                <div class="center tdinputlogin d-flex align-items-center">
+                                    <i class="fa-solid fa-link me-2"></i>
+                                    <input type="url" id="url" maxlength="255" name="url" class="flat minwidth150" placeholder="URL" list="urlList" required/>
+                                    <!-- Bouton déroulant placé à droite de l'input -->
+                                    <div class="dropdown ms-2">
+                                        <button class="btn bouton-url dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <li><a class="dropdown-item" href="#">Option 1</a></li>
+                                            <li><a class="dropdown-item" href="#">Option 2</a></li>
+                                            <li><a class="dropdown-item" href="#">Option 3</a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -59,5 +75,19 @@ if (session_status() === PHP_SESSION_NONE) {
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sélectionner les éléments nécessaires
+        const inputUrl = document.getElementById('url');
+        const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+        // Ajouter un écouteur d'événement sur chaque élément du menu déroulant
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', function(event) {
+                event.preventDefault();  // Empêche le comportement par défaut du lien
+                inputUrl.value = this.textContent;  // Affecte la valeur sélectionnée à l'input URL
+            });
+        });
+    </script>
     </body>
 </html>

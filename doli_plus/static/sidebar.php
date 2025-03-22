@@ -6,6 +6,13 @@ $userName = $_SESSION['user_name'] ?? 'Erreur';
 <!-- Barre latérale de la page (affichée sur grands écrans) -->
 <div class="sidebar col-12 col-md-2 p-3 d-none d-md-block">
     <div class="liste-bouton">
+
+        <h4 class="mt-3">
+            <button class="btn w-100 bouton-action mt-2 mb-1" onclick="window.location.href='index.php?controller=Accueil&action=index'">Accueil</button>
+        </h4>
+
+        <hr class="responsive-line">
+
         <h4 class="mt-3">Notes de frais</h4>
         <button class="btn w-100 bouton-action mt-2 mb-1" onclick="window.location.href='index.php?controller=NoteFrais&action=indexListe'">Liste</button>
         <button class="btn w-100 bouton-action mb-1" onclick="window.location.href='index.php?controller=NoteFrais&action=indexStatistique'">Statistiques</button>
@@ -15,11 +22,6 @@ $userName = $_SESSION['user_name'] ?? 'Erreur';
         <h4 class="mt-1">Achats</h4>
         <button class="btn w-100 bouton-action mt-2 mb-1" onclick="window.location.href='index.php?controller=Fournisseur&action=indexAchat'">Historique des factures</button>
         <button class="btn w-100 bouton-action mb-1" onclick="window.location.href='index.php?controller=Fournisseur&action=indexPalmares'">Palmarès</button>
-
-        <hr class="responsive-line">
-
-        <h4 class="mt-1">URL</h4>
-        <button class="btn w-100 bouton-action mt-2" onclick="window.location.href='index.php?controller=Url&action=index'">Configuration URL</button>
     </div>
 
     <!-- Dropdown utilisateur --> <!-- TODO changer pour fonctionner avec le survole -->
