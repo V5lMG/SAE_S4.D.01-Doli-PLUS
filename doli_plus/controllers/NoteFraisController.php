@@ -100,7 +100,7 @@ class NoteFraisController
         }
 
         // Initialisation des listes histogramme et sectoriel
-        $listHistogramme = [];
+        $listHistogramme = ['actuel' => [], 'comparaison' => []];
         $listSectoriel = [];
 
         // Vérification des paramètres sectoriel et histogramme
@@ -117,12 +117,13 @@ class NoteFraisController
         }
 
         // Récupération des paramètres de dates et filtres
-        $date_debut = HttpHelper::getParam('date_debut');
-        $date_fin = HttpHelper::getParam('date_fin');
-        $parMois = HttpHelper::getParam('filtreJour') === 'mois' || HttpHelper::getParam('filtreJour') === null;
-        $parJour = HttpHelper::getParam('filtreJour') === 'jour';
-        $moisChoisi = HttpHelper::getParam('mois_filtre') ?? 0;
+        $date_debut  = HttpHelper::getParam('date_debut');
+        $date_fin    = HttpHelper::getParam('date_fin');
+        $parMois     = HttpHelper::getParam('filtreJour') === 'mois' || HttpHelper::getParam('filtreJour') === null;
+        $parJour     = HttpHelper::getParam('filtreJour') === 'jour';
+        $moisChoisi  = HttpHelper::getParam('mois_filtre') ?? 0;
         $anneeChoisi = HttpHelper::getParam('annee_filtre') ?? date("Y");
+        $comparaison = HttpHelper::getParam('comparaison') ?? false; // Je pense que ça récupère le fait que ce soit faux directment quand c'est pas cocher
 
         // Si aucune donnée sectorielle n'est disponible ou si le paramètre 'sectoriel' est activé
         if ($sectoriel || !($sectoriel || $histogramme)) {
@@ -135,20 +136,23 @@ class NoteFraisController
         // Si aucune donnée histogramme n'est disponible ou si le paramètre 'histogramme' est activé
         if ($histogramme || !($sectoriel || $histogramme)) {
             // Récupération des statistiques pour l'histogramme
-            $listHistogramme = $this->noteFraisService->recupererStatHistogramme($parMois, $parJour, $moisChoisi, $anneeChoisi);
+            $listHistogramme = $this->noteFraisService->recupererStatHistogramme($parMois, $parJour, $moisChoisi, $anneeChoisi,$comparaison);
             // Sauvegarde dans la session
             $_SESSION['listHistogramme'] = $listHistogramme;
         }
 
         // Attribution du résultat à la vue, en passant les deux listes séparément
         $view = new View("views/statistique_note_frais");
-        $view->setVar('listHistogramme', $listHistogramme);
+        $view->setVar('listHistogrammeActuel', $listHistogramme['actuel']);
+        $view->setVar('listHistogrammeComparaison', $listHistogramme['comparaison']);
         $view->setVar('listSectoriel'  , $listSectoriel);
         $view->setVar('date_debut'     , $date_debut);
         $view->setVar('date_fin'       , $date_fin);
         $view->setVar('parMois'        , $parMois);
         $view->setVar('parJour'        , $parJour);
         $view->setVar('moisChoisi'     , $moisChoisi);
+        $view->setVar('anneeChoisi'    , $anneeChoisi);
+        $view->setVar('comparaison', $comparaison);
 
         return $view;
     }

@@ -253,7 +253,7 @@ class NoteFraisService
      * @param string $anneeChoisi Année choisie pour l'affichage des statistiques.
      * @return array Un tableau contenant les données statistiques par mois ou par jour.
      */
-    public function recupererStatHistogramme(bool $parMois, bool $parJour, string $moisChoisi, string $anneeChoisi): array
+    public function recupererStatHistogramme(bool $parMois, bool $parJour, string $moisChoisi, string $anneeChoisi, bool $comparaison): array
     {
         // Démarrer la session si elle n'est pas déjà active
         if (session_status() === PHP_SESSION_NONE) {
@@ -285,71 +285,75 @@ class NoteFraisService
             $notesFrais = json_decode($response, true) ?? [];
 
             // Initialiser les structures de stockage
-            $histogramme = array_fill(1, 12, ['MontantTotal' => 0, 'NombreNotes' => 0]);
+            $histogrammeActuel = array_fill(1, 12, ['MontantTotal' => 0, 'NombreNotes' => 0]);
+            $histogrammeComparaison = array_fill(1, 12, ['MontantTotal' => 0, 'NombreNotes' => 0]);
 
             // Si parJour est sélectionné, initialiser un tableau pour les jours du mois
-            $histogrammeJour = [];
+            $histogrammeJourActuel = [];
+            $histogrammeJourComparaison = [];
             if ($parJour && $moisChoisi) {
-                // Initialiser l'histogramme pour chaque jour du mois choisi (1 à 31)
+                // Initialiser l'histogrammeActuel pour chaque jour du mois choisi (1 à 31)
                 for ($i = 1; $i <= 31; $i++) {
-                    $histogrammeJour[$i] = ['MontantTotal' => 0, 'NombreNotes' => 0];
+                    $histogrammeJourActuel[$i] = ['MontantTotal' => 0, 'NombreNotes' => 0];
+                    $histogrammeJourComparaison[$i] = ['MontantTotal' => 0, 'NombreNotes' => 0];
                 }
             }
+
+            // Calcul de l'année précédente
+            $anneePrecedente = (string)((int)$anneeChoisi - 1);
 
             // Parcourir toutes les notes de frais récupérées
             foreach ($notesFrais as $note) {
                 foreach ($note['lines'] as $line) {
                     $date_frais = $line['date'] ?? null;
 
-                    // Appliquer le filtre de l'année
-                    $annee_frais = null;
-                    if ($date_frais) {
-                        // Convertir la date de frais en objet DateTime
-                        $annee_frais = substr($date_frais, 0, 4);
-                    }
+                    if (!$date_frais) continue;
 
-                    if ($annee_frais && $anneeChoisi) {
-                        if ($annee_frais !== $anneeChoisi) {
-                            continue; // Ignorer les frais qui ne correspondent pas à l'année choisie
-                        }
-                    }
-
+                    $annee_frais = substr($date_frais, 0, 4);
                     $mois = (int)date('n', strtotime($date_frais));
                     $jour = (int)date('j', strtotime($date_frais));
                     $montant = $line['total_ttc'] ?? 0;
 
-                    // Par mois
-                    if ($parMois) {
-                        $histogramme[$mois]['MontantTotal'] += $montant;
-                        $histogramme[$mois]['NombreNotes']++;
-                    }
-
-                    if ($parJour && $mois === (int)$moisChoisi) {
-                        // Remplir l'histogramme pour les jours du mois sélectionné
-                        $histogrammeJour[$jour]['MontantTotal'] += $montant;
-                        $histogrammeJour[$jour]['NombreNotes']++;
+                    // Comparaison avec l'année choisie et l'année précédente
+                    if ($annee_frais === $anneeChoisi) {
+                        if ($parMois) {
+                            $histogrammeActuel[$mois]['MontantTotal'] += $montant;
+                            $histogrammeActuel[$mois]['NombreNotes']++;
+                        }
+                        if ($parJour && $mois === (int)$moisChoisi) {
+                            $histogrammeJourActuel[$jour]['MontantTotal'] += $montant;
+                            $histogrammeJourActuel[$jour]['NombreNotes']++;
+                        }
+                    } elseif ($comparaison && $annee_frais === $anneePrecedente) {
+                        if ($parMois) {
+                            $histogrammeComparaison[$mois]['MontantTotal'] += $montant;
+                            $histogrammeComparaison[$mois]['NombreNotes']++;
+                        }
+                        if ($parJour && $mois === (int)$moisChoisi) {
+                            $histogrammeJourComparaison[$jour]['MontantTotal'] += $montant;
+                            $histogrammeJourComparaison[$jour]['NombreNotes']++;
+                        }
                     }
                 }
             }
 
             // Créer un nouveau tableau avec les clés remplacées par les noms des mois
-            $histogrammeAvecMois = [];
-            foreach ($histogramme as $numeroMois => $valeurs) {
+            $histogrammeAvecMoisActuel = [];
+            $histogrammeAvecMoisComparaison = [];
+            foreach ($histogrammeActuel as $numeroMois => $valeurs) {
                 $nomMois = $this->moisNoms[$numeroMois]; // Convertir le numéro du mois en nom
-                $histogrammeAvecMois[$nomMois] = $valeurs;
+                $histogrammeAvecMoisActuel[$nomMois] = $valeurs;
             }
 
-            // Formater les montants dans le tableau histogramme
-            foreach ($histogrammeAvecMois as $mois => &$data) {
-                $data['MontantTotal'] = number_format($data['MontantTotal'], 2, '.', '');
+            foreach ($histogrammeComparaison as $numeroMois => $valeurs) {
+                $nomMois = $this->moisNoms[$numeroMois];
+                $histogrammeAvecMoisComparaison[$nomMois] = $valeurs;
             }
 
-            // Formater les montants dans l'histogrammeJour
-            foreach ($histogrammeJour as $jour => &$data) {
-                $data['MontantTotal'] = number_format($data['MontantTotal'], 2, '.', '');
-            }
-
-            return $parMois ? $histogrammeAvecMois : $histogrammeJour;
+            // Retourner les résultats
+            return $parMois
+                ? ['actuel' => $histogrammeAvecMoisActuel, 'comparaison' => $histogrammeAvecMoisComparaison]
+                : ['actuel' => $histogrammeJourActuel, 'comparaison' => $histogrammeJourComparaison];
         }
 
         return []; // Retourner un tableau vide en cas d'échec
