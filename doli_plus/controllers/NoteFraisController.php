@@ -11,7 +11,9 @@ class NoteFraisController
     private NoteFraisService $noteFraisService;
 
     /**
-     * Create a new default controller
+     * Crée un nouveau contrôleur de gestion des notes de frais.
+     *
+     * @param NoteFraisService $noteFraisService Le service de gestion des notes de frais.
      */
     public function __construct(NoteFraisService $noteFraisService)
     {
@@ -19,21 +21,30 @@ class NoteFraisController
     }
 
     /**
-     * Default action
+     * Affiche la liste des notes de frais.
+     * Vérifie que l'utilisateur est authentifié avant d'afficher la vue.
      *
-     * @return View the default view displaying all users
+     * @return View La vue des notes de frais.
      */
     public function index(): View {
         AuthService::checkAuthentication();
         return new View("views/liste_note_frais");
     }
 
+    /**
+     * Affiche la liste des notes de frais filtrées.
+     * Applique les filtres récupérés via les paramètres HTTP et calcule les totaux.
+     *
+     * @return View La vue filtrée des notes de frais avec les totaux.
+     */
     public function indexListe(): View
     {
         AuthService::checkAuthentication();
 
+        // Récupérer la liste non triée des notes de frais
         $listeNoteFraisNonTrie = $this->noteFraisService->recupererListeComplete();
 
+        // Récupération des paramètres de filtre
         $employe    = HttpHelper::getParam('employe', '');
         $type       = HttpHelper::getParam('type', 'TOUS');
         $reference  = HttpHelper::getParam('reference', '');
@@ -42,6 +53,7 @@ class NoteFraisController
         $etat       = HttpHelper::getParam('etat', 'tous');
         $afficherTous = HttpHelper::getParam('afficherTous', '');
 
+        // Si on veut afficher toutes les notes
         if ($afficherTous) {
             $listeNoteFrais = $listeNoteFraisNonTrie;
             $totaux = [
@@ -51,6 +63,7 @@ class NoteFraisController
                 'montant_ttc_total' => array_sum(array_column($listeNoteFrais, 'montant_ttc'))
             ];
         } else {
+            // Appliquer les filtres et récupérer les données
             $filteredData = $this->noteFraisService->filtrerValeurs(
                 $listeNoteFraisNonTrie,
                 $employe,
@@ -64,12 +77,19 @@ class NoteFraisController
             $totaux = $filteredData['totaux'];
         }
 
+        // Passer les données à la vue
         $view = new View("views/liste_note_frais");
         $view->setVar('listeNoteFrais', $listeNoteFrais);
         $view->setVar('totaux', $totaux);
         return $view;
     }
 
+    /**
+     * Affiche les statistiques des notes de frais (sectorielles et histogrammes).
+     * Récupère les données en fonction des paramètres de filtre.
+     *
+     * @return View La vue des statistiques des notes de frais.
+     */
     public function indexStatistique(): View
     {
         AuthService::checkAuthentication();

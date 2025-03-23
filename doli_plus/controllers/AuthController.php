@@ -9,7 +9,9 @@ class AuthController
     private AuthService $authService;
 
     /**
-     * Create a new default controller
+     * Crée un nouveau contrôleur par défaut pour l'authentification.
+     *
+     * @param AuthService $authService Le service d'authentification à utiliser pour les opérations.
      */
     public function __construct(AuthService $authService)
     {
@@ -18,7 +20,6 @@ class AuthController
 
     /**
      * Action par défaut pour afficher la page d'authentification avec la liste des URLs.
-     *
      * Cette méthode récupère les URLs enregistrées dans le fichier `url.conf` via la méthode
      * `getUrlFichier()` du service d'authentification, puis les passe à la vue pour affichage.
      *
@@ -35,9 +36,11 @@ class AuthController
     }
 
     /**
-     * Action pour afficher la page de menu
+     * Action pour afficher la page de menu et effectuer l'authentification.
+     * Cette méthode vérifie si les informations d'identification sont valides via l'API Dolibarr.
+     * En cas de succès, elle redirige l'utilisateur vers la page d'accueil, sinon elle affiche un message d'erreur.
      *
-     * @return View la vue de menu
+     * @return View La vue de menu, ou une redirection en cas d'authentification réussie ou échouée.
      */
     public function login(): View
     {
@@ -65,9 +68,10 @@ class AuthController
 
 
     /**
-     * Gère la déconnexion de l'utilisateur
+     * Gère la déconnexion de l'utilisateur.
+     * Cette méthode supprime les informations de session de l'utilisateur et redirige vers la page de connexion.
      *
-     * @return void Redirige toujours vers la page de connexion
+     * @return void Redirige toujours vers la page de connexion après la déconnexion.
      */
     public function logout(): void
     {

@@ -18,17 +18,13 @@
  */
 namespace application;
 
-use controllers\palmaresFournisseurController;
-use controllers\UrlController;
 use controllers\FournisseurController;
 use controllers\AccueilController;
 use controllers\NoteFraisController;
 use controllers\AuthController;
-use controllers\StatistiqueNoteFraisController;
 
 use services\AuthService;
 use services\NoteFraisService;
-use services\UrlService;
 
 use yasmf\ComponentFactory;
 use yasmf\NoControllerAvailableForNameException;
@@ -63,11 +59,9 @@ class DefaultComponentFactory implements ComponentFactory
             "Home" => $this->buildAuthController(),
             "Accueil" => $this->buildAccueilController(),
 
-
             "NoteFrais" => $this->buildNoteFraisController(),
             "Fournisseur" => new FournisseurController(),
 
-            "Url" => new UrlController(),
             default => throw new NoControllerAvailableForNameException($controller_name)
         };
     }
@@ -131,14 +125,16 @@ class DefaultComponentFactory implements ComponentFactory
     }
 
     /**
-     * Méthode privée pour créer le contrôleur d'authentification.
+     * Méthode privée pour créer le contrôleur des notes de frais.
      *
-     * @return AuthController Le contrôleur d'authentification.
+     * @return NoteFraisController Le contrôleur des notes de frais.
      */
     private function buildNoteFraisController(): NoteFraisController
     {
         return new NoteFraisController($this->buildNoteFraisService());
     }
+
+    // ---------------------------------------------Accueil----------------------------------------------------//
 
     /**
      * Méthode privée pour créer le contrôleur de l'accueil
@@ -149,5 +145,4 @@ class DefaultComponentFactory implements ComponentFactory
     {
         return new AccueilController($this->buildAuthService());
     }
-
 }

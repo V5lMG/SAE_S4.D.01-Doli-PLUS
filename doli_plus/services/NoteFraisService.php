@@ -21,7 +21,9 @@ class NoteFraisService
     ];
 
     /**
-     * Récupère toutes les notes de frais pour la liste des notes de frais
+     * Récupère toutes les notes de frais pour la liste des notes de frais.
+     *
+     * @return array Un tableau contenant toutes les notes de frais formatées.
      */
     public function recupererListeComplete(): array
     {
@@ -150,16 +152,14 @@ class NoteFraisService
     /**
      * Filtre une liste de notes de frais en fonction des critères fournis.
      *
-     * @param array       $notes       Liste complète des notes de frais.
-     * @param string|null $employe     Nom ou identifiant de l'employé associé à la note (filtrage partiel).
-     * @param string|null $type        Type de frais (ex: "REPAS", "TRANSPORT"), par défaut 'TOUS' (aucun filtre appliqué).
-     * @param string|null $reference   Référence unique de la note de frais (filtrage partiel).
-     * @param string|null $date_debut  Date minimale de début au format 'Y-m-d' (ex: '2024-01-01').
-     * @param string|null $date_fin    Date maximale de fin au format 'Y-m-d' (ex: '2024-12-31').
-     * @param string|null $etat        État de la note de frais (ex: "validé", "en attente"), par défaut 'tous' (aucun filtre appliqué).
-     * @param array       $notesFiltrees Référence vers le tableau où seront stockées les notes filtrées.
-     *
-     * @return array Retourne un tableau contenant les notes filtrées, ou un message d'erreur si aucun filtre n'est utilisé.
+     * @param array $notes Liste complète des notes de frais.
+     * @param string|null $employe Nom ou identifiant de l'employé associé à la note (filtrage partiel).
+     * @param string|null $type Type de frais (ex: "REPAS", "TRANSPORT"), par défaut 'TOUS'.
+     * @param string|null $reference Référence unique de la note de frais (filtrage partiel).
+     * @param string|null $date_debut Date minimale de début au format 'Y-m-d'.
+     * @param string|null $date_fin Date maximale de fin au format 'Y-m-d'.
+     * @param string|null $etat État de la note de frais (ex: "validé", "en attente"), par défaut 'tous'.
+     * @return array Un tableau contenant les notes filtrées et les totaux, ou un message d'erreur.
      */
     public function filtrerValeurs(array $notes, ?string $employe = null, ?string $type = 'TOUS', ?string $reference = null, ?string $date_debut = null, ?string $date_fin = null, ?string $etat = 'tous'): array
     {
@@ -245,12 +245,13 @@ class NoteFraisService
     }
 
     /**
-     * Récupère les statistiques pour l'histogramme (par mois ou par jour)
-     * @param string $anneeChoisi
-     * @param string|null $moisChoisi
-     * @param bool $parMois
-     * @param bool $parJour
-     * @return array
+     * Récupère les statistiques pour l'histogramme (par mois ou par jour).
+     *
+     * @param bool $parMois Détermine si les statistiques sont par mois.
+     * @param bool $parJour Détermine si les statistiques sont par jour.
+     * @param string $moisChoisi Mois choisi pour l'affichage des statistiques.
+     * @param string $anneeChoisi Année choisie pour l'affichage des statistiques.
+     * @return array Un tableau contenant les données statistiques par mois ou par jour.
      */
     public function recupererStatHistogramme(bool $parMois, bool $parJour, string $moisChoisi, string $anneeChoisi): array
     {
@@ -355,10 +356,11 @@ class NoteFraisService
     }
 
     /**
-     * Récupère les statistiques sectorielles des notes de frais par type
-     * @param string|null $date_debut
-     * @param string|null $date_fin
-     * @return array
+     * Récupère les statistiques sectorielles des notes de frais par type.
+     *
+     * @param string|null $date_debut Date de début pour le filtre.
+     * @param string|null $date_fin Date de fin pour le filtre.
+     * @return array Un tableau contenant les statistiques par type de dépense.
      */
     public function recupererStatSectorielle(string $date_debut = null, string $date_fin = null): array
     {

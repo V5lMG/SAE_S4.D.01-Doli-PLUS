@@ -11,7 +11,9 @@ class AccueilController
     private AuthService $authService;
 
     /**
-     * Create a new default controller
+     * Crée un nouveau contrôleur par défaut
+     *
+     * @param AuthService $authService
      */
     public function __construct(AuthService $authService)
     {
@@ -19,12 +21,16 @@ class AccueilController
     }
 
     /**
-     * TODO
+     * Action par défaut pour l'affichage de la page d'accueil.
+     * Cette méthode vérifie l'authentification de l'utilisateur et récupère l'URL saisie.
+     * Si l'URL existe, elle est passée à la vue.
+     *
      * @return View
      */
     public function index(): View
     {
         AuthService::checkAuthentication();
+
         // Vérifier si l'URL est déjà enregistrée
         $url = $_SESSION["url_saisie"] ?? '';
         $view = new View("views/accueil");
@@ -42,7 +48,6 @@ class AccueilController
 
     /**
      * Action pour ajouter une nouvelle URL dans le fichier `url.conf`.
-     *
      * Cette méthode permet à l'utilisateur d'ajouter une nouvelle URL dans le fichier `url.conf`.
      * Si l'URL est valide, elle est ajoutée (ou replacée en haut si elle existe déjà).
      * Après l'ajout, l'utilisateur est redirigé vers la page d'authentification.
@@ -58,38 +63,38 @@ class AccueilController
         }
     }
 
+    /**
+     * Action pour déplacer l'URL enregistrée en haut dans le fichier `url.conf`.
+     * Récupère l'URL de la session et la remet en haut du fichier `url.conf`.
+     *
+     * @return void
+     */
     public function urlEnHaut(): void
     {
         $url = $_SESSION["url_saisie"] ?? '';
         AuthService::setUrlFichier($url);
-
     }
 
 
     /**
-     * @param string $url
-     * @return bool
+     * Vérifie si l'URL existe déjà dans le fichier `url.conf`.
+     * Cette méthode vérifie si l'URL passée en paramètre existe dans la liste des URLs stockées.
+     *
+     * @param string $url L'URL à vérifier.
+     *
+     * @return bool Retourne `true` si l'URL existe, sinon `false`.
      */
     public function urlExiste(string $url): bool
     {
         // Récupère les URLs stockées et les nettoie
         $urls = $this->authService->getUrlFichier();
-        $cleanUrls = array_map('trim', $urls); // Enlève les espaces et retours à la ligne des URLs stockées
+        $cleanUrls = array_map('trim', $urls);
+        $cleanUrl = trim($url);
 
-        // Nettoie l'URL passée en paramètre
-        $cleanUrl = strtolower(trim($url)); // Enlève les espaces et met en minuscule
-
-        var_dump($cleanUrls); // Affiche les URLs stockées après nettoyage
-        var_dump($cleanUrl); // Affiche l'URL à tester
-
-        // Comparaison explicite des URLs
+        // Comparaison des URLs
         if (in_array($cleanUrl, $cleanUrls)) {
-            var_dump("URL trouvée!"); // Vérifie que cette ligne est atteinte
             return true;
-        } else {
-            var_dump("URL NON trouvée!"); // Vérifie que cette ligne est atteinte
-            return false;
         }
+        return false;
     }
-
 }

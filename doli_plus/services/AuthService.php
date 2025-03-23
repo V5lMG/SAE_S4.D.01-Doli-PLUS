@@ -5,7 +5,15 @@ class AuthService
 {
 
     /**
-     * Authentifie l'utilisateur et récupère le token
+     * Authentifie l'utilisateur et récupère le token.
+     * Cette méthode envoie une requête à l'API Dolibarr avec les informations d'identification
+     * et récupère un token d'authentification en cas de succès.
+     *
+     * @param string $username Le nom d'utilisateur.
+     * @param string $password Le mot de passe.
+     * @param string $url L'URL de l'API Dolibarr.
+     *
+     * @return bool Retourne `true` si l'authentification a réussi, sinon `false`.
      */
     public function authentification(string $username, string $password, string $url): bool
     {
@@ -48,14 +56,16 @@ class AuthService
             }
         }
 
-        return false;  // Retourner false si l'authentification a échoué
+        // Retourner false si l'authentification a échoué
+        return false;
     }
 
-
-    // http://dolibarr.iut-rodez.fr/G2024-43-SAE/htdocs/api/index.php
     /**
-     * Enregistre l'URL dans le fichier url.conf, ou la place en haut si elle y est déjà.
-     * @param string $url L'URL à enregistrer
+     * Enregistre l'URL dans le fichier `url.conf`, ou la place en haut si elle y est déjà.
+     * Cette méthode permet d'ajouter une URL dans un fichier de configuration, et de la
+     * positionner en haut si elle existe déjà dans le fichier.
+     *
+     * @param string $url L'URL à enregistrer.
      * @return void
      */
     public static function setUrlFichier(string $url): void
@@ -64,11 +74,10 @@ class AuthService
         $filePath = 'static/config/url.conf';
 
         // Lire le contenu du fichier (si le fichier n'existe pas, on crée un tableau vide)
-        $lines = file_exists($filePath) ? file($filePath, FILE_IGNORE_NEW_LINES) : [];
+        $lines = file_exists($filePath) ? file($filePath) : [];
 
         // Vérifier si l'URL existe déjà dans le fichier
         if (($key = array_search($url, $lines)) !== false) {
-            // Si l'URL existe déjà, on la supprime de sa position actuelle
             unset($lines[$key]);
         }
 
@@ -80,8 +89,10 @@ class AuthService
     }
 
     /**
-     * Récupère toutes les URLs du fichier url.conf
-     * @return array Retourne toutes les URLs sous forme de tableau
+     * Récupère toutes les URLs du fichier `url.conf`.
+     * Cette méthode lit les URLs stockées dans le fichier de configuration et les retourne sous forme de tableau.
+     *
+     * @return array Retourne un tableau contenant toutes les URLs.
      */
     public static function getUrlFichier(): array
     {
@@ -93,12 +104,16 @@ class AuthService
             return []; // Retourne un tableau vide si le fichier n'existe pas
         }
 
-        // Lire le contenu du fichier ligne par ligne sans les retours à la ligne
+        // Lire le contenu du fichier ligne par ligne
         return file($filePath, FILE_SKIP_EMPTY_LINES);
     }
 
     /**
-     * Vérifie si l'utilisateur possède bien un token
+     * Vérifie si l'utilisateur possède bien un token.
+     * Cette méthode vérifie que le token d'authentification est présent dans la session,
+     * sinon elle redirige l'utilisateur vers la page d'accueil.
+     *
+     * @return void
      */
     public static function checkAuthentication(): void
     {
@@ -116,7 +131,10 @@ class AuthService
 
 
     /**
-     * Déconnecte l'utilisateur en supprimant son token de session
+     * Déconnecte l'utilisateur en supprimant son token de session.
+     * Cette méthode efface le token et le nom d'utilisateur de la session afin de déconnecter l'utilisateur.
+     *
+     * @return void
      */
     public function deconnexion(): void
     {
@@ -131,8 +149,10 @@ class AuthService
     }
 
     /**
-     * TODO
-     * @param string $url
+     * Enregistre l'URL saisie dans la session.
+     * Cette méthode permet de stocker une URL dans la session pour une utilisation future.
+     *
+     * @param string $url L'URL à enregistrer.
      * @return void
      */
     public function urlSession(string $url) : void

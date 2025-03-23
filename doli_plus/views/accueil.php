@@ -35,8 +35,6 @@ if (session_status() === PHP_SESSION_NONE) {
                         <!-- Popup de confirmation -->
                         <?php
                         $url = $_SESSION["url_saisie"] ?? '';
-                        var_dump($controller);
-
                         if ($controller->urlExiste($url)) {
                             // Si l'URL existe déjà, appeler addUrl sans afficher la popup pour remettre l'URl en haut du fichier
                             header("Location: index.php?controller=Accueil&action=urlEnHaut");
@@ -64,7 +62,6 @@ if (session_status() === PHP_SESSION_NONE) {
                                     </div>
                                 </div>
                             </div>
-
                             <script>
                                 document.addEventListener("DOMContentLoaded", function() {
                                     var urlPopup = document.getElementById('urlPopup');
