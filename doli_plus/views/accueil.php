@@ -35,12 +35,11 @@ if (session_status() === PHP_SESSION_NONE) {
                         <!-- Popup de confirmation -->
                         <?php
                         $url = $_SESSION["url_saisie"] ?? '';
-
-                        $controller = new \controllers\AuthController(new \services\AuthService());
+                        var_dump($controller);
 
                         if ($controller->urlExiste($url)) {
                             // Si l'URL existe déjà, appeler addUrl sans afficher la popup pour remettre l'URl en haut du fichier
-                            header("Location: index.php?controller=Auth&action=addUrl");
+                            header("Location: index.php?controller=Accueil&action=urlEnHaut");
                             exit();
                         } else {?>
                             <!-- Popup de confirmation -->
@@ -70,7 +69,7 @@ if (session_status() === PHP_SESSION_NONE) {
                                 document.addEventListener("DOMContentLoaded", function() {
                                     var urlPopup = document.getElementById('urlPopup');
                                     if (urlPopup) {
-                                        var myModal = new bootstrap.Modal(urlPopup, { keyboard: fase });
+                                        var myModal = new bootstrap.Modal(urlPopup, { keyboard: false });
                                         myModal.show();
                                     }
                                 });

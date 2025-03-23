@@ -61,7 +61,7 @@ class DefaultComponentFactory implements ComponentFactory
     {
         return match ($controller_name) {
             "Home" => $this->buildAuthController(),
-            "Accueil" => new AccueilController(),
+            "Accueil" => $this->buildAccueilController(),
 
 
             "NoteFrais" => $this->buildNoteFraisController(),
@@ -139,4 +139,15 @@ class DefaultComponentFactory implements ComponentFactory
     {
         return new NoteFraisController($this->buildNoteFraisService());
     }
+
+    /**
+     * Méthode privée pour créer le contrôleur de l'accueil
+     *
+     * @return AccueilController Le contrôleur d'authentification.
+     */
+    private function buildAccueilController(): AccueilController
+    {
+        return new AccueilController($this->buildAuthService());
+    }
+
 }

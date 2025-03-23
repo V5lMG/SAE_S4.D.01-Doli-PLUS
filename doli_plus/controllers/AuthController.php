@@ -63,6 +63,7 @@ class AuthController
         return new View("index"); // défaut si aucune soumission n'est faites
     }
 
+
     /**
      * Gère la déconnexion de l'utilisateur
      *
