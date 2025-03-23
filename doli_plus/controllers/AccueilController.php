@@ -58,23 +58,12 @@ class AccueilController
     {
         if (isset($_POST["new_url"])) {
             $newUrl = $_POST["new_url"];
-            AuthService::setUrlFichier($newUrl);
-            exit;
+        } else {
+            $newUrl = $_SESSION["url_saisie"];
         }
+        AuthService::setUrlFichier($newUrl);
+        header("Location: index.php?controller=Accueil&action=index");
     }
-
-    /**
-     * Action pour déplacer l'URL enregistrée en haut dans le fichier `url.conf`.
-     * Récupère l'URL de la session et la remet en haut du fichier `url.conf`.
-     *
-     * @return void
-     */
-    public function urlEnHaut(): void
-    {
-        $url = $_SESSION["url_saisie"] ?? '';
-        AuthService::setUrlFichier($url);
-    }
-
 
     /**
      * Vérifie si l'URL existe déjà dans le fichier `url.conf`.

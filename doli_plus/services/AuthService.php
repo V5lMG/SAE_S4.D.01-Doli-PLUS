@@ -62,29 +62,24 @@ class AuthService
 
     /**
      * Enregistre l'URL dans le fichier `url.conf`, ou la place en haut si elle y est déjà.
-     * Cette méthode permet d'ajouter une URL dans un fichier de configuration, et de la
-     * positionner en haut si elle existe déjà dans le fichier.
      *
      * @param string $url L'URL à enregistrer.
      * @return void
      */
     public static function setUrlFichier(string $url): void
     {
-        // Définir le chemin du fichier
         $filePath = 'static/config/url.conf';
 
-        // Lire le contenu du fichier (si le fichier n'existe pas, on crée un tableau vide)
-        $lines = file_exists($filePath) ? file($filePath) : [];
+        // Lire le fichier ligne par ligne et supprimer les éventuels retours à la ligne
+        $lines = file_exists($filePath) ? array_map('trim', file($filePath, FILE_IGNORE_NEW_LINES)) : [];
 
-        // Vérifier si l'URL existe déjà dans le fichier
-        if (($key = array_search($url, $lines)) !== false) {
-            unset($lines[$key]);
-        }
+        // Supprimer l'URL si elle est déjà présente
+        $lines = array_filter($lines, fn($line) => $line !== $url);
 
-        // Ajouter l'URL en haut du tableau
+        // Ajouter l'URL en haut du fichier
         array_unshift($lines, $url);
 
-        // Écrire de nouveau tout le contenu dans le fichier (EOL = end of line)
+        // Réécrire le fichier en ajoutant un saut de ligne après chaque URL
         file_put_contents($filePath, implode(PHP_EOL, $lines) . PHP_EOL);
     }
 
@@ -106,6 +101,23 @@ class AuthService
 
         // Lire le contenu du fichier ligne par ligne
         return file($filePath, FILE_SKIP_EMPTY_LINES);
+    }
+
+    /**
+     * Enregistre l'URL saisie dans la session.
+     * Cette méthode permet de stocker une URL dans la session pour une utilisation future.
+     *
+     * @param string $url L'URL à enregistrer.
+     * @return void
+     */
+    public function urlSession(string $url) : void
+    {
+        // Démarrer la session si elle n'est pas encore démarrée
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $_SESSION['url_saisie'] = $url;
     }
 
     /**
@@ -146,22 +158,5 @@ class AuthService
         // Supprimer le token de session et le nom d'utilisateur
         unset($_SESSION['api_token']);
         unset($_SESSION['user_name']);
-    }
-
-    /**
-     * Enregistre l'URL saisie dans la session.
-     * Cette méthode permet de stocker une URL dans la session pour une utilisation future.
-     *
-     * @param string $url L'URL à enregistrer.
-     * @return void
-     */
-    public function urlSession(string $url) : void
-    {
-        // Démarrer la session si elle n'est pas encore démarrée
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        $_SESSION['url_saisie'] = $url;
     }
 }

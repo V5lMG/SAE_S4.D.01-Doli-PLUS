@@ -51,6 +51,10 @@ $userName = $_SESSION['user_name'] ?? 'Erreur';
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
+                    <button class="btn" onclick="window.location.href='index.php?controller=Accueil&action=index'"><span class="text-white">Accueil</span></button>
+                </li>
+                <hr class="responsive-line">
+                <li class="nav-item">
                     <button class="btn" onclick="window.location.href='index.php?controller=NoteFrais&action=indexListe'"><span class="text-white">Liste</span></button>
                 </li>
                 <li class="nav-item">
@@ -62,10 +66,6 @@ $userName = $_SESSION['user_name'] ?? 'Erreur';
                 </li>
                 <li class="nav-item">
                     <button class="btn" onclick="window.location.href='index.php?controller=Fournisseur&action=indexPalmares'"><span class="text-white">Palmarès</span></button>
-                </li>
-                <hr class="responsive-line">
-                <li class="nav-item">
-                    <button class="btn" onclick="window.location.href='#'"><span class="text-white">Configuration URL</span></button>
                 </li>
             </ul>
         </div>
