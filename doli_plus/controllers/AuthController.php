@@ -49,6 +49,7 @@ class AuthController
             // Vérifier l'identifiant via l'API Dolibarr
             if ($this->authService->authentification($username, $password, $url)) {
                 // Authentification réussie → Redirection vers accueil.php
+                $this->authService->urlSession($url);
                 header("Location: index.php?controller=Accueil&action=index");
                 exit();
             } else {

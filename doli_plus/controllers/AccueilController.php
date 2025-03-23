@@ -6,22 +6,15 @@ use services\AuthService;
 
 class AccueilController
 {
+
+    /**
+     * TODO
+     * @return View
+     */
     public function index(): View
     {
         AuthService::checkAuthentication();
-
-        // Récupérer l'URL actuelle de l'utilisateur (si nécessaire, selon la logique d'application)
-        $currentUrl = $_SERVER['REQUEST_URI']; // Par exemple, obtenir l'URL de la page actuelle
-
-        // Vérifier si l'URL a déjà été utilisée
-        $urls = AuthService::getUrlFichier();
-        $urlExists = in_array($currentUrl, $urls); // Vérifie si l'URL est dans la liste
-
-        // Passer l'information à la vue
-        return new View("views/accueil", [
-            'urlExists' => $urlExists,
-            'currentUrl' => $currentUrl
-        ]);
+        return new View("views/accueil");
     }
 
     /**
@@ -35,17 +28,20 @@ class AccueilController
      */
     public function addUrl(): void
     {
-        if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST["new_url"])) {
-            $newUrl = trim($_POST["new_url"]);
-
-            // Vérifie si l'URL est valide
-            if (filter_var($newUrl, FILTER_VALIDATE_URL)) {
-                AuthService::setUrlFichier($newUrl);
-            }
-
-            // Redirection pour éviter une soumission multiple
-            header("Location: index.php?controller=Home&action=index");
+        if (!empty($_POST["new_url"])) {
+            $newUrl = $_POST["new_url"];
+            AuthService::setUrlFichier($newUrl);
             exit;
         }
+    }
+
+    /**
+     * @param string $url
+     * @return bool
+     */
+    public function urlExiste(string $url): bool
+    {
+        $urls = $this->authService->getUrlFichier(); // Récupère les URLs stockées
+        return in_array($url, array_map('trim', $urls)); // Vérifie si l'URL est déjà enregistré
     }
 }

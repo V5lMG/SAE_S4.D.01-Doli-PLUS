@@ -129,4 +129,19 @@ class AuthService
         unset($_SESSION['api_token']);
         unset($_SESSION['user_name']);
     }
+
+    /**
+     * TODO
+     * @param string $url
+     * @return void
+     */
+    public function urlSession(string $url) : void
+    {
+        // Démarrer la session si elle n'est pas encore démarrée
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $_SESSION['url_saisie'] = $url;
+    }
 }

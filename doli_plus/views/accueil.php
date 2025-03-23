@@ -32,23 +32,32 @@ if (session_status() === PHP_SESSION_NONE) {
                             </div>
                         </div>
 
-
                         <!-- Popup de confirmation -->
-                        <?php if (isset($urlExists) && !$urlExists): ?>
+                        <?php
+                        $url = $_SESSION["url_saisie"] ?? '';
+
+                        $controller = new \controllers\AuthController(new \services\AuthService());
+
+                        if ($controller->urlExiste($url)) {
+                            // Si l'URL existe déjà, appeler addUrl sans afficher la popup pour remettre l'URl en haut du fichier
+                            header("Location: index.php?controller=Auth&action=addUrl");
+                            exit();
+                        } else {?>
+                            <!-- Popup de confirmation -->
                             <div id="urlPopup" class="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Nouvelle URL détectée</h5>
+                                            <h5 class="modal-title">Nouvelle URL détectée</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            L'URL suivante n'a jamais été enregistrée : <strong><?= htmlspecialchars($currentUrl) ?></strong><br>
+                                            L'URL suivante n'a jamais été enregistrée : <strong><?= htmlspecialchars($url) ?></strong><br>
                                             Souhaitez-vous l'enregistrer ?
                                         </div>
                                         <div class="modal-footer">
                                             <form action="index.php?controller=Accueil&action=addUrl" method="POST">
-                                                <input type="hidden" name="new_url" value="<?= htmlspecialchars($currentUrl) ?>">
+                                                <input type="hidden" name="new_url" value="<?= htmlspecialchars($url) ?>">
                                                 <button type="submit" class="btn btn-primary">Oui, enregistrer</button>
                                             </form>
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non, merci</button>
@@ -59,19 +68,16 @@ if (session_status() === PHP_SESSION_NONE) {
 
                             <script>
                                 document.addEventListener("DOMContentLoaded", function() {
-                                    // Vérifier si le modal existe avant de tenter de l'initialiser
                                     var urlPopup = document.getElementById('urlPopup');
                                     if (urlPopup) {
-                                        var myModal = new bootstrap.Modal(urlPopup, {
-                                            keyboard: false
-                                        });
-                                        myModal.show(); // Afficher la popup dès le chargement de la page
+                                        var myModal = new bootstrap.Modal(urlPopup, { keyboard: fase });
+                                        myModal.show();
                                     }
                                 });
                             </script>
-                        <?php endif; ?>
-
-
+                            <?php
+                        }
+                        ?>
                         <div class="row justify-content-center">
                             <div class="col-12 col-md-8 text-center">
                                 <div class="p-4 border rounded shadow-sm bg-light">
@@ -79,8 +85,6 @@ if (session_status() === PHP_SESSION_NONE) {
                                 </div>
                             </div>
                         </div>
-                        <!-- Jusqu'ici -->
-
                     </div>
                 </div>
             </div>

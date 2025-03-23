@@ -79,8 +79,8 @@ if (session_status() === PHP_SESSION_NONE) {
                     echo '<div style="background-color: #B77F7F; width: 10px;"></div>';
 
                     // Message d'erreur à droite du bandeau
-                    echo '<div style="padding-left: 10px; flex-grow: 1; display: flex;">';
-                        echo '<p style="font-weight: bold;">' . htmlspecialchars($_SESSION['error_message']) . '</p>';
+                    echo '<div style="padding-left: 10px; flex-grow: 1; display: flex; justify-content: center; align-items: center; height: 100%;">';
+                        echo '<p style="font-weight: bold; text-align: center;">' . htmlspecialchars($_SESSION['error_message']) . '</p>';
                     echo '</div>';
 
                 echo '</div>';
