@@ -72,8 +72,8 @@ class NoteFraisService
                 foreach ($note['lines'] as $line) {
                     // Calculer les montants pour chaque ligne
                     $tva = $line['tva_tx'];
-                    $value_unit = $line['value_unit'];
-                    $value_unit_ttc = $line['value_unit'] / (1 + ($tva/100));
+                    $value_unit = $line['value_unit'] / (1 + ($tva/100));
+                    $value_unit_ttc = $line['value_unit'];
                     $montant_ht = $line['total_ht'] ?? 0.0;
                     $montant_ttc = $line['total_ttc'] ?? 0.0;
 
@@ -312,7 +312,7 @@ class NoteFraisService
                     $annee_frais = substr($date_frais, 0, 4);
                     $mois = (int)date('n', strtotime($date_frais));
                     $jour = (int)date('j', strtotime($date_frais));
-                    $montant = $line['total_ttc'] ?? 0;
+                    $montant = $line['total_ht'] ?? 0;
 
                     // Comparaison avec l'année choisie et l'année précédente
                     if ($annee_frais === $anneeChoisi) {
@@ -420,7 +420,7 @@ class NoteFraisService
                         default => 'Autre',
                     };
 
-                    $montant = $line['total_ttc'] ?? 0;
+                    $montant = $line['total_ht'] ?? 0;
 
                     // Vérifier si ce type existe déjà dans le tableau
                     if (!isset($sectoriel[$type])) {
