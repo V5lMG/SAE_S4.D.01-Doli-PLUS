@@ -50,6 +50,11 @@ $userName = $_SESSION['user_name'] ?? 'Erreur';
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
+
+                <li class="nav-item">
+                    <button class="btn" onclick="window.location.href='index.php?controller=Accueil&action=index'"><span class="text-white">Accueil</span></button>
+                </li>
+                <hr class="responsive-line">
                 <li class="nav-item">
                     <button class="btn" onclick="window.location.href='index.php?controller=Accueil&action=index'"><span class="text-white">Accueil</span></button>
                 </li>
