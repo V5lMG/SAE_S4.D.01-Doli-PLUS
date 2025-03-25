@@ -36,10 +36,9 @@ if (session_status() === PHP_SESSION_NONE) {
                         <?php
                         $url = $_SESSION["url_saisie"] ?? '';
                         if ($controller->urlExiste($url)) {
-                            // Si l'URL existe déjà, appeler addUrl sans afficher la popup pour remettre l'URl en haut du fichier
-                            header("Location: index.php?controller=Accueil&action=urlEnHaut");
-                            exit();
-                        } else {?>
+                            // Si l'URL existe déjà, appeler addUrl sans afficher la popup pour remettre l'URL en haut du fichier
+                            $controller->addUrl("index.php?controller=Accueil&action=addUrl");
+                        } else { ?>
                             <!-- Popup de confirmation -->
                             <div id="urlPopup" class="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -71,9 +70,7 @@ if (session_status() === PHP_SESSION_NONE) {
                                     }
                                 });
                             </script>
-                            <?php
-                        }
-                        ?>
+                        <?php } ?>
                         <div class="row justify-content-center">
                             <div class="col-12 col-md-8 text-center">
                                 <div class="p-4 border rounded shadow-sm bg-light">
