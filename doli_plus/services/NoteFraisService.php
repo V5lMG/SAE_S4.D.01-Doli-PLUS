@@ -342,11 +342,13 @@ class NoteFraisService
             $histogrammeAvecMoisComparaison = [];
             foreach ($histogrammeActuel as $numeroMois => $valeurs) {
                 $nomMois = $this->moisNoms[$numeroMois]; // Convertir le numéro du mois en nom
+                $valeurs['MontantTotal'] = number_format($valeurs['MontantTotal'], 2, '.', '');
                 $histogrammeAvecMoisActuel[$nomMois] = $valeurs;
             }
 
             foreach ($histogrammeComparaison as $numeroMois => $valeurs) {
                 $nomMois = $this->moisNoms[$numeroMois];
+                $valeurs['MontantTotal'] = number_format($valeurs['MontantTotal'], 2, '.', '');
                 $histogrammeAvecMoisComparaison[$nomMois] = $valeurs;
             }
 
