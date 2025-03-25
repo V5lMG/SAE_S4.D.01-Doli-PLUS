@@ -92,8 +92,12 @@ class FournisseurService
             }
 
             // Filtre par numéro de téléphone
-            if (!empty($numTel) && stripos($fournisseur['nomTel'], $numTel) === false) {
-                continue;
+            if (!empty($numTel)) {
+                if (preg_match('/^[0-9]$/', $numTel) && strpos($fournisseur['numTel'], $numTel) === false) {
+                    continue;
+                } elseif (!preg_match('/^[0-9]$/', $numTel) && stripos($fournisseur['numTel'], $numTel) === false) {
+                    continue;
+                }
             }
 
             // Filtre par adresse
