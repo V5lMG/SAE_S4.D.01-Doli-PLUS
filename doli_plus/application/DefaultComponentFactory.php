@@ -24,6 +24,7 @@ use controllers\NoteFraisController;
 use controllers\AuthController;
 
 use services\AuthService;
+use services\FournisseurService;
 use services\NoteFraisService;
 
 use yasmf\ComponentFactory;
@@ -46,6 +47,8 @@ class DefaultComponentFactory implements ComponentFactory
 
     private ?NoteFraisService $noteFraisService = null;
 
+    private ?FournisseurService $fournisseurService = null;
+
     /**
      * Méthode permettant de créer un contrôleur en fonction de son nom.
      *
@@ -60,7 +63,7 @@ class DefaultComponentFactory implements ComponentFactory
             "Accueil" => $this->buildAccueilController(),
 
             "NoteFrais" => $this->buildNoteFraisController(),
-            "Fournisseur" => new FournisseurController(),
+            "Fournisseur" => $this->buildFournisseurController(),
 
             default => throw new NoControllerAvailableForNameException($controller_name)
         };
@@ -78,6 +81,7 @@ class DefaultComponentFactory implements ComponentFactory
         return match($service_name) {
             "Auth" => $this->buildAuthService(),
             "NoteFrais" => $this->buildNoteFraisService(),
+            "Fournisseur" => $this->buildFournisseurService(),
             default => throw new NoServiceAvailableForNameException($service_name)
         };
     }
@@ -111,7 +115,7 @@ class DefaultComponentFactory implements ComponentFactory
     // ---------------------------------------------Note de Frais----------------------------------------------------//
 
     /**
-     * Méthode privée pour instancier le service d'authentification.
+     * Méthode privée pour instancier le service des notes de frais.
      * Le service est créé une seule fois et réutilisé (Singleton).
      *
      * @return NoteFraisService Le service de la gestion des notes de frais.
@@ -133,6 +137,35 @@ class DefaultComponentFactory implements ComponentFactory
     {
         return new NoteFraisController($this->buildNoteFraisService());
     }
+
+    // ---------------------------------------------Fournisseur-------------------------------------------------//
+
+    /**
+     * Méthode privée pour instancier le service des fournisseurs.
+     * Le service est créé une seule fois et réutilisé (Singleton).
+     *
+     * @return FournisseurService Le service de la gestion des notes de frais.
+     */
+    private function buildFournisseurService(): FournisseurService
+    {
+        if ($this->fournisseurService == null) {
+            $this->fournisseurService = new FournisseurService();
+        }
+        return $this->fournisseurService;
+    }
+
+    /**
+     * Méthode privée pour créer le contrôleur des fournisseurs.
+     *
+     * @return FournisseurController Le contrôleur des notes de frais.
+     */
+    private function buildFournisseurController(): FournisseurController
+    {
+        return new FournisseurController($this->buildFournisseurService());
+    }
+
+
+
 
     // ---------------------------------------------Accueil----------------------------------------------------//
 
