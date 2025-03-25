@@ -61,7 +61,7 @@ $mois = [
                 <?php include 'static/sidebar.php'; ?>
 
                 <!-- Contenu principal -->
-                <div class="contenu-principal">
+                <div class="contenu-principal mt-4">
                     <div class="container-fluid">
 
                         <!-- Contenu principal a modifier -->
@@ -144,7 +144,6 @@ $mois = [
                                             </div>
                                         </div>
                                         <div class="row justify-content-center mt-3">
-
                                             <div class="col-md-1 col-12">
                                                 <input type="hidden" name="histogramme" value="true"/>
                                                 <input type="hidden" name="date_debut" id="date_debut" value="<?= $date_debut?>"/>
@@ -154,7 +153,7 @@ $mois = [
                                                     <i class="fa fa-search"></i>
                                                 </button>
                                             </div>
-                                            <div class="col-md-1 col-12">
+                                            <div class="col-md-1 col-12 mt-md-0 mt-3">
                                                 <button type="reset" class="btn btn-outline-secondary" title="RéinitialiserHistogramme" onclick="resetFiltersHistogramme()">
                                                     <i class="fa fa-times"></i>
                                                 </button>
@@ -163,7 +162,7 @@ $mois = [
                                     </form>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-6 text-center">
+                            <div class="col-12 col-md-6 text-center mt-md-0 mt-4">
                                 <!-- Diagramme Circulaire -->
                                 <div class="p-4 border rounded shadow-sm bg-light">
                                     <?php if (isset($date_debut) && isset ($date_fin) && !empty($date_debut) && !empty($date_fin)) { ?>
@@ -183,7 +182,7 @@ $mois = [
                                                 <label for="date_fin">Date fin :</label>
                                                 <input type="date" class="form-control" id="date_fin" name="date_fin" value="<?= isset($date_fin) ? htmlspecialchars($date_fin) : '' ?>">
                                             </div>
-                                            <div class="col-md-1 col-12">
+                                            <div class="col-md-1 col-12 mt-md-0 mt-3">
                                                 <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
                                                 <input type="hidden" name="sectoriel" value="true"/>
                                                 <input type="hidden" name="annee_filtre" id="annee_filtre" value="<?= $anneeChoisi?>"/>
@@ -193,7 +192,7 @@ $mois = [
                                                     <i class="fa fa-search"></i>
                                                 </button>
                                             </div>
-                                            <div class="col-md-1 col-12">
+                                            <div class="col-md-1 col-12 mt-md-0 mt-3">
                                                 <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
                                                 <button type="reset" class="btn btn-outline-secondary" title="RéinitialiserSectoriel" onclick="resetFiltersSectoriel()">
                                                     <i class="fa fa-times"></i>

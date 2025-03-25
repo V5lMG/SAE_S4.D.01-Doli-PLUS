@@ -22,7 +22,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 <?php include 'static/sidebar.php'; ?>
 
                 <!-- Contenu principal -->
-                <div class="contenu-principal">
+                <div class="contenu-principal mt-4">
                     <div class="container-fluid">
 
                         <!-- Contenu principal a modifier -->
