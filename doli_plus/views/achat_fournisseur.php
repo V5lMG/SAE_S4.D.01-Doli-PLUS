@@ -37,7 +37,7 @@ if (session_status() === PHP_SESSION_NONE) {
                             <div class="row g-3 align-items-center">
                                 <div class="col-md-2 text-center d-flex flex-column align-items-start">
                                     <label for="nom" class="fw-bold">Nom :</label>
-                                    <input type="text" class="form-control" id="nom" name="nom" value="<?= $nom ?>" placeholder="Ex : Mathias">
+                                    <input type="text" class="form-control" id="nom" name="nom" value="<?= $nom ?>" placeholder="Ex : Edf">
                                 </div>
 
                                 <div class="col-md-3 text-center d-flex flex-column align-items-start">
@@ -83,6 +83,7 @@ if (session_status() === PHP_SESSION_NONE) {
                                 document.querySelector("form").submit();
                             }
                         </script>
+
                         <!-- Tableau des notes de frais -->
                         <div class="mt-4 table-responsive">
                             <table class="table table-bordered">
@@ -96,21 +97,26 @@ if (session_status() === PHP_SESSION_NONE) {
                                 </thead>
                                 <tbody>
                                 <?php
-                                if (!empty($listeFournisseur)): ?>
-                                <?php foreach ($listeFournisseur as $fournisseur): ?>
-                                <tr data-bs-toggle="collapse" data-bs-target="#collapse-<?= $fournisseur['nom'] ?>" aria-expanded="false" aria-controls="collapse-<?= $fournisseur['nom'] ?>">
-                                    <td><span class="fw-bold text-decoration-underline text-primary"><?= htmlspecialchars($fournisseur['nom']) ?></span></td>
-                                    <td><?= htmlspecialchars($fournisseur['numTel']) ?></td>
-                                    <td><?= htmlspecialchars($fournisseur['adresse']) ?></td>
-                                    <td><?= htmlspecialchars($fournisseur['codePostal']) ?></td>
-                                </tr>
-                                <?php endforeach; ?>
-                                <!-- Sous-tableau pour afficher les factures fournisseur -->
-                                <?php else: ?>
-                                <tr>
-                                    <td colspan="11" class="text-center text-muted">Aucun fournisseur trouvé</td>
-                                </tr>
-                                <?php endif; ?>
+                                    if (isset($listeFournisseur['fournisseurs']) && is_array($listeFournisseur['fournisseurs']) && count($listeFournisseur['fournisseurs']) > 0) : ?>
+
+                                        <?php
+                                        $listeFournisseur = $listeFournisseur['fournisseurs'] ?? []; // Accéder à la clé correcte
+
+                                        foreach ($listeFournisseur as $fournisseur):
+                                            ?>
+                                            <pre><?php var_dump($fournisseur); ?></pre>
+                                            <tr>
+                                                <td><?= htmlspecialchars($fournisseur['nom'] ?? '') ?></td>
+                                                <td><?= htmlspecialchars($fournisseur['numTel'] ?? '') ?></td>
+                                                <td><?= htmlspecialchars($fournisseur['adresse'] ?? '') ?></td>
+                                                <td><?= htmlspecialchars($fournisseur['codePostal'] ?? '') ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted">Aucun fournisseur trouvé</td>
+                                        </tr>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>

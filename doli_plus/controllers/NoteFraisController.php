@@ -45,12 +45,12 @@ class NoteFraisController
         $listeNoteFraisNonTrie = $this->noteFraisService->recupererListeComplete();
 
         // Récupération des paramètres de filtre
-        $employe    = HttpHelper::getParam('employe', '');
-        $type       = HttpHelper::getParam('type', 'TOUS');
-        $reference  = HttpHelper::getParam('reference', '');
-        $date_debut = HttpHelper::getParam('date_debut', '');
-        $date_fin   = HttpHelper::getParam('date_fin', '');
-        $etat       = HttpHelper::getParam('etat', 'tous');
+        $employe      = HttpHelper::getParam('employe', '');
+        $type         = HttpHelper::getParam('type', 'TOUS');
+        $reference    = HttpHelper::getParam('reference', '');
+        $date_debut   = HttpHelper::getParam('date_debut', '');
+        $date_fin     = HttpHelper::getParam('date_fin', '');
+        $etat         = HttpHelper::getParam('etat', 'tous');
         $afficherTous = HttpHelper::getParam('afficherTous', '');
 
         // Si on veut afficher toutes les notes

@@ -172,7 +172,7 @@ class NoteFraisService
         }
 
         if (empty($employe) && $type === 'TOUS' && empty($reference) && empty($date_debut) && empty($date_fin) && $etat === 'tous') {
-            return ['message' => 'Sélectionnez au moins un filtre'];
+            return [];
         }
 
         $notesFiltrees = [];

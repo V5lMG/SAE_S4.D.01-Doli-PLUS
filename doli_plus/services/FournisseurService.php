@@ -41,23 +41,27 @@ class FournisseurService
         if ($httpCode === 200) {
             $data = json_decode($response, true) ?? [];
 
-            $fournisseurFormatees = [];
+            $fourniseurFormatees = [];
+            $nb_note = 0;
 
             // Formater la réponse pour extraire les informations pertinentes
-            foreach ($data as $fournisseur) {
+            foreach ($data as $fourniseur) {
 
-                // Ajouter les informations formatées dans le tableau final pour la fournisseur de frais
-                $fournisseurFormatees[] = [
-                    'nom' => $fournisseur['name'] ?? 'Inconnu',
-                    'numTel' => $fournisseur['phone'] ?? 'Inconnu',
-                    'adresse' => $fournisseur['address'] ?? 'Inconnu',
-                    'codePostal' => $fournisseur['zip'] ?? 'Inconnu',
+                $nb_note += 1;
+
+                // Ajouter les informations formatées dans le tableau final pour la note de frais
+                $fourniseurFormatees[] = [
+                    'nom' => $fourniseur['name'] ?? 'Inconnu',
+                    'numTel' => $fourniseur['phone'] ?? 'Inconnu',
+                    'adresse' => !empty($fourniseur['address']) ? $fourniseur['address'] : 'Inconnu',
+                    'codePostal' => $fourniseur['zip'] ?? 'Inconnu',
                 ];
             }
 
             // Retourner le tableau des notes de frais formatées
-            return $fournisseurFormatees;
+            return $fourniseurFormatees;
         }
+
         return []; // Retourner un tableau vide en cas d'échec
     }
 
@@ -71,6 +75,7 @@ class FournisseurService
      */
     public function filtrerValeurs(array $fournisseurs, ?string $nom = null, ?string $numTel = null, ?string $adresse = null, ?string $codePostal = null): array
     {
+        // Démarrage de la session si nécessaire
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -79,45 +84,43 @@ class FournisseurService
             return [];
         }
 
-        if (empty($nom) && empty($numTel) && empty($adresse) && empty($codPostal)) {
-            return ['message' => 'Sélectionnez au moins un filtre'];
+        // Vérification si tous les filtres ne sont pas définis
+        if (
+            (!isset($nom) || $nom == '') &&
+            (!isset($adresse) || $adresse == '') &&
+            (!isset($codePostal) || $codePostal == '') &&
+            (!isset($numTel) || $numTel == '')
+        ) {
+            return [];
         }
 
-        $fournisseursFiltrees = [];
+        $fournisseursFiltres = [];
 
         foreach ($fournisseurs as $fournisseur) {
-            // Filtre par nom
-            if (!empty($nom) && stripos($fournisseur['nom'], $nom) === false) {
+            // Vérification du nom
+            if (isset($nom) && $nom !== '' && stripos($fournisseur['nom'], $nom) === false) {
                 continue;
             }
 
-            // Filtre par numéro de téléphone
-            if (!empty($numTel)) {
-                if (preg_match('/^[0-9]$/', $numTel) && strpos($fournisseur['numTel'], $numTel) === false) {
-                    continue;
-                } elseif (!preg_match('/^[0-9]$/', $numTel) && stripos($fournisseur['numTel'], $numTel) === false) {
-                    continue;
-                }
-            }
-
-            // Filtre par adresse
-            if (!empty($adresse) && stripos($fournisseur['adresse'], $adresse) === false) {
+            // Vérification du numéro de téléphone (ne pas filtrer si "Inconnu" ou vide, mais filtrer si on cherche des numéros avec "0")
+            if (isset($numTel) && $numTel !== '' && $numTel !== 'Inconnu' && stripos($fournisseur['numTel'], $numTel) === false) {
                 continue;
             }
 
-            // Filtre par code postal
-            if (!empty($codePostal) && stripos($fournisseur['codePostal'], $codePostal) === false) {
+            // Vérification de l'adresse (ne pas filtrer si "Inconnu")
+            if (isset($adresse) && $adresse !== '' && $adresse !== 'Inconnu' && stripos($fournisseur['adresse'], $adresse) === false) {
                 continue;
             }
 
+            // Vérification du code postal (ne pas filtrer si "Inconnu")
+            if (isset($codePostal) && $codePostal !== '' && $codePostal !== 'Inconnu' && stripos($fournisseur['codePostal'], $codePostal) === false) {
+                continue;
+            }
 
-
-            // Ajout de la note filtrée
-            $fournisseursFiltrees[] = $fournisseur;
-
+            // Ajout du fournisseur si tous les filtres sont valides
+            $fournisseursFiltres[] = $fournisseur;
         }
 
-        return $fournisseursFiltrees;
+        return ['fournisseurs' => $fournisseursFiltres];
     }
-
 }

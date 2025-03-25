@@ -47,7 +47,7 @@ class FournisseurController
 
         // Récupération des paramètres de filtre
         $nom        = HttpHelper::getParam('nom', '');
-        $numTel     = HttpHelper::getParam('adresse', '');
+        $numTel     = HttpHelper::getParam('numTel', '');
         $adresse    = HttpHelper::getParam('adresse', '');
         $codePostal = HttpHelper::getParam('codePostal', '');
 
