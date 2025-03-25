@@ -33,6 +33,30 @@ class FournisseurController
     }
 
     /**
+     * Affiche la page de palmarès des fournisseurs.
+     * Vérifie que l'utilisateur est authentifié avant d'afficher la vue.
+     *
+     * @return View La vue de la page des palmarès.
+     */
+    public function indexPalmares(): View
+    {
+        AuthService::checkAuthentication();
+
+        // Démarrer la session si elle n'est pas déjà démarrée
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $listPalmares = [];
+
+        $listPalmares = $this->fournisseurService->recupererListeCompletePalmares();
+
+        // Passer les données à la vue
+        $view = new View("views/palmares_fournisseur");
+        $view->setVar('listePalmares', $listPalmares);
+        return $view;
+    }
+
+    /**
      * Affiche la liste des notes de frais filtrées.
      * Applique les filtres récupérés via les paramètres HTTP et calcule les totaux.
      *
@@ -67,4 +91,5 @@ class FournisseurController
         $view->setVar('listeFournisseur', $listeFournisseur);
         return $view;
     }
+
 }
