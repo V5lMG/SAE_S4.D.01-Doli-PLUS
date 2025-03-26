@@ -111,7 +111,7 @@ $mois = [
                                             <div class="col-md-6" >
                                                 <label for="annee_filtre">Veuillez sélectionner <u>l'année</u> à afficher :</label>
                                                 <select class="form-select" id="annee_filtre" name="annee_filtre">
-                                                    <option value="" selected>--Sélectionner une année--</option>
+                                                    <option value="" >--Sélectionner une année--</option>
                                                     <?php
                                                     $currentYear = date("Y");
                                                     for ($year = $currentYear; $year >= 1900; $year--) {?>
@@ -138,7 +138,7 @@ $mois = [
                                         <div class="row justify-content-center mt-3">
                                             <div class="col-md-6 col-12">
                                                 <label class="form-check-label">Comparaison avec l'année précédente : </label>
-                                                <input class="form-check-input" type="checkbox" id="comparaison" name="comparaison" <?php echo isset($_POST['comparaison']) ? 'checked' : ''; ?>>
+                                                <input class="form-check-input" type="checkbox" id="comparaison" name="comparaison" <?= $_POST['comparaison'] == 'on' ? 'checked' : ''; ?>>
                                             </div>
                                         </div>
                                         <div class="row justify-content-center mt-3">
@@ -183,12 +183,11 @@ $mois = [
                                             <div class="col-md-1 col-12 mt-md-0 mt-3">
                                                 <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
                                                 <input type="hidden" name="sectoriel" value="true"/>
-
-                                                <!-- AJOUTER EN HIDDEN LES CHAMPS RADIO ET LA CHECKBOX AFIN DE LES GARDER INTACTE -->
+                                                <input type="hidden" name="comparaison" id="comparaison" value="<?= $_POST['comparaison']?>"/>
+                                                <input type="hidden" name="filtreJour" id="parMois" value="<?= $filtreJour ?>"/>
                                                 <input type="hidden" name="annee_filtre" id="annee_filtre" value="<?= $anneeChoisi?>"/>
                                                 <input type="hidden" name="mois_filtre" id="mois_filtre" value="<?= $moisChoisi?>"/>
                                                 <input type="hidden" name="listeStatHistogramme" value="<?= $listHistogramme?>"/>
-
                                                 <button type="submit" class="btn btn-primary" title="Rechercher">
                                                     <i class="fa fa-search"></i>
                                                 </button>
@@ -222,11 +221,13 @@ $mois = [
             }
 
             function resetFiltersSectoriel() {
-                /*En ce qui concerne la réinitialisation du formulaire du diagramme sectoriel,
+                /*
+                  En ce qui concerne la réinitialisation du formulaire du diagramme sectoriel,
                   on doit récupèrer le formulaire directement, car si l'on récupère seulement
                   les champs avec leur ID, des conflits ont lieu avec les "input" de type
                   "hidden" du formulaire de l'histogramme.
                  */
+
                 let form = document.getElementById("formSectoriel");
 
                 // Réinitialiser uniquement les champs de ce formulaire
@@ -263,14 +264,14 @@ $mois = [
                 labels: histogrammeLabels,
                 datasets: [
                     {
-                        label: "Montant total de l'année actuelle",
+                        label: 'Montant total (€)',
                         data: montantTotalActuel,
                         backgroundColor: 'rgba(75, 192, 192, 0.6)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1
                     },
                     ...(comparaisonCheckbox ? [{
-                        label: "Montant total de l'année passé",
+                        label: 'Montant total (Comparaison)',
                         data: montantTotalComparaison,
                         backgroundColor: 'rgba(255, 99, 132, 0.6)', // Couleur pour les données de comparaison
                         borderColor: 'rgba(255, 99, 132, 1)',

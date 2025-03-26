@@ -119,7 +119,7 @@ class NoteFraisController
         // Récupération des paramètres de dates et filtres
         $date_debut  = HttpHelper::getParam('date_debut');
         $date_fin    = HttpHelper::getParam('date_fin');
-        $parMois     = HttpHelper::getParam('filtreJour') === 'mois' || HttpHelper::getParam('filtreJour') === null;
+        $parMois     = HttpHelper::getParam('filtreJour') === 'mois';
         $parJour     = HttpHelper::getParam('filtreJour') === 'jour';
         $moisChoisi  = HttpHelper::getParam('mois_filtre') ?? 0;
         $anneeChoisi = HttpHelper::getParam('annee_filtre') ?? date("Y");
