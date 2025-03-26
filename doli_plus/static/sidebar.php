@@ -19,8 +19,8 @@ $userName = $_SESSION['user_name'] ?? 'Erreur';
 
         <hr class="responsive-line">
 
-        <h4 class="mt-1">Achats</h4>
-        <button class="btn w-100 bouton-action mt-2 mb-1" onclick="window.location.href='index.php?controller=Fournisseur&action=index'">Historique des factures</button>
+        <h4 class="mt-1">Fournisseurs</h4>
+        <button class="btn w-100 bouton-action mt-2 mb-1" onclick="window.location.href='index.php?controller=Fournisseur&action=index'">Liste</button>
         <button class="btn w-100 bouton-action mb-1" onclick="window.location.href='index.php?controller=Fournisseur&action=indexPalmares'">Palmarès</button>
     </div>
 
@@ -56,17 +56,17 @@ $userName = $_SESSION['user_name'] ?? 'Erreur';
                 </li>
                 <hr class="responsive-line">
                 <li class="nav-item">
-                    <button class="btn" onclick="window.location.href='index.php?controller=NoteFrais&action=indexListe'"><span class="text-white">Liste</span></button>
+                    <button class="btn" onclick="window.location.href='index.php?controller=NoteFrais&action=indexListe'"><span class="text-white">Liste des notes de frais</span></button>
                 </li>
                 <li class="nav-item">
-                    <button class="btn" onclick="window.location.href='index.php?controller=NoteFrais&action=indexStatistique'"><span class="text-white">Statistiques</span></button>
+                    <button class="btn" onclick="window.location.href='index.php?controller=NoteFrais&action=indexStatistique'"><span class="text-white">Statistiques des frais</span></button>
                 </li>
                 <hr class="responsive-line">
                 <li class="nav-item">
-                    <button class="btn" onclick="window.location.href='index.php?controller=Fournisseur&action=index'"><span class="text-white">Historique des factures</span></button>
+                    <button class="btn" onclick="window.location.href='index.php?controller=Fournisseur&action=index'"><span class="text-white">Historique des fournisseurs</span></button>
                 </li>
                 <li class="nav-item">
-                    <button class="btn" onclick="window.location.href='index.php?controller=Fournisseur&action=indexPalmares'"><span class="text-white">Palmarès</span></button>
+                    <button class="btn" onclick="window.location.href='index.php?controller=Fournisseur&action=indexPalmares'"><span class="text-white">Palmarès des fournisseur</span></button>
                 </li>
             </ul>
         </div>

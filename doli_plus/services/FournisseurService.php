@@ -261,7 +261,6 @@ class FournisseurService
 
         if ($httpCode === 200) {
             $data = json_decode($response, true) ?? [];
-
             // Formater les données
             $factures = [
                 'factures' => [],
@@ -269,13 +268,10 @@ class FournisseurService
             ];
 
             if (!empty($data)) {
-
                 $factures['refSupplier'] = $data[0]['ref_supplier'] ?? 'Inconnu';
 
-                // Filtrer les factures qui correspondent à ref_supplier
                 foreach ($data as $facture) {
                     if ($facture['socid'] === $ref) {
-
                         $status = match($facture['status']) {
                             '0' => 'Brouillon',
                             '1' => 'Impayées',
@@ -308,14 +304,29 @@ class FournisseurService
                             default => 'Inconnu'
                         };
 
+                        $lignes = [];
+                        foreach ($facture['lines'] as $ligne) {
+                            $lignes[] = [
+                                'description' => empty(trim($ligne['description'] ?? '')) ? 'Aucune' : $ligne['description'],
+                                'ref' => empty(trim($ligne['ref_supplier'] ?? '')) ? 'Inconnu' : $ligne['ref_supplier'],
+                                'tva' => number_format($ligne['tva_tx'], 2) ?? 'Inconnu',
+                                'prix_unitaire_ht' => number_format($ligne['pu_ht'], 2, ',', ' ') ?? 'Inconnu',
+                                'prix_unitaire_ttc' => number_format($ligne['pu_ttc'], 2, ',', ' ') ?? 'Inconnu',
+                                'quantite' => $ligne['qty'] ?? 0,
+                                'reduction' => $ligne['remise_percent'] ?? 'Inconnu',
+                                'total_ht' => number_format($ligne['total_ht'], 2, ',', ' ') ?? 'Inconnu',
+                            ];
+                        }
+
                         $factures['factures'][] = [
                             'ref' => $facture['ref'] ?? 'Inconnue',
                             'date_facture' => date("d/m/Y", $facture['date']) ?? 'Inconnue',
                             'date_echeance' => date("d/m/Y", $facture['date_echeance']) ?? 'Inconnue',
                             'cond_reglement' => $condReglement,
                             'mode_reglement' => $modeReglement,
-                            'montant_ht' => number_format($facture['total_ht'], 2, ',', ' ') . ' €' ?? 'Inconnu',
-                            'etat' => $status
+                            'montant_ht' => number_format($facture['total_ht'], 2, ',', ' ') . ' €',
+                            'etat' => $status,
+                            'lignes' => $lignes
                         ];
                     }
                 }
@@ -323,6 +334,7 @@ class FournisseurService
 
             return $factures;
         }
-        return []; // Retourner un tableau vide en cas d'échec
+
+        return []; // retourne un tableau vide en cas d'erreur
     }
 }

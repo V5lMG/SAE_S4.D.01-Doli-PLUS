@@ -120,7 +120,6 @@ class FournisseurController
 
         // Récupérer les factures
         $factures = $this->fournisseurService->factureFournisseur($refFournisseur);
-        var_dump($factures);
         // Passer les variables à la vue
         $view = new View("views/liste_facture");
         $view->setVar('factures',       $factures["factures"]);
