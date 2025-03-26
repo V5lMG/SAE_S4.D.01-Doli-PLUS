@@ -123,7 +123,8 @@ class NoteFraisController
         $parJour     = HttpHelper::getParam('filtreJour') === 'jour';
         $moisChoisi  = HttpHelper::getParam('mois_filtre') ?? 0;
         $anneeChoisi = HttpHelper::getParam('annee_filtre') ?? date("Y");
-        $comparaison = HttpHelper::getParam('comparaison') ?? false; // Je pense que ça récupère le fait que ce soit faux directment quand c'est pas cocher
+        $comparaison = HttpHelper::getParam('comparaison') ?? false;
+
 
         // Si aucune donnée sectorielle n'est disponible ou si le paramètre 'sectoriel' est activé
         if ($sectoriel || !($sectoriel || $histogramme)) {
@@ -136,14 +137,14 @@ class NoteFraisController
         // Si aucune donnée histogramme n'est disponible ou si le paramètre 'histogramme' est activé
         if ($histogramme || !($sectoriel || $histogramme)) {
             // Récupération des statistiques pour l'histogramme
-            $listHistogramme = $this->noteFraisService->recupererStatHistogramme($parMois, $parJour, $moisChoisi, $anneeChoisi,$comparaison);
+            $listHistogramme = $this->noteFraisService->recupererStatHistogramme($parMois, $parJour, $moisChoisi, $anneeChoisi, $comparaison);
             // Sauvegarde dans la session
             $_SESSION['listHistogramme'] = $listHistogramme;
         }
 
         // Attribution du résultat à la vue, en passant les deux listes séparément
         $view = new View("views/statistique_note_frais");
-        $view->setVar('listHistogrammeActuel', $listHistogramme['actuel']);
+        $view->setVar('listHistogrammeActuel'     , $listHistogramme['actuel']);
         $view->setVar('listHistogrammeComparaison', $listHistogramme['comparaison']);
         $view->setVar('listSectoriel'  , $listSectoriel);
         $view->setVar('date_debut'     , $date_debut);
@@ -152,7 +153,7 @@ class NoteFraisController
         $view->setVar('parJour'        , $parJour);
         $view->setVar('moisChoisi'     , $moisChoisi);
         $view->setVar('anneeChoisi'    , $anneeChoisi);
-        $view->setVar('comparaison', $comparaison);
+        $view->setVar('comparaison'    , $comparaison);
 
         return $view;
     }

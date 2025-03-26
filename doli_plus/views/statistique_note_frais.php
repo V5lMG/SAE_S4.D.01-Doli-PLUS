@@ -99,7 +99,7 @@ $mois = [
                                         <div class="row justify-content-center mt-3">
                                             <div class="col-md-6">
                                                 <label for="parMois">Par mois (sur un an)</label>
-                                                <input type="radio" class="form-check-input" name="filtreJour" id="parMois" value="mois" <?= $filtreJour === 'mois' ? 'checked' : '' ?>>
+                                                <input type="radio" class="form-check-input" name="filtreMois" id="parMois" value="mois" <?= $filtreJour === 'mois' ? 'checked' : '' ?>>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="parJour">Par jour (sur un mois)</label>
@@ -111,9 +111,8 @@ $mois = [
                                             <div class="col-md-6" >
                                                 <label for="annee_filtre">Veuillez sélectionner <u>l'année</u> à afficher :</label>
                                                 <select class="form-select" id="annee_filtre" name="annee_filtre">
-                                                    <option value="" >--Sélectionner une année--</option>
+                                                    <option value="">--Sélectionner une année--</option>
                                                     <?php
-                                                    // TODO à régler
                                                     $currentYear = date("Y");
                                                     for ($year = $currentYear; $year >= 1900; $year--) {?>
                                                         <option value="<?= $year ?>" <?= $year == $anneeChoisi ? 'selected' : '' ?> > <?= $year ?> </option>
@@ -184,6 +183,9 @@ $mois = [
                                             <div class="col-md-1 col-12 mt-md-0 mt-3">
                                                 <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
                                                 <input type="hidden" name="sectoriel" value="true"/>
+                                                <input type="hidden" name="comparaison" id="comparaison" value="<?= isset($_POST['comparaison'])?>"/>
+                                                <input type="hidden" name="parMois" id="parMois" value="<?= $filtreJour ?>"/>
+                                                <input type="hidden" name="parJour" id="parJour" value="<?= $filtreJour?>"/>
                                                 <input type="hidden" name="annee_filtre" id="annee_filtre" value="<?= $anneeChoisi?>"/>
                                                 <input type="hidden" name="mois_filtre" id="mois_filtre" value="<?= $moisChoisi?>"/>
                                                 <input type="hidden" name="listeStatHistogramme" value="<?= $listHistogramme?>"/>
@@ -225,7 +227,6 @@ $mois = [
                   les champs avec leur ID, des conflits ont lieu avec les "input" de type
                   "hidden" du formulaire de l'histogramme.
                  */
-
                 let form = document.getElementById("formSectoriel");
 
                 // Réinitialiser uniquement les champs de ce formulaire
@@ -262,14 +263,14 @@ $mois = [
                 labels: histogrammeLabels,
                 datasets: [
                     {
-                        label: 'Montant total (€)',
+                        label: "Montant total de l'année actuelle",
                         data: montantTotalActuel,
                         backgroundColor: 'rgba(75, 192, 192, 0.6)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1
                     },
                     ...(comparaisonCheckbox ? [{
-                        label: 'Montant total (Comparaison)',
+                        label: "Montant total de l'année passé",
                         data: montantTotalComparaison,
                         backgroundColor: 'rgba(255, 99, 132, 0.6)', // Couleur pour les données de comparaison
                         borderColor: 'rgba(255, 99, 132, 1)',
