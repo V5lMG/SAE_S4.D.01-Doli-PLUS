@@ -43,12 +43,10 @@ class FournisseurService
             $data = json_decode($response, true) ?? [];
 
             $fourniseurFormatees = [];
-            $nb_note = 0;
 
             // Formater la réponse pour extraire les informations pertinentes
             foreach ($data as $fourniseur) {
 
-                $nb_note += 1;
                 $ref =  $fourniseur['ref'] ?? 'Inconnu';
                 // Ajouter les informations formatées dans le tableau final pour la note de frais
                 $fourniseurFormatees[] = [
@@ -60,11 +58,73 @@ class FournisseurService
                 ];
             }
 
-
             // Retourner le tableau des notes de frais formatées
             return $fourniseurFormatees;
         }
 
+        return []; // Retourner un tableau vide en cas d'échec
+    }
+
+    /**
+     * Récupère tous les fournisseurs.
+     *
+     * @return array Un tableau contenant tous les fournisseurs.
+     */
+    public function recupererListeCompletePalmares(): array
+    {
+        // Démarrer la session si elle n'est pas encore démarrée
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Vérifier si un token API est disponible
+        if (!isset($_SESSION['api_token'])) {
+            return [];
+        }
+
+        // Initialiser cURL
+        $requeteCurl = curl_init($this->apiUrlFacture);
+        curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
+        curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
+        curl_setopt($requeteCurl, CURLOPT_HTTPHEADER, [
+            'DOLAPIKEY: ' . $_SESSION['api_token'],
+            'Accept: application/json'
+        ]);
+
+        // Exécuter la requête
+        $response = curl_exec($requeteCurl);
+        $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
+        curl_close($requeteCurl);
+
+        // Vérifier si la requête a réussi (HTTP 200)
+        if ($httpCode === 200) {
+            $data = json_decode($response, true) ?? [];
+
+            $palmaresFormatees = [];
+
+            // Formater la réponse pour extraire les informations pertinentes
+            foreach ($data as $facture) {
+                $nomFournisseur = $facture['socnom'];              // Nom du fournisseur
+                $totalHT        = floatval($facture['total_ht']);  // Montant total HT
+
+                if (!isset($palmaresFormatees[$nomFournisseur])) {
+                    $palmaresFormatees[$nomFournisseur] = [
+                        'nombre_factures' => 0,
+                        'total_ht' => 0
+                    ];
+                }
+
+                // Incrémenter le nombre de factures et le total HT
+                foreach ($facture['lines'] as $line) {
+                    $palmaresFormatees[$nomFournisseur]['nombre_factures']++;
+                }
+                $palmaresFormatees[$nomFournisseur]['total_ht'] += $totalHT;
+            }
+
+            // Retourner le tableau des notes de frais formatées
+            return $palmaresFormatees;
+        }
         return []; // Retourner un tableau vide en cas d'échec
     }
 
