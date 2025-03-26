@@ -396,10 +396,25 @@ $mois = [
             // Configuration des options du diagramme
             const options = {
                 responsive: false,
-                maintainAspectRatio: false, // Ajuste le diagramme selon le conteneur
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'right',  // Place la légende à droite
+                        position: 'right',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                const value = tooltipItem.raw;
+                                const datasetIndex = tooltipItem.datasetIndex;
+
+                                // Ajouter "€" uniquement pour le premier dataset (Montant total)
+                                if (datasetIndex === 0) {
+                                    return `${tooltipItem.label}: ${value} €`;
+                                } else {
+                                    return `${tooltipItem.label}: ${value}`;
+                                }
+                            }
+                        }
                     }
                 }
             };

@@ -220,10 +220,18 @@ $compteur = 0;
     // Configuration des options du diagramme
     const options = {
         responsive: false,
-        maintainAspectRatio: false, // Ajuste le diagramme selon le conteneur
+        maintainAspectRatio: false,
         plugins: {
             legend: {
-                position: 'right', // Place la légende en haut
+                position: 'right',
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(tooltipItem) {
+                        const value = tooltipItem.raw;
+                        return `${tooltipItem.label}: ${value} €`;
+                    }
+                }
             }
         }
     };
