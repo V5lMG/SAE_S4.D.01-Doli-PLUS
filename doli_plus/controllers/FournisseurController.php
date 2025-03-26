@@ -21,15 +21,15 @@ class FournisseurController
     }
 
     /**
-     * Affiche la page d'achat fournisseur.
+     * Affiche la page de liste des fournisseurs.
      * Vérifie que l'utilisateur est authentifié avant d'afficher la vue.
      *
-     * @return View La vue de la page d'achat fournisseur.
+     * @return View La vue de la page de liste des fournisseurs.
      */
-    public function indexAchat(): View
+    public function index(): View
     {
         AuthService::checkAuthentication();
-        return new View("views/achat_fournisseur");
+        return new View("views/liste_fournisseur");
     }
 
     /**
@@ -63,7 +63,7 @@ class FournisseurController
         $listeFournisseur = $filteredData; // à voir le "notes"
 
         // Passer les données à la vue
-        $view = new View("views/achat_fournisseur");
+        $view = new View("views/liste_fournisseur");
         $view->setVar('listeFournisseur', $listeFournisseur);
         return $view;
     }
