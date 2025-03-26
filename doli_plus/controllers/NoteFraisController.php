@@ -119,7 +119,7 @@ class NoteFraisController
         // Récupération des paramètres de dates et filtres
         $date_debut  = HttpHelper::getParam('date_debut');
         $date_fin    = HttpHelper::getParam('date_fin');
-        $parMois     = HttpHelper::getParam('filtreJour') === 'mois' || HttpHelper::getParam('filtreJour') === null;
+        $parMois     = HttpHelper::getParam('filtreJour') === 'mois';
         $parJour     = HttpHelper::getParam('filtreJour') === 'jour';
         $moisChoisi  = HttpHelper::getParam('mois_filtre') ?? 0;
         $anneeChoisi = HttpHelper::getParam('annee_filtre') ?? date("Y");
@@ -143,7 +143,7 @@ class NoteFraisController
 
         // Attribution du résultat à la vue, en passant les deux listes séparément
         $view = new View("views/statistique_note_frais");
-        $view->setVar('listHistogrammeActuel', $listHistogramme['actuel']);
+        $view->setVar('listHistogrammeActuel'     , $listHistogramme['actuel']);
         $view->setVar('listHistogrammeComparaison', $listHistogramme['comparaison']);
         $view->setVar('listSectoriel'  , $listSectoriel);
         $view->setVar('date_debut'     , $date_debut);
@@ -152,7 +152,7 @@ class NoteFraisController
         $view->setVar('parJour'        , $parJour);
         $view->setVar('moisChoisi'     , $moisChoisi);
         $view->setVar('anneeChoisi'    , $anneeChoisi);
-        $view->setVar('comparaison', $comparaison);
+        $view->setVar('comparaison'    , $comparaison);
 
         return $view;
     }
