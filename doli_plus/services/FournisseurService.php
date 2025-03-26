@@ -67,7 +67,7 @@ class FournisseurService
      *
      * @return array Un tableau contenant tous les fournisseurs.
      */
-    public function recupererListeCompletePalmares(): array
+    public function recupererListeCompletePalmares($date_debut = null, $date_fin = null): array
     {
         // Démarrer la session si elle n'est pas encore démarrée
         if (session_status() === PHP_SESSION_NONE) {
@@ -100,15 +100,35 @@ class FournisseurService
 
             $palmaresFormatees = [];
 
+            // Convertir les dates de début et de fin en timestamps pour la comparaison
+            $dateDebutTimestamp = $date_debut ? strtotime($date_debut) : null;
+            $dateFinTimestamp = $date_fin ? strtotime($date_fin) : null;
+
             // Formater la réponse pour extraire les informations pertinentes
             foreach ($data as $facture) {
                 $nomFournisseur = $facture['socnom'];              // Nom du fournisseur
                 $totalHT        = floatval($facture['total_ht']);  // Montant total HT
+                $timestamp      = $facture['date'];               // Timestamp de la facture
+                // Mettre +1 à chaque date car avec le timestamp, il y a un décalage d'un jour
+                $dateFacture    = date("d/m/Y", strtotime('+1 day', $timestamp)); // Conversion du timestamp en date
+
+                // Corriger le timestamp en ajoutant 1 jour
+                $timestampCorrige = strtotime('+1 day', $timestamp);
+
+                // Filtre par date (comparaison entre timestamps)
+                if (($dateDebutTimestamp && $timestampCorrige < $dateDebutTimestamp) ||
+                    ($dateFinTimestamp && $timestampCorrige > $dateFinTimestamp)) {
+                    continue;
+                }
+
+                // Formater la date pour l'affichage
+                $dateFacture = date("d/m/Y", $timestampCorrige);
 
                 if (!isset($palmaresFormatees[$nomFournisseur])) {
                     $palmaresFormatees[$nomFournisseur] = [
                         'nombre_factures' => 0,
-                        'total_ht' => 0
+                        'total_ht' => 0,
+                        'dates' => []  // Stocker les dates des factures
                     ];
                 }
 
@@ -117,7 +137,14 @@ class FournisseurService
                     $palmaresFormatees[$nomFournisseur]['nombre_factures']++;
                 }
                 $palmaresFormatees[$nomFournisseur]['total_ht'] += $totalHT;
+                $palmaresFormatees[$nomFournisseur]['dates'][] = $dateFacture; // Ajouter la date formatée
             }
+
+            // Trier le tableau par montant HT décroissant
+            uasort($palmaresFormatees, function ($a, $b) {
+                return $b['total_ht'] <=> $a['total_ht'];
+            });
+
 
             // Retourner le tableau des notes de frais formatées
             return $palmaresFormatees;

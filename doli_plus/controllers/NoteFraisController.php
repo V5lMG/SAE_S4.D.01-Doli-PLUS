@@ -123,7 +123,7 @@ class NoteFraisController
         $parJour     = HttpHelper::getParam('filtreJour') === 'jour';
         $moisChoisi  = HttpHelper::getParam('mois_filtre') ?? 0;
         $anneeChoisi = HttpHelper::getParam('annee_filtre') ?? date("Y");
-        $comparaison = HttpHelper::getParam('comparaison') ?? false; // Je pense que ça récupère le fait que ce soit faux directment quand c'est pas cocher
+        $comparaison = HttpHelper::getParam('comparaison') ?? false;
 
         // Si aucune donnée sectorielle n'est disponible ou si le paramètre 'sectoriel' est activé
         if ($sectoriel || !($sectoriel || $histogramme)) {

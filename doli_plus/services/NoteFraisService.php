@@ -141,7 +141,7 @@ class NoteFraisService
                     'lines' => $lignesTableau   // Contient toutes les lignes formatées
                 ];
             }
-
+            $valeurTrier = triColonne($note, $colonne, $direction);
             // Retourner le tableau des notes de frais formatées
             return $noteFraisFormatees;
         }
@@ -243,6 +243,40 @@ class NoteFraisService
 
         return ['notes' => $notesFiltrees, 'totaux' => $totaux];
     }
+
+    // Valeur a trier
+    // Colonne
+    //Direction (ascendant et descendant)
+    public function triColonne(array $notes, string $colonne, string $direction = 'asc'): array
+    {
+        // Vérifier si la colonne spécifiée existe dans les données
+        if (empty($notes) || !isset($notes[0][$colonne])) {
+            return $notes; // Retourner les données inchangées si la colonne n'existe pas
+        }
+
+        // Fonction de comparaison pour le tri
+        usort($notes, function ($a, $b) use ($colonne, $direction) {
+            $valA = $a[$colonne];
+            $valB = $b[$colonne];
+
+            // Gérer les dates au format 'd/m/Y'
+            if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $valA) && preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $valB)) {
+                $valA = \DateTime::createFromFormat('d/m/Y', $valA);
+                $valB = \DateTime::createFromFormat('d/m/Y', $valB);
+            }
+
+            // Comparaison selon la direction
+            if ($direction === 'asc') {
+                return $valA <=> $valB;
+            } else {
+                return $valB <=> $valA;
+            }
+        });
+
+        return $notes;
+    }
+
+    //A appeler dans affichage total et dans filtrer valeurs
 
     /**
      * Récupère les statistiques pour l'histogramme (par mois ou par jour).
