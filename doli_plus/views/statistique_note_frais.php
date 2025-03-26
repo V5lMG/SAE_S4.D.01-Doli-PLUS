@@ -64,7 +64,6 @@ $mois = [
                 <div class="contenu-principal mt-4">
                     <div class="container-fluid">
 
-                        <!-- Contenu principal a modifier -->
                         <!-- Titre -->
                         <div class="row">
                             <div class="col text-center">
@@ -203,7 +202,6 @@ $mois = [
                                 </div>
                             </div>
                         </div>
-                        <!-- Jusqu'ici -->
                     </div>
                 </div>
             </div>

@@ -3,8 +3,6 @@ namespace services;
 
 class NoteFraisService
 {
-    private string $apiUrl = "http://dolibarr.iut-rodez.fr/G2024-43-SAE/htdocs/api/index.php/expensereports";
-
     private $moisNoms = [
         1 => 'Janvier',
         2 => 'Février',
@@ -37,8 +35,11 @@ class NoteFraisService
             return [];
         }
 
+        // Récupérer l'URL
+        $urlNoteFrais = $_SESSION['url_saisie'] . "/expensereports";
+
         // Initialiser cURL
-        $requeteCurl = curl_init($this->apiUrl);
+        $requeteCurl = curl_init($urlNoteFrais);
         curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
@@ -265,8 +266,11 @@ class NoteFraisService
             return [];
         }
 
+        // Récupérer l'URL
+        $urlNoteFrais = $_SESSION['url_saisie'] . "/expensereports";
+
         // Initialiser cURL
-        $requeteCurl = curl_init($this->apiUrl);
+        $requeteCurl = curl_init($urlNoteFrais);
         curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
@@ -380,8 +384,11 @@ class NoteFraisService
             return [];
         }
 
+        // Récupérer l'URL
+        $urlNoteFrais = $_SESSION['url_saisie'] . "/expensereports";
+
         // Initialiser cURL
-        $requeteCurl = curl_init($this->apiUrl);
+        $requeteCurl = curl_init($urlNoteFrais);
         curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);

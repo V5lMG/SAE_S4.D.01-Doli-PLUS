@@ -3,8 +3,6 @@ namespace services;
 
 class FournisseurService
 {
-    private string $apiUrl = "http://dolibarr.iut-rodez.fr/G2024-43-SAE/htdocs/api/index.php/thirdparties";
-
     /**
      * Récupère tous les fournisseurs.
      *
@@ -22,8 +20,11 @@ class FournisseurService
             return [];
         }
 
+        // Récupérer l'URL
+        $fourniseurUrl = $_SESSION['url_saisie'] . "/thirdparties";
+
         // Initialiser cURL
-        $requeteCurl = curl_init($this->apiUrl);
+        $requeteCurl = curl_init($fourniseurUrl);
         curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
@@ -48,15 +49,17 @@ class FournisseurService
             foreach ($data as $fourniseur) {
 
                 $nb_note += 1;
-
+                $ref =  $fourniseur['ref'] ?? 'Inconnu';
                 // Ajouter les informations formatées dans le tableau final pour la note de frais
                 $fourniseurFormatees[] = [
+                    'ref' => $ref,
                     'nom' => $fourniseur['name'] ?? 'Inconnu',
                     'numTel' => $fourniseur['phone'] ?? 'Inconnu',
                     'adresse' => !empty($fourniseur['address']) ? $fourniseur['address'] : 'Inconnu',
                     'codePostal' => $fourniseur['zip'] ?? 'Inconnu',
                 ];
             }
+
 
             // Retourner le tableau des notes de frais formatées
             return $fourniseurFormatees;
@@ -66,7 +69,7 @@ class FournisseurService
     }
 
     /**
-     * @param array $fournisseurs liste des fournisseurs.
+     * @param array       $fournisseurs liste des fournisseurs.
      * @param string|null $nom nom du fournisseur.
      * @param string|null $numTel numéro de téléphone du fournisseur.
      * @param string|null $adresse adresse du fournisseur.
@@ -83,6 +86,14 @@ class FournisseurService
         if (!isset($_SESSION['api_token'])) {
             return [];
         }
+
+        // Enregistrer les filtres dans la session
+        $_SESSION['filters'] = [
+            'nom' => $_POST['nom'] ?? "",
+            'numTel' => $_POST['numTel'] ?? "",
+            'adresse' => $_POST['adresse'] ?? "",
+            'codePostal' => $_POST['codePostal'] ?? "",
+        ];
 
         // Vérification si tous les filtres ne sont pas définis
         if (
@@ -122,5 +133,51 @@ class FournisseurService
         }
 
         return ['fournisseurs' => $fournisseursFiltres];
+    }
+
+    /**
+     * Récupère les factures du fournisseur cherché.
+     *
+     * @return array Un tableau contenant toutes les factures du fournisseur.
+     */
+    public function factureFournisseur($ref): array
+    {
+        // Démarrage de la session si nécessaire
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['api_token'])) {
+            return [];
+        }
+
+        // Récupérer l'URL
+        $apiUrlFacture = $_SESSION['url_saisie'] . "/supplierinvoices";
+
+        // Initialiser cURL
+        $requeteCurl = curl_init($apiUrlFacture);
+        curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
+        curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
+        curl_setopt($requeteCurl, CURLOPT_HTTPHEADER, [
+            'DOLAPIKEY: ' . $_SESSION['api_token'],
+            'Accept: application/json'
+        ]);
+
+        // Exécuter la requête
+        $response = curl_exec($requeteCurl);
+        $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
+        curl_close($requeteCurl);
+
+        // On décode la réponse
+        $data = json_decode($response, true) ?? [];
+
+        // Tableau créer contenant les factures du fournisseur recherché avec les filtres auparavant
+        $factures = "FACTURE"; // STUB
+
+
+        return $factures;
+
+        //return null;
     }
 }

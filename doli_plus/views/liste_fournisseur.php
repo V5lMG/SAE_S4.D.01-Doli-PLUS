@@ -84,15 +84,15 @@ if (session_status() === PHP_SESSION_NONE) {
                             }
                         </script>
 
-                        <!-- Tableau des notes de frais -->
+                        <!-- Tableau des fournisseurs -->
                         <div class="mt-4 table-responsive">
                             <table class="table table-bordered">
                                 <thead class="table-light">
                                 <tr>
-                                    <th>Nom</th>
-                                    <th>Numéro de téléphone</th>
-                                    <th>Adresse</th>
-                                    <th>Code postal</th>
+                                    <th class="col-3">Nom</th>
+                                    <th class="col-2">Numéro de téléphone</th>
+                                    <th class="col-4">Adresse</th>
+                                    <th class="col-2">Code postal</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -104,9 +104,14 @@ if (session_status() === PHP_SESSION_NONE) {
 
                                         foreach ($listeFournisseur as $fournisseur):
                                             ?>
-                                            <pre><?php var_dump($fournisseur); ?></pre>
                                             <tr>
-                                                <td><?= htmlspecialchars($fournisseur['nom'] ?? '') ?></td>
+                                                <!-- passage de la ref du fournisseur, pour la page d'affichage des factures -->
+                                                <?php $ref = htmlspecialchars($fournisseur['ref'] ?? '') ?>
+                                                <td>
+                                                    <a href="index.php?controller=Fournisseur&action=indexFactures&nomFournisseur=<?= urlencode($fournisseur['nom']) ?>&refFournisseur=<?= urlencode($fournisseur['ref']) ?>">
+                                                        <?= htmlspecialchars($fournisseur['nom'] ?? '') ?>
+                                                    </a>
+                                                </td>
                                                 <td><?= htmlspecialchars($fournisseur['numTel'] ?? '') ?></td>
                                                 <td><?= htmlspecialchars($fournisseur['adresse'] ?? '') ?></td>
                                                 <td><?= htmlspecialchars($fournisseur['codePostal'] ?? '') ?></td>

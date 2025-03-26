@@ -33,10 +33,10 @@ class FournisseurController
     }
 
     /**
-     * Affiche la liste des notes de frais filtrées.
-     * Applique les filtres récupérés via les paramètres HTTP et calcule les totaux.
+     * Affiche la liste des fournisseurs.
+     * Applique les filtres récupérés via les paramètres HTTP.
      *
-     * @return View La vue filtrée des notes de frais avec les totaux.
+     * @return View La vue filtrée des notes de fournisseurs.
      */
     public function indexListe(): View
     {
@@ -65,6 +65,36 @@ class FournisseurController
         // Passer les données à la vue
         $view = new View("views/liste_fournisseur");
         $view->setVar('listeFournisseur', $listeFournisseur);
+        return $view;
+    }
+
+    /**
+     * Affiche la liste des factures d'un fournisseur donné.
+     *
+     * @return View La vue contenant la liste des factures du fournisseur.
+     */
+    public function indexFactures(): View
+    {
+        AuthService::checkAuthentication($ref);
+
+        // Démarrer la session si elle n'est pas encore démarrée
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Vérifier que les paramètres existent dans la requête GET
+        $nomFournisseur = $_GET['nomFournisseur'] ?? "Inconnu";
+        $refFournisseur = $_GET['refFournisseur'] ?? "Inconnu";
+
+        // Récupérer les factures
+        $factures = $this->fournisseurService->factureFournisseur($ref);
+
+        // Passer les variables à la vue
+        $view = new View("views/liste_facture");
+        $view->setVar('factures', $factures);
+        $view->setVar('nomFournisseur', $nomFournisseur);
+        $view->setVar('refFournisseur', $refFournisseur);
+
         return $view;
     }
 }
