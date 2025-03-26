@@ -82,8 +82,11 @@ class FournisseurService
             return [];
         }
 
+        // Récupérer l'URL
+        $urlFacture = $_SESSION['url_saisie'] . "/supplierinvoices";
+
         // Initialiser cURL
-        $requeteCurl = curl_init($this->apiUrlFacture);
+        $requeteCurl = curl_init($urlFacture);
         curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
