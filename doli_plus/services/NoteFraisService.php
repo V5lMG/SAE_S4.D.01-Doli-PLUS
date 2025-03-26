@@ -91,7 +91,6 @@ class NoteFraisService
                         default => 'Autre',
                     };
 
-
                     // Créer la ligne sous forme de tableau pour cette ligne spécifique
                     $ligneTableau = [
                         'date' => date("d/m/Y", strtotime($line['date'])),

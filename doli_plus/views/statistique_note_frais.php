@@ -99,7 +99,7 @@ $mois = [
                                         <div class="row justify-content-center mt-3">
                                             <div class="col-md-6">
                                                 <label for="parMois">Par mois (sur un an)</label>
-                                                <input type="radio" class="form-check-input" name="filtreMois" id="parMois" value="mois" <?= $filtreJour === 'mois' ? 'checked' : '' ?>>
+                                                <input type="radio" class="form-check-input" name="filtreJour" id="parMois" value="mois" <?= $filtreJour === 'mois' ? 'checked' : '' ?>>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="parJour">Par jour (sur un mois)</label>
@@ -111,7 +111,7 @@ $mois = [
                                             <div class="col-md-6" >
                                                 <label for="annee_filtre">Veuillez sélectionner <u>l'année</u> à afficher :</label>
                                                 <select class="form-select" id="annee_filtre" name="annee_filtre">
-                                                    <option value="">--Sélectionner une année--</option>
+                                                    <option value="" selected>--Sélectionner une année--</option>
                                                     <?php
                                                     $currentYear = date("Y");
                                                     for ($year = $currentYear; $year >= 1900; $year--) {?>
@@ -183,12 +183,12 @@ $mois = [
                                             <div class="col-md-1 col-12 mt-md-0 mt-3">
                                                 <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
                                                 <input type="hidden" name="sectoriel" value="true"/>
-                                                <input type="hidden" name="comparaison" id="comparaison" value="<?= isset($_POST['comparaison'])?>"/>
-                                                <input type="hidden" name="parMois" id="parMois" value="<?= $filtreJour ?>"/>
-                                                <input type="hidden" name="parJour" id="parJour" value="<?= $filtreJour?>"/>
+
+                                                <!-- AJOUTER EN HIDDEN LES CHAMPS RADIO ET LA CHECKBOX AFIN DE LES GARDER INTACTE -->
                                                 <input type="hidden" name="annee_filtre" id="annee_filtre" value="<?= $anneeChoisi?>"/>
                                                 <input type="hidden" name="mois_filtre" id="mois_filtre" value="<?= $moisChoisi?>"/>
                                                 <input type="hidden" name="listeStatHistogramme" value="<?= $listHistogramme?>"/>
+
                                                 <button type="submit" class="btn btn-primary" title="Rechercher">
                                                     <i class="fa fa-search"></i>
                                                 </button>

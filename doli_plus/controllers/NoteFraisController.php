@@ -137,7 +137,7 @@ class NoteFraisController
         // Si aucune donnée histogramme n'est disponible ou si le paramètre 'histogramme' est activé
         if ($histogramme || !($sectoriel || $histogramme)) {
             // Récupération des statistiques pour l'histogramme
-            $listHistogramme = $this->noteFraisService->recupererStatHistogramme($parMois, $parJour, $moisChoisi, $anneeChoisi, $comparaison);
+            $listHistogramme = $this->noteFraisService->recupererStatHistogramme($parMois, $parJour, $moisChoisi, $anneeChoisi,$comparaison);
             // Sauvegarde dans la session
             $_SESSION['listHistogramme'] = $listHistogramme;
         }

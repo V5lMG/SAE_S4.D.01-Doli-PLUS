@@ -63,24 +63,22 @@ if (session_status() === PHP_SESSION_NONE) {
                                 </thead>
                                 <tbody>
                                 <?php
-                                if (isset($listeFournisseur['fournisseurs']) && is_array($listeFournisseur['fournisseurs']) && count($listeFournisseur['fournisseurs']) > 0) : ?>
-
-                                    <?php
-                                    $listeFournisseur = $listeFournisseur['fournisseurs'] ?? []; // Accéder à la clé correcte
-
-                                    foreach ($listeFournisseur as $fournisseur):
-                                        ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($fournisseur['nom'] ?? '') ?></td>
-                                            <td><?= htmlspecialchars($fournisseur['numTel'] ?? '') ?></td>
-                                            <td><?= htmlspecialchars($fournisseur['adresse'] ?? '') ?></td>
-                                            <td><?= htmlspecialchars($fournisseur['codePostal'] ?? '') ?></td>
-                                            <td><?= htmlspecialchars($fournisseur['codePostal'] ?? '') ?></td>
-                                        </tr>
+                                if (!empty($factures)) :
+                                    foreach ($factures as $facture): ?>
+                                            <tr>
+                                               <td><?= htmlspecialchars($facture['ref'] ?? '') ?></td>
+                                               <td><?= htmlspecialchars($facture['date_facture'] ?? '') ?></td>
+                                               <td><?= htmlspecialchars($facture['date_echeance'] ?? '') ?></td>
+                                               <td><?= htmlspecialchars($facture['cond_reglement'] ?? '') ?></td>
+                                               <td><?= htmlspecialchars($facture['mode_reglement'] ?? '') ?></td>
+                                               <td><?= htmlspecialchars($facture['montant_ht'] ?? '') ?></td>
+                                               <td><?= htmlspecialchars($facture['etat'] ?? '') ?></td>
+                                               <td><?php echo "test"?></td>
+                                            </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="8" class="text-center text-muted">Aucun fournisseur trouvé</td>
+                                        <td colspan="8" class="text-center text-muted">Aucune facture trouvée</td>
                                     </tr>
                                 <?php endif; ?>
                                 </tbody>

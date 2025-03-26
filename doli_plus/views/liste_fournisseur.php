@@ -105,8 +105,6 @@ if (session_status() === PHP_SESSION_NONE) {
                                         foreach ($listeFournisseur as $fournisseur):
                                             ?>
                                             <tr>
-                                                <!-- passage de la ref du fournisseur, pour la page d'affichage des factures -->
-                                                <?php $ref = htmlspecialchars($fournisseur['ref'] ?? '') ?>
                                                 <td>
                                                     <a href="index.php?controller=Fournisseur&action=indexFactures&nomFournisseur=<?= urlencode($fournisseur['nom']) ?>&refFournisseur=<?= urlencode($fournisseur['ref']) ?>">
                                                         <?= htmlspecialchars($fournisseur['nom'] ?? '') ?>

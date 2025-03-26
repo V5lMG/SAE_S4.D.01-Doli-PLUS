@@ -169,15 +169,70 @@ class FournisseurService
         $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
         curl_close($requeteCurl);
 
-        // On décode la réponse
-        $data = json_decode($response, true) ?? [];
+        if ($httpCode === 200) {
+            $data = json_decode($response, true) ?? [];
 
-        // Tableau créer contenant les factures du fournisseur recherché avec les filtres auparavant
-        $factures = "FACTURE"; // STUB
+            // Formater les données
+            $factures = [
+                'factures' => [],
+                'refSupplier' => ''
+            ];
 
+            if (!empty($data)) {
 
-        return $factures;
+                $factures['refSupplier'] = $data[0]['ref_supplier'] ?? 'Inconnu';
 
-        //return null;
+                // Filtrer les factures qui correspondent à ref_supplier
+                foreach ($data as $facture) {
+                    if ($facture['socid'] === $ref) {
+
+                        $status = match($facture['status']) {
+                            '0' => 'Brouillon',
+                            '1' => 'Impayées',
+                            '2' => 'Payé',
+                            default => 'Inconnu'
+                        };
+
+                        $condReglement = match($facture['cond_reglement_code']) {
+                            'RECEP' => 'A réception',
+                            '30D' => '30 jours',
+                            '30DENDMONTH' => '30 jours en fin de mois',
+                            '60D' => '60 jours',
+                            '60DENDMONTH' => '60 jours en fin de mois',
+                            'PT_ORDER' => 'A commande',
+                            'PT_DELIVERY' => 'A livraison',
+                            'PT_5050' => '50/50',
+                            '10D' => '10 jours',
+                            '10DENDMONTH' => '10 jours en fin de mois',
+                            '14D' => '14 jours',
+                            '14DENDMONTH' => '14 jours en fin de mois',
+                            default => 'Inconnu'
+                        };
+
+                        $modeReglement = match($facture['mode_reglement_code']) {
+                            'CB' => 'Carte bancaire',
+                            'CHQ' => 'Chèque',
+                            'LIQ' => 'Espèce',
+                            'PRE' => 'Ordre de prélèvement',
+                            'VIR' => 'Virement bancaire',
+                            default => 'Inconnu'
+                        };
+
+                        $factures['factures'][] = [
+                            'ref' => $facture['ref'] ?? 'Inconnue',
+                            'date_facture' => date("d/m/Y", $facture['date']) ?? 'Inconnue',
+                            'date_echeance' => date("d/m/Y", $facture['date_echeance']) ?? 'Inconnue',
+                            'cond_reglement' => $condReglement,
+                            'mode_reglement' => $modeReglement,
+                            'montant_ht' => number_format($facture['total_ht'], 2, ',', ' ') . ' €' ?? 'Inconnu',
+                            'etat' => $status
+                        ];
+                    }
+                }
+            }
+
+            return $factures;
+        }
+        return []; // Retourner un tableau vide en cas d'échec
     }
 }

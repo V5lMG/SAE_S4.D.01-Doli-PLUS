@@ -75,7 +75,7 @@ class FournisseurController
      */
     public function indexFactures(): View
     {
-        AuthService::checkAuthentication($ref);
+        AuthService::checkAuthentication();
 
         // Démarrer la session si elle n'est pas encore démarrée
         if (session_status() === PHP_SESSION_NONE) {
@@ -83,17 +83,17 @@ class FournisseurController
         }
 
         // Vérifier que les paramètres existent dans la requête GET
-        $nomFournisseur = $_GET['nomFournisseur'] ?? "Inconnu";
-        $refFournisseur = $_GET['refFournisseur'] ?? "Inconnu";
+        $nomFournisseur = isset($_GET['nomFournisseur']) ? htmlspecialchars($_GET['nomFournisseur']) : "Inconnu";
+        $refFournisseur = isset($_GET['refFournisseur']) ? htmlspecialchars($_GET['refFournisseur']) : "Inconnu";
 
         // Récupérer les factures
-        $factures = $this->fournisseurService->factureFournisseur($ref);
-
+        $factures = $this->fournisseurService->factureFournisseur($refFournisseur);
+        var_dump($factures);
         // Passer les variables à la vue
         $view = new View("views/liste_facture");
-        $view->setVar('factures', $factures);
+        $view->setVar('factures',       $factures["factures"]);
+        $view->setVar('refFournisseur', $factures["refSupplier"]);
         $view->setVar('nomFournisseur', $nomFournisseur);
-        $view->setVar('refFournisseur', $refFournisseur);
 
         return $view;
     }
