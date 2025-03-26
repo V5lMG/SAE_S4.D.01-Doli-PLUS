@@ -16,3 +16,15 @@ body {
 .beige {
     color : #8c7c5c
 }
+
+.fournisseur1 td {
+    background-color : gold;
+}
+
+.fournisseur2 td {
+    background-color : silver;
+}
+
+.fournisseur3 td {
+    background-color : #cd7f32;
+}

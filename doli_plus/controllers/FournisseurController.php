@@ -46,13 +46,21 @@ class FournisseurController
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        $listPalmares = [];
 
-        $listPalmares = $this->fournisseurService->recupererListeCompletePalmares();
+        $listPalmares = [];
+        $date_debut  = HttpHelper::getParam('date_debut');
+        $date_fin    = HttpHelper::getParam('date_fin');
+
+        $listPalmares = $this->fournisseurService->recupererListeCompletePalmares($date_debut, $date_fin);
+
+        $top = (int)HttpHelper::getParam('top') === 0 ? 30 : (int)HttpHelper::getParam('top');
 
         // Passer les données à la vue
         $view = new View("views/palmares_fournisseur");
         $view->setVar('listePalmares', $listPalmares);
+        $view->setVar('top', $top);
+        $view->setVar('date_debut', $date_debut);
+        $view->setVar('date_fin', $date_fin);
         return $view;
     }
 
