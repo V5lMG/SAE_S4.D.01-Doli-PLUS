@@ -65,16 +65,28 @@ if (session_status() === PHP_SESSION_NONE) {
                                 <?php if (!empty($factures)): ?>
                                     <?php foreach ($factures as $facture): ?>
                                         <tr data-bs-toggle="collapse" data-bs-target="#collapse-<?= $facture['ref'] ?>" aria-expanded="false" aria-controls="collapse-<?= $facture['ref'] ?>">
-                                            <td><span class="fw-bold text-decoration-underline text-primary"><?= htmlspecialchars($facture['ref'] ?? '') ?></span></td>
+                                            <td class="fw-bold text-decoration-underline text-primary"><?= htmlspecialchars($facture['ref'] ?? '') ?></td>
                                             <td><?= htmlspecialchars($facture['date_facture']) ?></td>
                                             <td><?= htmlspecialchars($facture['date_echeance']) ?></td>
                                             <td><?= htmlspecialchars($facture['cond_reglement']) ?></td>
                                             <td><?= htmlspecialchars($facture['mode_reglement']) ?></td>
                                             <td><?= htmlspecialchars($facture['montant_ht']) ?></td>
                                             <td><?= htmlspecialchars($facture['etat']) ?></td>
-                                            <td><?php echo "test" ?></td>
+                                            <td class="col-3">
+                                                <?php if (empty($facture["fichiers_joints"])) :?>
+                                                    <span class="d-flex flex-column text-center">Aucun fichier joint</span>
+                                                <?php else: ?>
+                                                    <div class="d-flex flex-column">
+                                                        <?php foreach ($facture['fichiers_joints'] as $fichier): ?>
+                                                            <a href="index.php?controller=Fournisseur&action=telechargerFichier&fichierUrl=<?= urlencode($fichier['url']) ?>"
+                                                               class="btn btn-sm btn-link text-primary download-link w-100" target="_blank">
+                                                                <i class="fa fa-download"></i> <?= htmlspecialchars($fichier['nom']) ?>
+                                                            </a>
+                                                        <?php endforeach; ?>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </td>
                                         </tr>
-
                                         <!-- Sous-tableau pour afficher les lignes de la facture -->
                                         <tr class="collapse" id="collapse-<?= $facture['ref'] ?>">
                                             <td colspan="8">
@@ -128,13 +140,19 @@ if (session_status() === PHP_SESSION_NONE) {
                         <!-- JavaScript pour activer le collapse Bootstrap -->
                         <script>
                             document.addEventListener("DOMContentLoaded", function () {
-                                let collapsibleRows = document.querySelectorAll("[data-bs-toggle='collapse']");
-                                collapsibleRows.forEach(row => {
-                                    row.addEventListener("click", function () {
-                                        let target = this.getAttribute("data-bs-target");
-                                        let element = document.querySelector(target);
-                                        if (element) {
-                                            element.classList.toggle("show");
+                                document.querySelectorAll(".download-link").forEach(link => {
+                                    link.addEventListener("click", function (event) {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                        window.open(this.href, "_blank");
+                                    });
+                                });
+
+                                document.querySelectorAll("[data-bs-toggle='collapse']").forEach(row => {
+                                    row.addEventListener("click", function (event) {
+                                        if (!event.target.closest(".download-link")) {
+                                            let target = this.getAttribute("data-bs-target");
+                                            document.querySelector(target).classList.toggle("show");
                                         }
                                     });
                                 });

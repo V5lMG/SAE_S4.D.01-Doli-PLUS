@@ -120,6 +120,7 @@ class FournisseurController
 
         // Récupérer les factures
         $factures = $this->fournisseurService->factureFournisseur($refFournisseur);
+
         // Passer les variables à la vue
         $view = new View("views/liste_facture");
         $view->setVar('factures',       $factures["factures"]);
@@ -127,5 +128,15 @@ class FournisseurController
         $view->setVar('nomFournisseur', $nomFournisseur);
 
         return $view;
+    }
+
+    /**
+     * Télécharge un fichier spécifique via l'API
+     */
+    public function telechargerFichier()
+    {
+        AuthService::checkAuthentication();
+        $fichierUrl = htmlspecialchars($_GET['fichierUrl']) ?? '';
+        $this->fournisseurService->telechargerFichierApi($fichierUrl);
     }
 }
