@@ -124,62 +124,59 @@ $compteur = 0;
                     </div>
                     <!-- Diagramme sectoriel palmarès -->
                     <div class="col-12 col-md-6 text-center">
-                        <div class="p-4 border rounded shadow-sm bg-light">
-                            <?php if (!empty($date_debut) && !empty($date_fin)) { ?>
-                                <h5>Diagramme sectoriel des notes de frais entre <?= htmlspecialchars((new DateTime($date_debut))->format('d/m/Y')); ?> et <?= htmlspecialchars((new DateTime($date_fin))->format('d/m/Y')); ?> compris </h5>
-                            <?php } else { ?>
-                                <h5>Diagramme sectoriel de la totalité des notes de frais</h5>
-                            <?php } ?>
-                            <canvas id="diagramme_sectoriel" width="400" height="400" ></canvas>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <!-- Filtre -->
-                <div class="row justify-content-center">
-                    <form id="formPalmares" method="POST" action="<?= htmlspecialchars('index.php?controller=Fournisseur&action=indexPalmares'); ?>">
-                    <div class="col-12 col-md-6 offset-md-6 text-center">
-                        <div class="p-4 border rounded shadow-sm bg-light">
-                            <div class="row">
-                                <!-- Date début-->
-                                <div class="col-md-3 col-12">
-                                    <label for="date_debut">Date début :</label>
-                                    <input type="date" class="form-control" id="date_debut" name="date_debut" value="<?= isset($date_debut) ? htmlspecialchars($date_debut) : '' ?>">
-                                </div>
-                                <!-- Date fin -->
-                                <div class="col-md-3 col-12">
-                                    <label for="date_fin">Date fin :</label>
-                                    <input type="date" class="form-control" id="date_fin" name="date_fin" value="<?= isset($date_fin) ? htmlspecialchars($date_fin) : '' ?>">
-                                </div>
-                                <!-- Quantité de fournisseur sélectionné -->
-                                <div class="col-md-4 col-8">
-                                    <input type="radio" class="form-check-input" name="top" id="top10" value=10 <?= $top === 10 ? 'checked' : '' ?>>
-                                    <label for="top10">Top 10</label><br>
-
-                                    <input type="radio" class="form-check-input" name="top" id="top20" value="20" <?= $top === 20 ? 'checked' : '' ?>>
-                                    <label for="top20">Top 20</label><br>
-
-                                    <input type="radio" class="form-check-input" name="top" id="top30" value="30" <?= $top === 30 ? 'checked' : '' ?>>
-                                    <label for="top30">Top 30</label><br>
-                                </div>
-                                <div class="col-md-1 col-1">
-                                    <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
-                                    <button type="submit" class="btn btn-primary" title="Rechercher">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </div>
-                                <div class="col-md-1 col-1">
-                                    <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
-                                    <button type="button" class="btn btn-outline-secondary ms-2" title="Réinitialiser" onclick="resetFilters()">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </div>
+                        <div class="row"></div>
+                            <div class="col-md-12 p-4 border rounded shadow-sm bg-light">
+                                <?php if (isset($date_debut) && isset ($date_fin) && !empty($date_debut) && !empty($date_fin)) { ?>
+                                    <h5>Diagramme sectoriel des notes de frais entre <?= htmlspecialchars((new DateTime($date_debut))->format('d/m/Y')); ?> et <?= htmlspecialchars((new DateTime($date_fin))->format('d/m/Y')); ?> compris </h5>
+                                <?php } else { ?>
+                                    <h5>Diagramme sectoriel de la totalité des notes de frais</h5>
+                                <?php } ?>
+                                <canvas id="diagramme_sectoriel" width="400" height="400" ></canvas>
                             </div>
+                                <form id="formPalmares" method="POST" action="<?= htmlspecialchars('index.php?controller=Fournisseur&action=indexPalmares'); ?>">
+                                    <div class="col-12 col-md-12 text-center">
+                                        <div class="p-4 border rounded shadow-sm bg-light">
+                                            <div class="row">
+                                                <!-- Date début-->
+                                                <div class="col-md-3 col-12">
+                                                    <label for="date_debut">Date début :</label>
+                                                    <input type="date" class="form-control" id="date_debut" name="date_debut" value="<?= isset($date_debut) ? htmlspecialchars($date_debut) : '' ?>">
+                                                </div>
+                                                <!-- Date fin -->
+                                                <div class="col-md-3 col-12">
+                                                    <label for="date_fin">Date fin :</label>
+                                                    <input type="date" class="form-control" id="date_fin" name="date_fin" value="<?= isset($date_fin) ? htmlspecialchars($date_fin) : '' ?>">
+                                                </div>
+                                                <!-- Quantité de fournisseur sélectionné -->
+                                                <div class="col-md-4 col-8">
+                                                    <input type="radio" class="form-check-input" name="top" id="top10" value=10 <?= $top === 10 ? 'checked' : '' ?>>
+                                                    <label for="top10">Top 10</label><br>
+
+                                                    <input type="radio" class="form-check-input" name="top" id="top20" value="20" <?= $top === 20 ? 'checked' : '' ?>>
+                                                    <label for="top20">Top 20</label><br>
+
+                                                    <input type="radio" class="form-check-input" name="top" id="top30" value="30" <?= $top === 30 ? 'checked' : '' ?>>
+                                                    <label for="top30">Top 30</label><br>
+                                                </div>
+                                                <div class="col-md-1 col-1">
+                                                    <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
+                                                    <button type="submit" class="btn btn-primary" title="Rechercher">
+                                                        <i class="fa fa-search"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-1 col-1">
+                                                    <label for="invisible"></label> <!-- aligne le bouton de recherche avec les champs "date"-->
+                                                    <button type="button" class="btn btn-outline-secondary ms-2" title="Réinitialiser" onclick="resetFilters()">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                         </div>
                     </div>
-                    </form>
                 </div>
-                <!-- Jusqu'ici -->
             </div>
         </div>
     </div>
