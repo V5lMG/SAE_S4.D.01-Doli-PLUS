@@ -105,7 +105,7 @@ if ($droit != 'admin' && $droit != 'facture') {
                                     if (isset($listeFournisseur['fournisseurs']) && is_array($listeFournisseur['fournisseurs']) && count($listeFournisseur['fournisseurs']) > 0) : ?>
 
                                         <?php
-                                        $listeFournisseur = $listeFournisseur['fournisseurs'] ?? []; // Accéder à la clé correcte
+                                        $listeFournisseur = $listeFournisseur['fournisseurs']; // Accéder à la clé correcte
 
                                         foreach ($listeFournisseur as $fournisseur):
                                             ?>

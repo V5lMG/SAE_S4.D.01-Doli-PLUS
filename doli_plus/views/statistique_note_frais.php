@@ -9,7 +9,7 @@ if ($droit != 'admin' && $droit != 'note2frais') {
     header('location: index.php?controller=Accueil&action=index');
 }
 
-$filtreJour = isset($_POST['filtreJour']) ? $_POST['filtreJour'] : 'mois'; // 'mois' par défaut
+$filtreJour = $_POST['filtreJour'] ?? 'mois'; // 'mois' par défaut
 
 // Convertir le tableau en JSON
 $listeStatSectorielle = isset($_SESSION['listSectoriel']) ? json_encode($_SESSION['listSectoriel']) : '[]';
@@ -19,17 +19,9 @@ $listeStatHistogramme = isset($_SESSION['listHistogramme']) ? json_encode($_SESS
 $listeStatHistogrammeDecoded = json_decode($listeStatHistogramme, true);
 
 // Vérifier si les données ont bien été décodées
-if (isset($listeStatHistogrammeDecoded['actuel'])) {
-    $listeStatHistogrammeActuel = $listeStatHistogrammeDecoded['actuel'];
-} else {
-    $listeStatHistogrammeActuel = [];
-}
+$listeStatHistogrammeActuel = $listeStatHistogrammeDecoded['actuel'] ?? [];
 
-if (isset($listeStatHistogrammeDecoded['comparaison'])) {
-    $listeStatHistogrammeComparaison = $listeStatHistogrammeDecoded['comparaison'];
-} else {
-    $listeStatHistogrammeComparaison = [];
-}
+$listeStatHistogrammeComparaison = $listeStatHistogrammeDecoded['comparaison'] ?? [];
 
 // Tableau des mois
 $mois = [
@@ -86,9 +78,9 @@ $mois = [
                                     $titre = "Evolution des notes de frais";
 
                                     if ($filtreJour === 'mois') {
-                                        $titre .= " sur l'année " . (isset($anneeChoisi) ? $anneeChoisi : date("Y"));
+                                        $titre .= " sur l'année " . ($anneeChoisi ?? date("Y"));
                                     } elseif ($filtreJour === 'jour') {
-                                        $titre .= " pour le mois de " . (isset($moisChoisi) ? $mois[$moisChoisi]: 'Sélectionner un mois') . " de l'année " . (isset($anneeChoisi) ? $anneeChoisi : date("Y"));
+                                        $titre .= " pour le mois de " . (isset($moisChoisi) ? $mois[$moisChoisi]: 'Sélectionner un mois') . " de l'année " . ($anneeChoisi ?? date("Y"));
                                     }
 
                                     // Vérification si la comparaison est activée
@@ -164,7 +156,7 @@ $mois = [
                             <div class="col-12 col-md-6 text-center mt-md-0 mt-4">
                                 <!-- Diagramme Circulaire -->
                                 <div class="p-4 border rounded shadow-sm bg-light">
-                                    <?php if (isset($date_debut) && isset ($date_fin) && !empty($date_debut) && !empty($date_fin)) { ?>
+                                    <?php if (!empty($date_debut) && !empty($date_fin)) { ?>
                                         <h5>Diagramme sectoriel des notes de frais entre <?= htmlspecialchars((new DateTime($date_debut))->format('d/m/Y')); ?> et <?= htmlspecialchars((new DateTime($date_fin))->format('d/m/Y')); ?> compris </h5>
                                     <?php } else { ?>
                                         <h5>Diagramme sectoriel de la totalité des notes de frais</h5>
@@ -249,12 +241,12 @@ $mois = [
 
             // Données de comparaison
             const montantTotalComparaison = histogrammeLabels.map(mois => {
-                // Si les données de comparaison existent, les récupérer, sinon mettre 0
+                // Si les données de comparaison existent, les récupérer, sinon mettre 0.
                 return listeStatHistogrammeComparaison[mois] ? listeStatHistogrammeComparaison[mois]['MontantTotal'] : 0;
             });
 
             const nombreNotesComparaison = histogrammeLabels.map(mois => {
-                // Si les données de comparaison existent, les récupérer, sinon mettre 0
+                // Si les données de comparaison existent, les récupérer, sinon mettre 0.
                 return listeStatHistogrammeComparaison[mois] ? listeStatHistogrammeComparaison[mois]['NombreNotes'] : 0;
             });
 

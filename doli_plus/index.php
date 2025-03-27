@@ -9,6 +9,7 @@ const PREFIX_TO_RELATIVE_PATH = "/doli_plus";
 require $_SERVER[ 'DOCUMENT_ROOT' ] . PREFIX_TO_RELATIVE_PATH . '/lib/vendor/autoload.php';
 
 use application\DefaultComponentFactory;
+use yasmf\NoControllerAvailableForNameException;
 use yasmf\Router;
 
 /*
@@ -21,7 +22,7 @@ try {
      * Exécution du routage pour le chemin relatif défini.
      */
     $router->route(PREFIX_TO_RELATIVE_PATH);
-} catch (\yasmf\NoControllerAvailableForNameException $e) {
+} catch (NoControllerAvailableForNameException $e) {
     /*
      * Gestion des erreurs si aucune route ne correspond au nom du contrôleur.
      */

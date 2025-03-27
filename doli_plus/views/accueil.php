@@ -36,7 +36,7 @@ if (session_status() === PHP_SESSION_NONE) {
                         <?php
                         $url = $_SESSION["url_saisie"] ?? '';
                         if ($controller->urlExiste($url)) {
-                            // Si l'URL existe déjà, appeler addUrl sans afficher la popup pour remettre l'URL en haut du fichier
+                            // Si l'URL existe déjà, appeler addUrl sans afficher le popup pour remettre l'URL en haut du fichier
                             $controller->addUrl("index.php?controller=Accueil&action=addUrl");
                         } else { ?>
                             <!-- Popup de confirmation -->
@@ -63,9 +63,9 @@ if (session_status() === PHP_SESSION_NONE) {
                             </div>
                             <script>
                                 document.addEventListener("DOMContentLoaded", function() {
-                                    var urlPopup = document.getElementById('urlPopup');
+                                    let urlPopup = document.getElementById('urlPopup');
                                     if (urlPopup) {
-                                        var myModal = new bootstrap.Modal(urlPopup, { keyboard: false });
+                                        let myModal = new bootstrap.Modal(urlPopup, {keyboard: false});
                                         myModal.show();
                                     }
                                 });
