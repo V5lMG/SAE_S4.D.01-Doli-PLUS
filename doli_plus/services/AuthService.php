@@ -215,8 +215,9 @@ class AuthService
             session_start();
         }
 
-        // Supprimer le token de session et le nom d'utilisateur
-        unset($_SESSION['api_token']);
-        unset($_SESSION['user_name']);
+        // Supprimer toutes les variables de session
+        session_unset();
+        // Détruire la session
+        session_destroy();
     }
 }
