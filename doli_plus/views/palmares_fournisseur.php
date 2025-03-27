@@ -69,7 +69,7 @@ $compteur = 0;
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Palmarès fournisseur</title>
+    <title>Palmarès fournisseurs</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/css/styles.css">
@@ -88,8 +88,8 @@ $compteur = 0;
 
                 <!-- Titre -->
                 <div class="row">
-                    <div class="col text-center">
-                        <h1 class="mb-4">Fournisseurs - Palmarès</h1>
+                    <div class="col text-center mt-3">
+                        <h2 class="mb-4 titre_page"><i class="fa-solid fa-ranking-star"></i> Fournisseurs - Palmarès</h2>
                     </div>
                 </div>
                 <!-- Liste palmarès et Diagramme sectoriel-->

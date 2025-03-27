@@ -25,10 +25,10 @@ if (session_status() === PHP_SESSION_NONE) {
                 <div class="contenu-principal mt-4">
                     <div class="container-fluid">
 
-                        <!-- Contenu principal a modifier -->
+                        <!-- Titre -->
                         <div class="row">
-                            <div class="col text-center">
-                                <h1 class="mb-4">Tableau de bord Admin</h1>
+                            <div class="col text-center mt-3">
+                                <h2 class="mb-4 titre_page"><i class="fa-solid fa-house"></i> Accueil</h2>
                             </div>
                         </div>
 
