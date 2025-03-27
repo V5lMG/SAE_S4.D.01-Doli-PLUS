@@ -141,7 +141,7 @@ class NoteFraisService
                     'lines' => $lignesTableau   // Contient toutes les lignes formatées
                 ];
             }
-            $valeurTrier = triColonne($note, $colonne, $direction);
+            
             // Retourner le tableau des notes de frais formatées
             return $noteFraisFormatees;
         }

@@ -61,6 +61,67 @@ class AuthService
     }
 
     /**
+     * Récupère les droits de l'utilisateur.
+     *
+     * @return void
+     */
+    public function droits(): void
+    {
+        // Définir les URLs pour les factures et les notes de frais
+        $url_facture = $_SESSION['url_saisie'] . "/supplierinvoices";
+        $url_note_de_frais = $_SESSION['url_saisie'] . "/expensereports";
+
+        // Initialisation des résultats
+        $acces_facture = false;
+        $acces_note_de_frais = false;
+
+        // Vérification de l'accès aux factures
+        if ($this->executer_requete_api($url_facture, $_SESSION['api_token'])) {
+            $acces_facture = true;
+        }
+
+        // Vérification de l'accès aux notes de frais
+        if ($this->executer_requete_api($url_note_de_frais, $_SESSION['api_token'])) {
+            $acces_note_de_frais = true;
+        }
+
+        // Déterminer le rôle de l'utilisateur en fonction des accès
+        if ($acces_facture && $acces_note_de_frais) {
+            $_SESSION['droit'] = 'admin'; // L'utilisateur a accès à tout
+        } elseif ($acces_facture) {
+            $_SESSION['droit'] = 'facture'; // L'utilisateur a accès uniquement aux factures
+        } elseif ($acces_note_de_frais) {
+            $_SESSION['droit'] = 'note2frais'; // L'utilisateur a accès uniquement aux notes de frais
+        } else {
+            $_SESSION['droit'] = 'rien'; // L'utilisateur n'a accès à rien
+        }
+    }
+
+    /**
+     * Exécute les requêtes à l'API.
+     *
+     * @param $url
+     * @param $api_key
+     * @return bool
+     */
+    public function executer_requete_api($url, $api_key) {
+        $requeteCurl = curl_init($url);
+        curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($requeteCurl, CURLOPT_HTTPGET, true); // Utiliser la méthode GET
+        curl_setopt($requeteCurl, CURLOPT_HTTPHEADER, array(
+            'DOLAPIKEY: ' . $api_key
+        ));
+
+        // Exécuter la requête et récupérer la réponse
+        $response = curl_exec($requeteCurl);
+        $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
+        curl_close($requeteCurl);
+
+        // Retourner true si l'accès est autorisé (code 200), sinon false
+        return $httpCode == 200;
+    }
+
+    /**
      * Enregistre l'URL dans le fichier `url.conf`, ou la place en haut si elle y est déjà.
      *
      * @param string $url L'URL à enregistrer.
@@ -140,7 +201,6 @@ class AuthService
             exit();
         }
     }
-
 
     /**
      * Déconnecte l'utilisateur en supprimant son token de session.

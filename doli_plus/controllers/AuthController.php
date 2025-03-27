@@ -53,6 +53,7 @@ class AuthController
             if ($this->authService->authentification($username, $password, $url)) {
                 // Authentification réussie → Redirection vers accueil.php
                 $this->authService->urlSession($url);
+                $this->authService->droits();
                 header("Location: index.php?controller=Accueil&action=index");
                 exit();
             } else {
@@ -65,7 +66,6 @@ class AuthController
 
         return new View("index"); // défaut si aucune soumission n'est faites
     }
-
 
     /**
      * Gère la déconnexion de l'utilisateur.
