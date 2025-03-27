@@ -13,7 +13,7 @@ class FournisseurController
     /**
      * Crée un nouveau contrôleur de gestion des fournisseurs.
      *
-     * @param FournisseurService $FournisseurService Le service de gestion des fournisseurs.
+     * @param FournisseurService $fournisseurService Le service de gestion des fournisseurs.
      */
     public function __construct(FournisseurService $fournisseurService)
     {
@@ -47,7 +47,6 @@ class FournisseurController
             session_start();
         }
 
-        $listPalmares = [];
         $date_debut  = HttpHelper::getParam('date_debut');
         $date_fin    = HttpHelper::getParam('date_fin');
 
@@ -133,7 +132,7 @@ class FournisseurController
     /**
      * Télécharge un fichier spécifique via l'API
      */
-    public function telechargerFichier()
+    public function telechargerFichier(): void
     {
         AuthService::checkAuthentication();
         $fichierUrl = htmlspecialchars($_GET['fichierUrl']) ?? '';

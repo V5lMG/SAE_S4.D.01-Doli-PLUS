@@ -55,13 +55,12 @@ class AuthController
                 $this->authService->urlSession($url);
                 $this->authService->droits();
                 header("Location: index.php?controller=Accueil&action=index");
-                exit();
             } else {
                 // Authentification échouée → Retour à la page de connexion avec un message d'erreur
                 $_SESSION['error_message'] = "Identifiant, mot de passe ou URL incorrect";
                 header("Location: index.php");
-                exit();
             }
+            exit();
         }
 
         return new View("index"); // défaut si aucune soumission n'est faites

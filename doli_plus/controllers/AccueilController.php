@@ -1,7 +1,6 @@
 <?php
 namespace controllers;
 
-use yasmf\HttpHelper;
 use yasmf\View;
 use services\AuthService;
 
@@ -38,10 +37,8 @@ class AccueilController
         // Passer les variables à la vue via setVar
         if ($url && !$this->urlExiste($url)) {
             $view->setVar('url', $url);
-            $view->setVar('controller', $this);
-        } else {
-            $view->setVar('controller', $this);
         }
+        $view->setVar('controller', $this);
 
         return $view;
     }
@@ -56,11 +53,7 @@ class AccueilController
      */
     public function addUrl(): void
     {
-        if (isset($_POST["new_url"])) {
-            $newUrl = $_POST["new_url"];
-        } else {
-            $newUrl = $_SESSION["url_saisie"];
-        }
+        $newUrl = $_POST["new_url"] ?? $_SESSION["url_saisie"];
         AuthService::setUrlFichier($newUrl);
         header("Location: index.php?controller=Accueil&action=index");
     }

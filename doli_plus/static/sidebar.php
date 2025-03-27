@@ -1,5 +1,5 @@
 <?php
-// La session doit être lancée dans chaque vue
+// La session doit être lancée dans chaque vue.
 $userName = $_SESSION['user_name'] ?? 'Erreur';
 $droit = $_SESSION['droit'] ?? 'rien';
 ?>

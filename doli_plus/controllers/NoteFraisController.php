@@ -103,7 +103,7 @@ class NoteFraisController
         $listHistogramme = ['actuel' => [], 'comparaison' => []];
         $listSectoriel = [];
 
-        // Vérification des paramètres sectoriel et histogramme
+        // Vérification des paramètres sectorielle et histogramme
         $sectoriel   = HttpHelper::getParam('sectoriel') ?? false;
         $histogramme = HttpHelper::getParam('histogramme') ?? false;
 
@@ -126,7 +126,7 @@ class NoteFraisController
         $comparaison = HttpHelper::getParam('comparaison') ?? false;
 
         // Si aucune donnée sectorielle n'est disponible ou si le paramètre 'sectoriel' est activé
-        if ($sectoriel || !($sectoriel || $histogramme)) {
+        if ($sectoriel || !($histogramme)) {
             // Récupération des statistiques sectorielles
             $listSectoriel = $this->noteFraisService->recupererStatSectorielle($date_debut, $date_fin);
             // Sauvegarde dans la session
@@ -134,7 +134,7 @@ class NoteFraisController
         }
 
         // Si aucune donnée histogramme n'est disponible ou si le paramètre 'histogramme' est activé
-        if ($histogramme || !($sectoriel || $histogramme)) {
+        if ($histogramme || !($sectoriel)) {
             // Récupération des statistiques pour l'histogramme
             $listHistogramme = $this->noteFraisService->recupererStatHistogramme($parMois, $parJour, $moisChoisi, $anneeChoisi,$comparaison);
             // Sauvegarde dans la session

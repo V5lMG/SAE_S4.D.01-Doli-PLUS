@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $droit = $_SESSION['droit'] ?? 'rien';
-if ($droit != 'admin' || $droit != 'facture') {
+if ($droit != 'admin' && $droit != 'facture') {
     header('location: index.php?controller=Accueil&action=index');
 }
 
