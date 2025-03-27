@@ -122,7 +122,7 @@ class NoteFraisController
         $parMois     = HttpHelper::getParam('filtreJour') === 'mois' || HttpHelper::getParam('filtreJour') === null;
         $parJour     = HttpHelper::getParam('filtreJour') === 'jour';
         $moisChoisi  = HttpHelper::getParam('mois_filtre') ?? 0;
-        $anneeChoisi = HttpHelper::getParam('annee_filtre') ?? date("Y");
+        $anneeChoisi = HttpHelper::getParam('annee_filtre') ?? 0;
         $comparaison = HttpHelper::getParam('comparaison') ?? false;
 
         // Si aucune donnée sectorielle n'est disponible ou si le paramètre 'sectoriel' est activé
