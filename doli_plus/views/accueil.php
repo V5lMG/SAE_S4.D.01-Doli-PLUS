@@ -81,6 +81,7 @@ if (session_status() === PHP_SESSION_NONE) {
                                     &nbsp;&nbsp;&nbsp;&nbsp;- <strong>Les gestionnaires des notes de frais</strong> ont uniquement accès à la gestion des notes de frais de l’entreprise.<br>
                                     &nbsp;&nbsp;&nbsp;&nbsp;- <strong>Les gestionnaires des achats</strong> peuvent consulter et gérer uniquement les factures et les fournisseurs.<br>
                                     &nbsp;&nbsp;&nbsp;&nbsp;- Enfin, <strong>les autres utilisateurs</strong> n’ont aucun accès à l’application.<br><br>
+
                                 </div>
                             </div>
                         </div>
