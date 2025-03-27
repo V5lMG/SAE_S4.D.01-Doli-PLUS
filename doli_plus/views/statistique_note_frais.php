@@ -135,24 +135,20 @@ $mois = [
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="row justify-content-center mt-3">
-                                            <div class="col-md-6 col-12">
-                                                <label class="form-check-label">Comparaison avec l'année précédente : </label>
+                                        <div class="row align-items-center mt-3">
+                                            <div class="col d-flex align-items-center">
+                                                <label class="form-check-label me-2">Comparaison avec l'année précédente :</label>
                                                 <input class="form-check-input" type="checkbox" id="comparaison" name="comparaison" <?= $_POST['comparaison'] == 'on' ? 'checked' : ''; ?>>
                                             </div>
-                                        </div>
-                                        <div class="row justify-content-center mt-3">
-                                            <div class="col-md-1 col-12">
+                                            <div class="col-auto ms-auto">
                                                 <input type="hidden" name="histogramme" value="true"/>
-                                                <input type="hidden" name="date_debut" id="date_debut" value="<?= $date_debut?>"/>
-                                                <input type="hidden" name="date_fin" id="date_fin" value="<?= $date_fin?>"/>
+                                                <input type="hidden" name="date_debut" id="date_debut" value="<?= $date_debut ?>"/>
+                                                <input type="hidden" name="date_fin" id="date_fin" value="<?= $date_fin ?>"/>
                                                 <input type="hidden" name="listeStatSectorielle" value="<?= $listSectorielle ?>"/>
                                                 <button type="submit" class="btn btn-primary" title="Rechercher">
                                                     <i class="fa fa-search"></i>
                                                 </button>
-                                            </div>
-                                            <div class="col-md-1 col-12 mt-md-0 mt-3">
-                                                <button type="reset" class="btn btn-outline-secondary" title="RéinitialiserHistogramme" onclick="resetFiltersHistogramme()">
+                                                <button type="reset" class="btn btn-outline-secondary ms-2" title="RéinitialiserHistogramme" onclick="resetFiltersHistogramme()">
                                                     <i class="fa fa-times"></i>
                                                 </button>
                                             </div>
