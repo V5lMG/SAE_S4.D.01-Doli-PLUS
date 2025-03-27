@@ -20,7 +20,7 @@ $droit = $_SESSION['droit'] ?? 'rien';
         <?php endif; ?>
 
         <?php if ($droit === 'admin' || $droit === 'facture') : ?>
-            <h4 class="mt-1">Achats</h4>
+            <h4 class="mt-1">Fournisseurs</h4>
             <button class="btn w-100 bouton-action mt-2 mb-1" onclick="window.location.href='index.php?controller=Fournisseur&action=index'">Historique des factures</button>
             <button class="btn w-100 bouton-action mb-1" onclick="window.location.href='index.php?controller=Fournisseur&action=indexPalmares'">Palmarès</button>
         <?php endif; ?>
