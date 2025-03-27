@@ -318,6 +318,9 @@ class FournisseurService
                             ];
                         }
 
+                        // Récupération des fichiers joints de la facture
+                        $fichiersJoints = $this->recupererFichiersJoints($facture['id']);
+
                         $factures['factures'][] = [
                             'ref' => $facture['ref'] ?? 'Inconnue',
                             'date_facture' => date("d/m/Y", $facture['date']) ?? 'Inconnue',
@@ -326,15 +329,66 @@ class FournisseurService
                             'mode_reglement' => $modeReglement,
                             'montant_ht' => number_format($facture['total_ht'], 2, ',', ' ') . ' €',
                             'etat' => $status,
+                            'fichiers_joints' => $fichiersJoints,
                             'lignes' => $lignes
                         ];
                     }
                 }
             }
-
             return $factures;
         }
 
         return []; // retourne un tableau vide en cas d'erreur
+    }
+
+    /**
+     * Récupère les fichiers joints d'une facture via l'API
+     */
+    public function recupererFichiersJoints(int $factureId): array
+    {
+        // Récupérer l'URL
+        $url = $_SESSION['url_saisie'] . "/documents?modulepart=supplier_invoice&id=";
+        $urlDocuments = $url . $factureId;
+
+        $requeteCurl = curl_init($urlDocuments);
+        curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
+        curl_setopt($requeteCurl, CURLOPT_HTTPHEADER, [
+            'DOLAPIKEY: ' . $_SESSION['api_token'],
+            "Accept: application/json"
+        ]);
+
+        // Exécuter la requête
+        $response = curl_exec($requeteCurl);
+        $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
+        curl_close($requeteCurl);
+
+        if ($httpCode === 200) {
+            $documents = json_decode($response, true) ?? [];
+
+            $liensDocuments = [];
+            foreach ($documents as $document) {
+
+                $partiesUrl = explode('/', $document['fullname']);
+                $url = implode('/', array_slice($partiesUrl, 8, 4));
+
+                $liensDocuments[] = [
+                    'nom'  => $document['name'] ?? '',
+                    'url'  => $url
+                ];
+            }
+            return $liensDocuments;
+        }
+        return [];
+    }
+    /**
+     * Redirige directement vers l'URL du fichier pour le téléchargement
+     */
+    public function telechargerFichierApi(string $fichierUrl)
+    {
+        $urlComplet = "http://dolibarr.iut-rodez.fr/G2024-43-SAE/documents/fournisseur/facture/" . $fichierUrl;
+
+        // Redirection directe vers l'URL du fichier
+        header("Location: " . $urlComplet);
     }
 }
