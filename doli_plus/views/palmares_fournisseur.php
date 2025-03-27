@@ -99,6 +99,7 @@ $compteur = 0;
                             <table class="table table-bordered mt-2">
                                 <thead class="table-light">
                                 <tr>
+                                    <th>Classement</th>
                                     <th>Nom</th>
                                     <th>Quantité de facture</th>
                                     <th>Montant HT</th>
@@ -109,6 +110,7 @@ $compteur = 0;
                                       if ($compteur < $top) {
                                              $compteur++?>
                                     <tr  class="fournisseur<?=$compteur?>" >
+                                        <td>Top <?php echo $compteur?></td>
                                         <td><?= htmlspecialchars($nomFournisseur) ?></td>             <!-- Nom du fournisseur -->
                                         <td><?= htmlspecialchars($details['nombre_factures']) ?></td> <!-- Quantité de facture -->
                                         <td><?= htmlspecialchars($details['total_ht']) . ' €' ?></td> <!-- Montant des factures -->
