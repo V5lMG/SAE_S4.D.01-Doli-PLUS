@@ -72,9 +72,16 @@ if (session_status() === PHP_SESSION_NONE) {
                             </script>
                         <?php } ?>
                         <div class="row justify-content-center">
-                            <div class="col-12 col-md-8 text-center">
+                            <div class="col-12 col-md-8 ">
                                 <div class="p-4 border rounded shadow-sm bg-light">
-                                    Contenu de l'accueil
+                                    L’organisation a intégré <strong>Doliplus</strong> dans son système d'information afin de gérer efficacement divers processus internes. Doliplus offre une application qui répond aux besoins spécifiques des utilisateurs en matière de gestion des notes de frais, des factures et des fournisseurs, tout en proposant une interface ergonomique.<br><br>
+
+                                    L'accès à l'application est structuré selon les profils des utilisateurs :<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;- <strong>Les administrateurs</strong> bénéficient d'un accès complet à l'intégralité de l'application.<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;- <strong>Les gestionnaires des notes de frais</strong> ont uniquement accès à la gestion des notes de frais de l’entreprise.<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;- <strong>Les gestionnaires des achats</strong> peuvent consulter et gérer uniquement les factures et les fournisseurs.<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;- Enfin, <strong>les autres utilisateurs</strong> n’ont aucun accès à l’application.<br><br>
+
                                 </div>
                             </div>
                         </div>
