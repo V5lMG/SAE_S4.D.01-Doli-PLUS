@@ -3,6 +3,11 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+$droit = $_SESSION['droit'] ?? 'rien';
+if ($droit != 'admin' || $droit != 'note2frais') {
+    header('location: index.php?controller=Accueil&action=index');
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">

@@ -4,6 +4,11 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+$droit = $_SESSION['droit'] ?? 'rien';
+if ($droit != 'admin' || $droit != 'facture') {
+    header('location: index.php?controller=Accueil&action=index');
+}
+
 // Tableau pour les labels et les montants HT à passer au JavaScript
 $labels = [];
 $montantsHT = [];

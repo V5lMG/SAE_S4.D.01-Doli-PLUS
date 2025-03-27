@@ -4,6 +4,11 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+$droit = $_SESSION['droit'] ?? 'rien';
+if ($droit != 'admin' || $droit != 'note2frais') {
+    header('location: index.php?controller=Accueil&action=index');
+}
+
 $filtreJour = isset($_POST['filtreJour']) ? $_POST['filtreJour'] : 'mois'; // 'mois' par défaut
 
 // Convertir le tableau en JSON
