@@ -73,14 +73,21 @@ class FournisseurController
     {
         AuthService::checkAuthentication();
 
+        // Démarre la session si elle n'est pas déjà démarrée
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         // Récupérer la liste des fournisseurs
         $listeFournisseurNonTrie = $this->fournisseurService->recupererListeComplete();
 
         // Récupération des paramètres de filtre
-        $nom        = HttpHelper::getParam('nom', '');
-        $numTel     = HttpHelper::getParam('numTel', '');
-        $adresse    = HttpHelper::getParam('adresse', '');
-        $codePostal = HttpHelper::getParam('codePostal', '');
+        
+        // Récupérer les paramètres depuis la session
+        $nom        = isset($_SESSION['nom']) ? $_SESSION['nom'] : HttpHelper::getParam('nom', '');
+        $numTel     = isset($_SESSION['numTel']) ? $_SESSION['numTel'] : HttpHelper::getParam('numTel', '');
+        $adresse    = isset($_SESSION['adresse']) ? $_SESSION['adresse'] : HttpHelper::getParam('adresse', '');
+        $codePostal = isset($_SESSION['codePostal']) ? $_SESSION['codePostal'] : HttpHelper::getParam('codePostal', '');
 
         // Appliquer les filtres et récupérer les données
         $filteredData = $this->fournisseurService->filtrerValeurs(

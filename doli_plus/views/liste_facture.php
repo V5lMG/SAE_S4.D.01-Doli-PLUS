@@ -35,7 +35,7 @@ if ($droit != 'admin' && $droit != 'facture') {
                             <div class="row align-items-center">
                                 <!-- Colonne du bouton retour -->
                                 <div class="col-auto">
-                                    <form method="POST" action="index.php?controller=Fournisseur&action=index">
+                                    <form method="POST" action="index.php?controller=Fournisseur&action=indexListe">
                                         <?php
                                         // Si la session contient des filtres, les ajouter en tant que champs cachés dans le formulaire
                                         if (isset($_SESSION['filters'])) {
