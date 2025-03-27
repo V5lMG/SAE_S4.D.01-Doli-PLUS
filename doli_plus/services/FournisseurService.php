@@ -115,8 +115,6 @@ class FournisseurService
                 $nomFournisseur = $facture['socnom'];              // Nom du fournisseur
                 $totalHT        = floatval($facture['total_ht']);  // Montant total HT
                 $timestamp      = $facture['date'];               // Timestamp de la facture
-                // Mettre +1 à chaque date car avec le timestamp, il y a un décalage d'un jour
-                $dateFacture    = date("d/m/Y", strtotime('+1 day', $timestamp)); // Conversion du timestamp en date
 
                 // Corriger le timestamp en ajoutant 1 jour
                 $timestampCorrige = strtotime('+1 day', $timestamp);
@@ -139,7 +137,7 @@ class FournisseurService
                 }
 
                 // Incrémenter le nombre de factures et le total HT
-                foreach ($facture['lines'] as $line) {
+                foreach ($facture['lines'] as $ignored) {
                     $palmaresFormatees[$nomFournisseur]['nombre_factures']++;
                 }
                 $palmaresFormatees[$nomFournisseur]['total_ht'] += $totalHT;
@@ -384,7 +382,7 @@ class FournisseurService
     /**
      * Redirige directement vers l'URL du fichier pour le téléchargement
      */
-    public function telechargerFichierApi(string $fichierUrl)
+    public function telechargerFichierApi(string $fichierUrl): void
     {
         $urlComplet = "http://dolibarr.iut-rodez.fr/G2024-43-SAE/documents/fournisseur/facture/" . $fichierUrl;
 

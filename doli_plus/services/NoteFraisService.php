@@ -1,9 +1,11 @@
 <?php
 namespace services;
 
+use DateTime;
+
 class NoteFraisService
 {
-    private $moisNoms = [
+    private array $moisNoms = [
         1 => 'Janvier',
         2 => 'Février',
         3 => 'Mars',
@@ -154,11 +156,11 @@ class NoteFraisService
      *
      * @param array $notes Liste complète des notes de frais.
      * @param string|null $employe Nom ou identifiant de l'employé associé à la note (filtrage partiel).
-     * @param string|null $type Type de frais (ex: "REPAS", "TRANSPORT"), par défaut 'TOUS'.
+     * @param string|null $type Type de frais (ex : "REPAS", "TRANSPORT"), par défaut 'TOUS'.
      * @param string|null $reference Référence unique de la note de frais (filtrage partiel).
      * @param string|null $date_debut Date minimale de début au format 'Y-m-d'.
      * @param string|null $date_fin Date maximale de fin au format 'Y-m-d'.
-     * @param string|null $etat État de la note de frais (ex: "validé", "en attente"), par défaut 'tous'.
+     * @param string|null $etat État de la note de frais (ex : "validé", "en attente"), par défaut 'tous'.
      * @return array Un tableau contenant les notes filtrées et les totaux, ou un message d'erreur.
      */
     public function filtrerValeurs(array $notes, ?string $employe = null, ?string $type = 'TOUS', ?string $reference = null, ?string $date_debut = null, ?string $date_fin = null, ?string $etat = 'tous'): array
@@ -195,18 +197,18 @@ class NoteFraisService
             }
 
             // Gestion des dates
-            $noteDateDebut = \DateTime::createFromFormat('d/m/Y', $note['date_debut']);
-            $noteDateFin = \DateTime::createFromFormat('d/m/Y', $note['date_fin']);
+            $noteDateDebut = DateTime::createFromFormat('d/m/Y', $note['date_debut']);
+            $noteDateFin = DateTime::createFromFormat('d/m/Y', $note['date_fin']);
 
             if (!empty($date_debut)) {
-                $filtreDateDebut = \DateTime::createFromFormat('Y-m-d', $date_debut);
+                $filtreDateDebut = DateTime::createFromFormat('Y-m-d', $date_debut);
                 if ($noteDateDebut < $filtreDateDebut) {
                     continue;
                 }
             }
 
             if (!empty($date_fin)) {
-                $filtreDateFin = \DateTime::createFromFormat('Y-m-d', $date_fin);
+                $filtreDateFin = DateTime::createFromFormat('Y-m-d', $date_fin);
                 if ($noteDateFin > $filtreDateFin) {
                     continue;
                 }
@@ -244,9 +246,9 @@ class NoteFraisService
         return ['notes' => $notesFiltrees, 'totaux' => $totaux];
     }
 
-    // Valeur a trier
+    // Valeur à trier
     // Colonne
-    //Direction (ascendant et descendant)
+    // Direction (ascendant et descendant)
     public function triColonne(array $notes, string $colonne, string $direction = 'asc'): array
     {
         // Vérifier si la colonne spécifiée existe dans les données
@@ -261,8 +263,8 @@ class NoteFraisService
 
             // Gérer les dates au format 'd/m/Y'
             if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $valA) && preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $valB)) {
-                $valA = \DateTime::createFromFormat('d/m/Y', $valA);
-                $valB = \DateTime::createFromFormat('d/m/Y', $valB);
+                $valA = DateTime::createFromFormat('d/m/Y', $valA);
+                $valB = DateTime::createFromFormat('d/m/Y', $valB);
             }
 
             // Comparaison selon la direction
@@ -275,8 +277,6 @@ class NoteFraisService
 
         return $notes;
     }
-
-    //A appeler dans affichage total et dans filtrer valeurs
 
     /**
      * Récupère les statistiques pour l'histogramme (par mois ou par jour).
@@ -478,7 +478,7 @@ class NoteFraisService
             }
 
             // Formater les montants
-            foreach ($sectoriel as $type => &$data) {
+            foreach ($sectoriel as &$data) {
                 $data['MontantTotalType'] = number_format($data['MontantTotalType'], 2, '.', '');
             }
 
