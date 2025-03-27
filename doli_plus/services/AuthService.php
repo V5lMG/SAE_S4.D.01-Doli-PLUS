@@ -104,8 +104,7 @@ class AuthService
      * @param $api_key
      * @return bool
      */
-    public function executer_requete_api($url, $api_key): bool
-    {
+    public function executer_requete_api($url, $api_key) {
         $requeteCurl = curl_init($url);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true); // Utiliser la méthode GET
@@ -114,6 +113,7 @@ class AuthService
         ));
 
         // Exécuter la requête et récupérer la réponse
+        $response = curl_exec($requeteCurl);
         $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
         curl_close($requeteCurl);
 
@@ -122,7 +122,7 @@ class AuthService
     }
 
     /**
-     * Enregistre l'URL dans le fichier `url.conf', ou la place en haut si elle y est déjà.
+     * Enregistre l'URL dans le fichier `url.conf`, ou la place en haut si elle y est déjà.
      *
      * @param string $url L'URL à enregistrer.
      * @return void

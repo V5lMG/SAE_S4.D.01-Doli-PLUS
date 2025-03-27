@@ -8,6 +8,18 @@ $droit = $_SESSION['droit'] ?? 'rien';
 if ($droit != 'admin' && $droit != 'facture') {
     header('location: index.php?controller=Accueil&action=index');
 }
+
+// Récupération des filtres précédents si existants ou dans la session
+$nom = $_POST['nom'] ?? $_SESSION['filters']['nom'] ?? '';
+$numTel = $_POST['numTel'] ?? $_SESSION['filters']['numTel'] ?? '';
+$adresse = $_POST['adresse'] ?? $_SESSION['filters']['adresse'] ?? '';
+$codePostal = $_POST['codePostal'] ?? $_SESSION['filters']['codePostal'] ?? '';
+
+// Sécuriser les valeurs pour éviter les attaques XSS
+$nom = htmlspecialchars($nom);
+$numTel = htmlspecialchars($numTel);
+$adresse = htmlspecialchars($adresse);
+$codePostal = htmlspecialchars($codePostal);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -31,14 +43,7 @@ if ($droit != 'admin' && $droit != 'facture') {
                     <div class="container-fluid mt-3">
 
                         <!-- Barre de filtres -->
-                        <form method="POST" action="index.php?controller=Fournisseur&action=indexListe" class="bg-light p-3 rounded shadow-sm"><?php
-                            // Récupération des filtres précédents si existants
-                            $nom = isset($_POST['nom']) ? htmlspecialchars($_POST['nom']) : "";
-                            $numTel = isset($_POST['numTel']) ? htmlspecialchars($_POST['numTel']) : "";
-                            $adresse = isset($_POST['adresse']) ? htmlspecialchars($_POST['adresse']) : "";
-                            $codePostal = isset($_POST['codePostal']) ? htmlspecialchars($_POST['codePostal']) : "";
-                            ?>
-
+                        <form method="POST" action="index.php?controller=Fournisseur&action=indexListe" class="bg-light p-3 rounded shadow-sm">
                             <div class="row g-3 align-items-center">
                                 <div class="col-md-2 text-center d-flex flex-column align-items-start">
                                     <label for="nom" class="fw-bold">Nom :</label>

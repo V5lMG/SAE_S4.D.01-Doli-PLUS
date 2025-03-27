@@ -36,6 +36,14 @@ if ($droit != 'admin' && $droit != 'facture') {
                                 <!-- Colonne du bouton retour -->
                                 <div class="col-auto">
                                     <form method="POST" action="index.php?controller=Fournisseur&action=index">
+                                        <?php
+                                        // Si la session contient des filtres, les ajouter en tant que champs cachés dans le formulaire
+                                        if (isset($_SESSION['filters'])) {
+                                            foreach ($_SESSION['filters'] as $key => $value) {
+                                                echo '<input type="hidden" name="' . $key . '" value="' . htmlspecialchars($value) . '">';
+                                            }
+                                        }
+                                        ?>
                                         <button type="submit" class="btn btn-danger" title="Retour">
                                             <i class="fa-solid fa-arrow-left"></i>
                                         </button>

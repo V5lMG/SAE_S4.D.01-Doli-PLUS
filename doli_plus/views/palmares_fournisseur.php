@@ -44,10 +44,6 @@ $otherBorders = [
     'rgba(128, 128, 0,   1)', 'rgba(34,  139, 34,  1)', 'rgba(255, 255, 0,   1)'
 ];
 
-// Initialisation des tableaux finaux
-$backgroundColors = [];
-$borderColors = [];
-
 // Ajouter les couleurs fixes aux tableaux
 for ($i = 0; $i < 3; $i++) {
     $backgroundColors[] = $firstColors[$i];
@@ -129,7 +125,7 @@ $compteur = 0;
                     <!-- Diagramme sectoriel palmarès -->
                     <div class="col-12 col-md-6 text-center">
                         <div class="p-4 border rounded shadow-sm bg-light">
-                            <?php if (isset($date_debut) && isset ($date_fin) && !empty($date_debut) && !empty($date_fin)) { ?>
+                            <?php if (!empty($date_debut) && !empty($date_fin)) { ?>
                                 <h5>Diagramme sectoriel des notes de frais entre <?= htmlspecialchars((new DateTime($date_debut))->format('d/m/Y')); ?> et <?= htmlspecialchars((new DateTime($date_fin))->format('d/m/Y')); ?> compris </h5>
                             <?php } else { ?>
                                 <h5>Diagramme sectoriel de la totalité des notes de frais</h5>
