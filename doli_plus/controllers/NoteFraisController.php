@@ -81,6 +81,7 @@ class NoteFraisController
         $view = new View("views/liste_note_frais");
         $view->setVar('listeNoteFrais', $listeNoteFrais);
         $view->setVar('totaux', $totaux);
+        $view->setVar('page', 'noteFrais');
         return $view;
     }
 
@@ -153,6 +154,8 @@ class NoteFraisController
         $view->setVar('moisChoisi'     , $moisChoisi);
         $view->setVar('anneeChoisi'    , $anneeChoisi);
         $view->setVar('comparaison', $comparaison);
+
+        $view->setVar('page', 'statistiques');
 
         return $view;
     }

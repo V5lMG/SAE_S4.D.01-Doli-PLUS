@@ -39,6 +39,7 @@ class AccueilController
             $view->setVar('url', $url);
         }
         $view->setVar('controller', $this);
+        $view->setVar('page', 'accueil');   // info de la page pour charger l'aide
 
         return $view;
     }

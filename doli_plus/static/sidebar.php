@@ -2,6 +2,22 @@
 // La session doit être lancée dans chaque vue.
 $userName = $_SESSION['user_name'] ?? 'Erreur';
 $droit = $_SESSION['droit'] ?? 'rien';
+
+// Récupérer la page actuelle (transmise par le contrôleur)
+//$page = $_SESSION['page'];
+
+// Liens d'aide en fonction de la page actuelle
+$helpLinks = [
+    'accueil' => 'index.php?controller=Aide&action=accueil',
+    'facture' => 'index.php?controller=Aide&action=facture',
+    'fournisseur' => 'index.php?controller=Aide&action=fournisseur',
+    'noteFrais' => 'index.php?controller=Aide&action=noteFrais',
+    'palmares' => 'index.php?controller=Aide&action=palmares',
+    'statistiques' => 'index.php?controller=Aide&action=statistiques'
+];
+
+// Lien d'aide à utiliser
+$helpLink = $helpLinks[$page] ?? 'index.php?controller=Aide&action=default';
 ?>
 
 <!-- Barre latérale de la page (affichée sur grands écrans) -->
@@ -33,7 +49,7 @@ $droit = $_SESSION['droit'] ?? 'rien';
         </button>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="index.php?controller=Home&action=logout"><i class="fa fa-sign-out-alt"></i> Déconnexion</a></li>
-            <li><a class="dropdown-item" href="#"><i class="fa-regular fa-circle-question"></i> Besoin d'aide ?</a></li>
+            <li><a class="dropdown-item" href="<?= $helpLink ?>"><i class="fa-regular fa-circle-question"></i> Besoin d'aide ?</a></li>
         </ul>
     </div>
 </div>

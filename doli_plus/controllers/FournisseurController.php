@@ -29,7 +29,9 @@ class FournisseurController
     public function index(): View
     {
         AuthService::checkAuthentication();
-        return new View("views/liste_fournisseur");
+        $view = new View("views/liste_fournisseur");
+        $view->setVar('page', 'fournisseur');   // info de la page pour charger l'aide
+        return $view;
     }
 
     /**
@@ -60,6 +62,7 @@ class FournisseurController
         $view->setVar('top', $top);
         $view->setVar('date_debut', $date_debut);
         $view->setVar('date_fin', $date_fin);
+        $view->setVar('page', 'palmares');   // info de la page pour charger l'aide
         return $view;
     }
 
@@ -103,6 +106,7 @@ class FournisseurController
         // Passer les données à la vue
         $view = new View("views/liste_fournisseur");
         $view->setVar('listeFournisseur', $listeFournisseur);
+        $view->setVar('page', 'fournisseur');   // info de la page pour charger l'aide
         return $view;
     }
 
@@ -132,6 +136,7 @@ class FournisseurController
         $view->setVar('factures',       $factures["factures"]);
         $view->setVar('refFournisseur', $factures["refSupplier"]);
         $view->setVar('nomFournisseur', $nomFournisseur);
+        $view->setVar('page', 'facture');   // info de la page pour charger l'aide
 
         return $view;
     }

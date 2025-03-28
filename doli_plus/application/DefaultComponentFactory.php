@@ -18,6 +18,7 @@
  */
 namespace application;
 
+use controllers\AideController;
 use controllers\FournisseurController;
 use controllers\AccueilController;
 use controllers\NoteFraisController;
@@ -59,11 +60,13 @@ class DefaultComponentFactory implements ComponentFactory
     public function buildControllerByName(string $controller_name): mixed
     {
         return match ($controller_name) {
-            "Home" => $this->buildAuthController(),
-            "Accueil" => $this->buildAccueilController(),
+            "Home"        => $this->buildAuthController(),
+            "Accueil"     => $this->buildAccueilController(),
 
-            "NoteFrais" => $this->buildNoteFraisController(),
+            "NoteFrais"   => $this->buildNoteFraisController(),
             "Fournisseur" => $this->buildFournisseurController(),
+
+            "Aide"        => new AideController(),
 
             default => throw new NoControllerAvailableForNameException($controller_name)
         };
