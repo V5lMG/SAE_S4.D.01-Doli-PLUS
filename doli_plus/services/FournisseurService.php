@@ -1,6 +1,8 @@
 <?php
 namespace services;
 
+use RuntimeException;
+
 class FournisseurService
 {
     /**
@@ -25,6 +27,12 @@ class FournisseurService
 
         // Initialiser cURL
         $requeteCurl = curl_init($fourniseurUrl);
+
+        // On vérifie si "curl_init" a bien réussi avant d'utiliser "$requeteCurl"
+        if ($requeteCurl === false) {
+            throw new RuntimeException('Échec de l’initialisation de cURL');
+        }
+
         curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
@@ -44,18 +52,23 @@ class FournisseurService
 
             $fourniseurFormatees = [];
 
-            // Formater la réponse pour extraire les informations pertinentes
-            foreach ($data as $fourniseur) {
-
-                $ref =  $fourniseur['ref'] ?? 'Inconnu';
-                // Ajouter les informations formatées dans le tableau final pour la note de frais
-                $fourniseurFormatees[] = [
-                    'ref' => $ref,
-                    'nom' => $fourniseur['name'] ?? 'Inconnu',
-                    'numTel' => $fourniseur['phone'] ?? 'Inconnu',
-                    'adresse' => !empty($fourniseur['address']) ? $fourniseur['address'] : 'Inconnu',
-                    'codePostal' => $fourniseur['zip'] ?? 'Inconnu',
-                ];
+            // Sécurité (PHPStan) : évite une erreur si $data n'est pas un tableau
+            if (is_array($data)) {
+                // Formater la réponse pour extraire les informations pertinentes
+                foreach ($data as $fourniseur) {
+                    // Sécurité (PHPStan) : évite une erreur si $fournisseur n'est pas un tableau
+                    if (is_array($fourniseur)) {
+                        $ref = $fourniseur['ref'] ?? 'Inconnu';
+                        // Ajouter les informations formatées dans le tableau final pour la note de frais
+                        $fourniseurFormatees[] = [
+                            'ref' => $ref,
+                            'nom' => $fourniseur['name'] ?? 'Inconnu',
+                            'numTel' => $fourniseur['phone'] ?? 'Inconnu',
+                            'adresse' => !empty($fourniseur['address']) ? $fourniseur['address'] : 'Inconnu',
+                            'codePostal' => $fourniseur['zip'] ?? 'Inconnu',
+                        ];
+                    }
+                }
             }
 
             // Retourner le tableau des notes de frais formatées
@@ -87,6 +100,12 @@ class FournisseurService
 
         // Initialiser cURL
         $requeteCurl = curl_init($urlFacture);
+
+        // On vérifie si "curl_init" a bien réussi avant d'utiliser "$requeteCurl".
+        if ($requeteCurl === false) {
+            throw new RuntimeException('Échec de l’initialisation de cURL');
+        }
+
         curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
@@ -110,38 +129,44 @@ class FournisseurService
             $dateDebutTimestamp = $date_debut ? strtotime($date_debut) : null;
             $dateFinTimestamp = $date_fin ? strtotime($date_fin) : null;
 
-            // Formater la réponse pour extraire les informations pertinentes
-            foreach ($data as $facture) {
-                $nomFournisseur = $facture['socnom'];              // Nom du fournisseur
-                $totalHT        = floatval($facture['total_ht']);  // Montant total HT
-                $timestamp      = $facture['date'];               // Timestamp de la facture
+            // Conditions "is_array" afin de régler les erreurs PHPStan
+            if (is_array($data)) {
+                // Formater la réponse pour extraire les informations pertinentes
+                foreach ($data as $facture) {
+                    // Sécurité (PHPStan) : évite une erreur si $facture n'est pas un tableau
+                    if (is_array($facture)) {
+                        $nomFournisseur = $facture['socnom'];       // Nom du fournisseur
+                        $totalHT = floatval($facture['total_ht']);  // Montant total HT
+                        $timestamp = $facture['date'];              // Timestamp de la facture
 
-                // Corriger le timestamp en ajoutant 1 jour
-                $timestampCorrige = strtotime('+1 day', $timestamp);
+                        // Corriger le timestamp en ajoutant 1 jour
+                        $timestampCorrige = strtotime('+1 day', $timestamp);
 
-                // Filtre par date (comparaison entre timestamps)
-                if (($dateDebutTimestamp && $timestampCorrige < $dateDebutTimestamp) ||
-                    ($dateFinTimestamp && $timestampCorrige > $dateFinTimestamp)) {
-                    continue;
+                        // Filtre par date (comparaison entre timestamps)
+                        if (($dateDebutTimestamp && $timestampCorrige < $dateDebutTimestamp) ||
+                            ($dateFinTimestamp && $timestampCorrige > $dateFinTimestamp)) {
+                            continue;
+                        }
+
+                        // Formater la date pour l'affichage
+                        $dateFacture = date("d/m/Y", $timestampCorrige);
+
+                        if (!isset($palmaresFormatees[$nomFournisseur])) {
+                            $palmaresFormatees[$nomFournisseur] = [
+                                'nombre_factures' => 0,
+                                'total_ht' => 0,
+                                'dates' => []  // Stocker les dates des factures
+                            ];
+                        }
+
+                        // Incrémenter le nombre de factures et le total HT
+                        foreach ($facture['lines'] as $ignored) {
+                            $palmaresFormatees[$nomFournisseur]['nombre_factures']++;
+                        }
+                        $palmaresFormatees[$nomFournisseur]['total_ht'] += $totalHT;
+                        $palmaresFormatees[$nomFournisseur]['dates'][] = $dateFacture; // Ajouter la date formatée
+                    }
                 }
-
-                // Formater la date pour l'affichage
-                $dateFacture = date("d/m/Y", $timestampCorrige);
-
-                if (!isset($palmaresFormatees[$nomFournisseur])) {
-                    $palmaresFormatees[$nomFournisseur] = [
-                        'nombre_factures' => 0,
-                        'total_ht' => 0,
-                        'dates' => []  // Stocker les dates des factures
-                    ];
-                }
-
-                // Incrémenter le nombre de factures et le total HT
-                foreach ($facture['lines'] as $ignored) {
-                    $palmaresFormatees[$nomFournisseur]['nombre_factures']++;
-                }
-                $palmaresFormatees[$nomFournisseur]['total_ht'] += $totalHT;
-                $palmaresFormatees[$nomFournisseur]['dates'][] = $dateFacture; // Ajouter la date formatée
             }
 
             // Trier le tableau par montant HT décroissant
@@ -244,6 +269,12 @@ class FournisseurService
 
         // Initialiser cURL
         $requeteCurl = curl_init($apiUrlFacture);
+
+        // On vérifie si "curl_init" a bien réussi avant d'utiliser "$requeteCurl".
+        if ($requeteCurl === false) {
+            throw new RuntimeException('Échec de l’initialisation de cURL');
+        }
+
         curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
@@ -259,6 +290,11 @@ class FournisseurService
 
         if ($httpCode === 200) {
             $data = json_decode($response, true) ?? [];
+
+            if (!is_array($data)) {
+                $data = []; // Sécurité (PHPStan) : évite une erreur si $data n'est pas un tableau
+            }
+
             // Formater les données
             $factures = [
                 'factures' => [],
@@ -269,6 +305,9 @@ class FournisseurService
                 $factures['refSupplier'] = $data[0]['ref_supplier'] ?? 'Inconnu';
 
                 foreach ($data as $facture) {
+                    if (!is_array($facture)) {
+                        continue; // Sécurité (PHPStan) : évite une erreur si $facture n'est pas un tableau
+                    }
                     if ($facture['socid'] === $ref) {
                         $status = match($facture['status']) {
                             '0' => 'Brouillon',
@@ -304,6 +343,10 @@ class FournisseurService
 
                         $lignes = [];
                         foreach ($facture['lines'] as $ligne) {
+                            // Sécurité PHPStan : évité une erreur si "$ligne" n'est pas un tableau
+                            if (!is_array($ligne)) {
+                                continue;
+                            }
                             $lignes[] = [
                                 'description' => empty(trim($ligne['description'] ?? '')) ? 'Aucune' : $ligne['description'],
                                 'ref' => empty(trim($ligne['ref_supplier'] ?? '')) ? 'Inconnu' : $ligne['ref_supplier'],
@@ -349,6 +392,12 @@ class FournisseurService
         $urlDocuments = $url . $factureId;
 
         $requeteCurl = curl_init($urlDocuments);
+
+        // On vérifie si "curl_init" a bien réussi avant d'utiliser "$requeteCurl".
+        if ($requeteCurl === false) {
+            throw new RuntimeException('Échec de l’initialisation de cURL');
+        }
+
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPHEADER, [

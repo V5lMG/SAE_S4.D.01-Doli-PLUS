@@ -87,10 +87,10 @@ class FournisseurController
         // Récupération des paramètres de filtre
         
         // Récupérer les paramètres depuis la session
-        $nom        = isset($_SESSION['nom']) ? $_SESSION['nom'] : HttpHelper::getParam('nom', '');
-        $numTel     = isset($_SESSION['numTel']) ? $_SESSION['numTel'] : HttpHelper::getParam('numTel', '');
-        $adresse    = isset($_SESSION['adresse']) ? $_SESSION['adresse'] : HttpHelper::getParam('adresse', '');
-        $codePostal = isset($_SESSION['codePostal']) ? $_SESSION['codePostal'] : HttpHelper::getParam('codePostal', '');
+        $nom        = isset($_SESSION['nom']) ? $_SESSION['nom'] : HttpHelper::getParam('nom');
+        $numTel     = isset($_SESSION['numTel']) ? $_SESSION['numTel'] : HttpHelper::getParam('numTel');
+        $adresse    = isset($_SESSION['adresse']) ? $_SESSION['adresse'] : HttpHelper::getParam('adresse');
+        $codePostal = isset($_SESSION['codePostal']) ? $_SESSION['codePostal'] : HttpHelper::getParam('codePostal');
 
         // Appliquer les filtres et récupérer les données
         $filteredData = $this->fournisseurService->filtrerValeurs(

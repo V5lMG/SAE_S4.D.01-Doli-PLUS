@@ -27,6 +27,12 @@ class AuthService
 
         // Initialiser cURL pour l'authentification
         $requeteCurl = curl_init($urlContruite);
+
+        // On vérifie si "curl_init" a bien réussi avant d'utiliser "$requeteCurl"
+        if ($requeteCurl === false) {
+            throw new RuntimeException('Échec de l’initialisation de cURL');
+        }
+
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true); // Utiliser la méthode GET
 
@@ -40,7 +46,7 @@ class AuthService
             $responseData = json_decode($response, true);
 
             // Vérifier si un token est renvoyé
-            if (isset($responseData['success']['token'])) {
+            if (is_array($responseData) && isset($responseData['success']['token'])) {
                 // Stocker le token dans la session pour des appels futurs
                 $_SESSION['api_token'] = $responseData['success']['token'];
 
@@ -106,6 +112,12 @@ class AuthService
      */
     public function executer_requete_api($url, $api_key) {
         $requeteCurl = curl_init($url);
+
+        // On vérifie si "curl_init" a bien réussi avant d'utiliser "$requeteCurl"
+        if ($requeteCurl === false) {
+            throw new RuntimeException('Échec de l’initialisation de cURL');
+        }
+
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true); // Utiliser la méthode GET
         curl_setopt($requeteCurl, CURLOPT_HTTPHEADER, array(
