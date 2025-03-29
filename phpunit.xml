@@ -19,7 +19,7 @@
 <phpunit bootstrap="doli_plus/lib/vendor/autoload.php">
     <testsuites>
         <testsuite name="default test suit">
-            <directory>tests</directory>
+            <directory>doli_plus/tests</directory>
         </testsuite>
     </testsuites>
 

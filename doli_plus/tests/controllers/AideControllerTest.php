@@ -1,7 +1,8 @@
 <?php
 
-namespace controllers;
+namespace tests\controllers;
 
+use controllers\AideController;
 use PHPUnit\Framework\TestCase;
 
 class AideControllerTest extends TestCase
