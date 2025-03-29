@@ -5,20 +5,22 @@ use DateTime;
 
 class NoteFraisService
 {
+
     private array $moisNoms = [
-        1 => 'Janvier',
-        2 => 'Février',
-        3 => 'Mars',
-        4 => 'Avril',
-        5 => 'Mai',
-        6 => 'Juin',
-        7 => 'Juillet',
-        8 => 'Août',
-        9 => 'Septembre',
-        10 => 'Octobre',
-        11 => 'Novembre',
-        12 => 'Décembre'
-    ];
+    1 => 'Janvier',
+    2 => 'Février',
+    3 => 'Mars',
+    4 => 'Avril',
+    5 => 'Mai',
+    6 => 'Juin',
+    7 => 'Juillet',
+    8 => 'Août',
+    9 => 'Septembre',
+    10 => 'Octobre',
+    11 => 'Novembre',
+    12 => 'Décembre'
+];
+
 
     /**
      * Récupère toutes les notes de frais pour la liste des notes de frais.
@@ -42,6 +44,11 @@ class NoteFraisService
 
         // Initialiser cURL
         $requeteCurl = curl_init($urlNoteFrais);
+
+        if ($requeteCurl === false) {
+            throw new RuntimeException("Échec de l'initialisation de cURL.");
+        }
+
         curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
@@ -50,10 +57,11 @@ class NoteFraisService
             'Accept: application/json'
         ]);
 
-        // Exécuter la requête
+// Exécuter la requête
         $response = curl_exec($requeteCurl);
         $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
         curl_close($requeteCurl);
+
 
         // Vérifier si la requête a réussi (HTTP 200)
         if ($httpCode === 200) {
@@ -420,27 +428,46 @@ class NoteFraisService
         // Récupérer l'URL
         $urlNoteFrais = $_SESSION['url_saisie'] . "/expensereports";
 
-        // Initialiser cURL
-        $requeteCurl = curl_init($urlNoteFrais);
-        curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
-        curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
-        curl_setopt($requeteCurl, CURLOPT_HTTPHEADER, [
-            'DOLAPIKEY: ' . $_SESSION['api_token'],
-            'Accept: application/json'
-        ]);
+            // Initialiser cURL
+            $requeteCurl = curl_init($urlNoteFrais);
 
-        // Exécuter la requête
-        $response = curl_exec($requeteCurl);
-        $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
-        curl_close($requeteCurl);
+        // Vérifier si l'initialisation a réussi
+        if ($requeteCurl === false) {
+            throw new RuntimeException("Échec de l'initialisation de cURL.");
+        }
+            curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
+            curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
+            curl_setopt($requeteCurl, CURLOPT_HTTPHEADER, [
+                'DOLAPIKEY: ' . $_SESSION['api_token'],
+                'Accept: application/json'
+            ]);
 
-        // Vérifier si la requête a réussi (HTTP 200)
-        if ($httpCode === 200) {
-            $notesFrais = json_decode($response, true) ?? [];
-            $sectoriel = [];
+            // Exécuter la requête
+            $response = curl_exec($requeteCurl);
 
-            // Parcourir toutes les notes de frais récupérées
+            // Vérifier si la requête a échoué
+            if ($response === false) {
+                throw new RuntimeException("Erreur cURL : " . curl_error($requeteCurl));
+            }
+
+            $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
+            curl_close($requeteCurl); //Fermer la connexion cURL
+
+            // Vérifier si la requête a réussi (HTTP 200)
+            if ($httpCode !== 200) {
+                throw new RuntimeException("Erreur API, code HTTP : " . $httpCode);
+            } else {
+                $notesFrais = json_decode($response, true) ?? [];
+
+                // Vérifier si la réponse est valide
+                if (!is_array($notesFrais)) {
+                    throw new RuntimeException("Réponse JSON invalide.");
+                }
+
+                $sectoriel = [];
+
+                // Parcourir toutes les notes de frais récupérées
             foreach ($notesFrais as $note) {
                 foreach ($note['lines'] as $line) {
                     $date_frais = $line['date'] ?? null;
