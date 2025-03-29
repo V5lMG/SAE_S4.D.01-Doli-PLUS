@@ -1,6 +1,8 @@
 <?php
 namespace services;
 
+use RuntimeException;
+
 class AuthService
 {
 

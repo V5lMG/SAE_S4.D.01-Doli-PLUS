@@ -147,7 +147,7 @@ class FournisseurController
     public function telechargerFichier(): void
     {
         AuthService::checkAuthentication();
-        $fichierUrl = htmlspecialchars($_GET['fichierUrl']) ?? '';
+        $fichierUrl = htmlspecialchars($_GET['fichierUrl'] ?? '');
         $this->fournisseurService->telechargerFichierApi($fichierUrl);
     }
 }

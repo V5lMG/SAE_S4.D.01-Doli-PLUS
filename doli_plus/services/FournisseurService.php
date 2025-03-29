@@ -348,14 +348,14 @@ class FournisseurService
                                 continue;
                             }
                             $lignes[] = [
-                                'description' => empty(trim($ligne['description'] ?? '')) ? 'Aucune' : $ligne['description'],
-                                'ref' => empty(trim($ligne['ref_supplier'] ?? '')) ? 'Inconnu' : $ligne['ref_supplier'],
-                                'tva' => number_format($ligne['tva_tx'], 2) ?? 'Inconnu',
-                                'prix_unitaire_ht' => number_format($ligne['pu_ht'], 2, ',', ' ') ?? 'Inconnu',
-                                'prix_unitaire_ttc' => number_format($ligne['pu_ttc'], 2, ',', ' ') ?? 'Inconnu',
+                                'description' => isset($ligne['description']) && trim($ligne['description']) !== '' ? $ligne['description'] : 'Aucune',
+                                'ref' => isset($ligne['ref_supplier']) && trim($ligne['ref_supplier']) !== '' ? $ligne['ref_supplier'] : 'Inconnu',
+                                'tva' => isset($ligne['tva_tx']) ? number_format((float) $ligne['tva_tx'], 2) : 'Inconnu',
+                                'prix_unitaire_ht' => isset($ligne['pu_ht']) ? number_format((float) $ligne['pu_ht'], 2, ',', ' ') : 'Inconnu',
+                                'prix_unitaire_ttc' => isset($ligne['pu_ttc']) ? number_format((float) $ligne['pu_ttc'], 2, ',', ' ') : 'Inconnu',
                                 'quantite' => $ligne['qty'] ?? 0,
                                 'reduction' => $ligne['remise_percent'] ?? 'Inconnu',
-                                'total_ht' => number_format($ligne['total_ht'], 2, ',', ' ') ?? 'Inconnu',
+                                'total_ht' => isset($ligne['total_ht']) ? number_format((float) $ligne['total_ht'], 2, ',', ' ') : 'Inconnu',
                             ];
                         }
 
@@ -364,8 +364,8 @@ class FournisseurService
 
                         $factures['factures'][] = [
                             'ref' => $facture['ref'] ?? 'Inconnue',
-                            'date_facture' => date("d/m/Y", $facture['date']) ?? 'Inconnue',
-                            'date_echeance' => date("d/m/Y", $facture['date_echeance']) ?? 'Inconnue',
+                            'date_facture' => isset($facture['date']) ? date("d/m/Y", (int) $facture['date']) : 'Inconnue',
+                            'date_echeance' => isset($facture['date_echeance']) ? date("d/m/Y", (int) $facture['date_echeance']) : 'Inconnue',
                             'cond_reglement' => $condReglement,
                             'mode_reglement' => $modeReglement,
                             'montant_ht' => number_format($facture['total_ht'], 2, ',', ' ') . ' €',
@@ -411,10 +411,18 @@ class FournisseurService
         curl_close($requeteCurl);
 
         if ($httpCode === 200) {
-            $documents = json_decode($response, true) ?? [];
+            $documents = json_decode($response, true);
+
+            // Vérifier si la réponse est valide
+            if (!is_array($documents)) {
+                $documents = [];
+            }
 
             $liensDocuments = [];
             foreach ($documents as $document) {
+                if (!is_array($document) || !isset($document['fullname'])) {
+                    continue; // Passer les entrées invalides
+                }
 
                 $partiesUrl = explode('/', $document['fullname']);
                 $url = implode('/', array_slice($partiesUrl, 8, 4));
