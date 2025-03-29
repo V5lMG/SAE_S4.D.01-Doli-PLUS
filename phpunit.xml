@@ -16,7 +16,7 @@
   ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<phpunit bootstrap="all_users/lib/vendor/autoload.php">
+<phpunit bootstrap="doli_plus/lib/vendor/autoload.php">
     <testsuites>
         <testsuite name="default test suit">
             <directory>tests</directory>
