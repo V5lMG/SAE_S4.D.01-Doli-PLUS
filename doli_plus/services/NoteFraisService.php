@@ -2,6 +2,7 @@
 namespace services;
 
 use DateTime;
+use RuntimeException;
 
 class NoteFraisService
 {
@@ -26,30 +27,24 @@ class NoteFraisService
      * Récupère toutes les notes de frais pour la liste des notes de frais.
      *
      * @return array Un tableau contenant toutes les notes de frais formatées.
-     */
+             */
     public function recupererListeComplete(): array
     {
-        // Démarrer la session si elle n'est pas encore démarrée
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        // Vérifier si un token API est disponible
-        if (!isset($_SESSION['api_token'])) {
+        if (!isset($_SESSION['api_token'], $_SESSION['url_saisie'])) {
             return [];
         }
 
-        // Récupérer l'URL
         $urlNoteFrais = $_SESSION['url_saisie'] . "/expensereports";
 
-        // Initialiser cURL
         $requeteCurl = curl_init($urlNoteFrais);
-
         if ($requeteCurl === false) {
             throw new RuntimeException("Échec de l'initialisation de cURL.");
         }
 
-        curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPHEADER, [
@@ -57,107 +52,129 @@ class NoteFraisService
             'Accept: application/json'
         ]);
 
-// Exécuter la requête
         $response = curl_exec($requeteCurl);
-        $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
         curl_close($requeteCurl);
 
+        if (!is_string($response)) {
+            return [];
+        }
 
-        // Vérifier si la requête a réussi (HTTP 200)
-        if ($httpCode === 200) {
-            $data = json_decode($response, true) ?? [];
+        /** @var mixed $data */
+        $data = json_decode($response, true);
+        if (!is_array($data)) {
+            return [];
+        }
 
-            $noteFraisFormatees = [];
-            $nb_note = 0;
+        $noteFraisFormatees = [];
+        $nb_note = 0;
 
-            // Formater la réponse pour extraire les informations pertinentes
-            foreach ($data as $note) {
-                // Formater les dates
-                $date_debut = date('d/m/Y', $note['date_debut']);
-                $date_fin = date('d/m/Y', $note['date_fin']);
+        foreach ($data as $note) {
+            if (!is_array($note)) {
+                continue;
+            }
 
-                $lignesTableau = [];
-                $nb_note += 1;
+            $date_debut = isset($note['date_debut']) && is_int($note['date_debut'])
+                ? date('d/m/Y', $note['date_debut'])
+                : 'Inconnu';
 
-                // Formater chaque ligne
+            $date_fin = isset($note['date_fin']) && is_int($note['date_fin'])
+                ? date('d/m/Y', $note['date_fin'])
+                : 'Inconnu';
+
+            $lignesTableau = [];
+            $nb_note++;
+
+            $total_ht_global = 0.0;
+            $total_tva_global = 0.0;
+            $total_ttc_global = 0.0;
+
+            if (isset($note['lines']) && is_array($note['lines'])) {
                 foreach ($note['lines'] as $line) {
-                    // Calculer les montants pour chaque ligne
-                    $tva = $line['tva_tx'];
-                    $value_unit = $line['value_unit'] / (1 + ($tva/100));
-                    $value_unit_ttc = $line['value_unit'];
-                    $montant_ht = $line['total_ht'] ?? 0.0;
-                    $montant_ttc = $line['total_ttc'] ?? 0.0;
+                    if (!is_array($line)) {
+                        continue;
+                    }
 
-                    // Mettre à jour les totaux globaux
+                    $tva = is_numeric($line['tva_tx'] ?? null) ? (float)$line['tva_tx'] : 0.0;
+                    $value_unit_ttc = is_numeric($line['value_unit'] ?? null) ? (float)$line['value_unit'] : 0.0;
+                    $value_unit = $value_unit_ttc / (1 + ($tva / 100));
+                    $montant_ht = is_numeric($line['total_ht'] ?? null) ? (float)$line['total_ht'] : 0.0;
+                    $montant_ttc = is_numeric($line['total_ttc'] ?? null) ? (float)$line['total_ttc'] : 0.0;
+                    $quantite = is_numeric($line['qty'] ?? null) ? (float)$line['qty'] : 1.0;
+
                     $total_ht_global += $montant_ht;
-                    $total_tva_global += $montant_ttc - $montant_ht; // TVA = TTC - HT
+                    $total_tva_global += ($montant_ttc - $montant_ht);
                     $total_ttc_global += $montant_ttc;
 
-                    // Formater le type_fees_code pour l'affichage
-                    $type = match($line['type_fees_code'] ?? '') {
+                    $type_fees_code = (string)($line['type_fees_code'] ?? '');
+                    $type = match ($type_fees_code) {
                         'EX_KME' => 'Frais kilométriques',
                         'TF_LUNCH' => 'Repas',
                         'TF_TRIP' => 'Transport',
                         default => 'Autre',
                     };
 
-                    // Créer la ligne sous forme de tableau pour cette ligne spécifique
+                    $date_line = isset($line['date']) && is_string($line['date']) ? strtotime($line['date']) : false;
+                    $date_formatted = $date_line ? date("d/m/Y", $date_line) : 'Inconnu';
+
                     $ligneTableau = [
-                        'date' => date("d/m/Y", strtotime($line['date'])),
+                        'date' => $date_formatted,
                         'type' => $type,
-                        'tva' => number_format($tva, 2, ',') . ' %',  // Formater la TVA
-                        'prix_unitaire_ht' => number_format($value_unit, 2, ',', ' ') . ' €',  // Formater le prix unitaire HT
-                        'prix_unitaire_ttc' => number_format($value_unit_ttc, 2, ',', ' ') . ' €',  // Formater le prix unitaire TTC
-                        'quantite' => $line['qty'],
-                        'montant_ht' => number_format($montant_ht, 2, ',', ' ') . ' €',  // Formater le montant HT
-                        'montant_ttc' => number_format($montant_ttc, 2, ',', ' ') . ' €',  // Formater le montant TTC
+                        'tva' => number_format($tva, 2, ',', ' ') . ' %',
+                        'prix_unitaire_ht' => number_format($value_unit, 2, ',', ' ') . ' €',
+                        'prix_unitaire_ttc' => number_format($value_unit_ttc, 2, ',', ' ') . ' €',
+                        'quantite' => $quantite,
+                        'montant_ht' => number_format($montant_ht, 2, ',', ' ') . ' €',
+                        'montant_ttc' => number_format($montant_ttc, 2, ',', ' ') . ' €',
                     ];
 
-                    // Ajouter cette ligne formatée dans le tableau des lignes
                     $lignesTableau[] = $ligneTableau;
                 }
-
-                $status = match ($note['status']) {
-                    '0' => 'Brouillon',
-                    '2' => 'Validé',
-                    '99' => 'Refusé',
-                    '4' => 'Annulé',
-                    '5' => 'Approuvé',
-                    '6' => 'Payé',
-                    default => 'Inconnu'
-                };
-
-                // Ajouter les totaux globaux
-                $totaux = [
-                    'montant_ht_total' => number_format($total_ht_global, 2, ',', ' ') . ' €',
-                    'montant_tva_total' => number_format($total_tva_global, 2, ',', ' ') . ' €',
-                    'montant_ttc_total' => number_format($total_ttc_global, 2, ',', ' ') . ' €'
-                ];
-
-                // Ajouter les informations formatées dans le tableau final pour la note de frais
-                $noteFraisFormatees[] = [
-                    'ref' => $note['ref'] ?? 'Inconnu',
-                    'user_author_infos' => $note['user_author_infos'] ?? 'Inconnu',
-                    'date_debut' => $date_debut,
-                    'date_fin' => $date_fin,
-                    'montant_ht' => $note['total_ht'] ?? 0,
-                    'montant_tva' => $note['total_tva'] ?? 0,
-                    'montant_ttc' => $note['total_ttc'] ?? 0,
-                    'etat' => $status,
-                    'montant_reclame' => $note['total_ttc'] ?? 0.0,
-                    'reste_a_payer' => $note['total_ttc'] ?? 0.0 - $note['total_paid'] ?? 0.0,
-                    'totaux' => $totaux,
-                    'nombre_note' => $nb_note,
-                    'lines' => $lignesTableau   // Contient toutes les lignes formatées
-                ];
             }
-            
-            // Retourner le tableau des notes de frais formatées
-            return $noteFraisFormatees;
+
+            $status_code = (string)($note['status'] ?? '');
+            $status = match ($status_code) {
+                '0' => 'Brouillon',
+                '2' => 'Validé',
+                '99' => 'Refusé',
+                '4' => 'Annulé',
+                '5' => 'Approuvé',
+                '6' => 'Payé',
+                default => 'Inconnu',
+            };
+
+            $totaux = [
+                'montant_ht_total' => number_format($total_ht_global, 2, ',', ' ') . ' €',
+                'montant_tva_total' => number_format($total_tva_global, 2, ',', ' ') . ' €',
+                'montant_ttc_total' => number_format($total_ttc_global, 2, ',', ' ') . ' €',
+            ];
+
+            $montant_ttc = is_numeric($note['total_ttc'] ?? null) ? (float)$note['total_ttc'] : 0.0;
+            $montant_paid = is_numeric($note['total_paid'] ?? null) ? (float)$note['total_paid'] : 0.0;
+
+            $noteFraisFormatees[] = [
+                'ref' => isset($note['ref']) && is_string($note['ref']) ? $note['ref'] : 'Inconnu',
+                'user_author_infos' => isset($note['user_author_infos']) && is_string($note['user_author_infos'])
+                    ? $note['user_author_infos']
+                    : 'Inconnu',
+                'date_debut' => $date_debut,
+                'date_fin' => $date_fin,
+                'montant_ht' => is_numeric($note['total_ht'] ?? null) ? (float)$note['total_ht'] : 0.0,
+                'montant_tva' => is_numeric($note['total_tva'] ?? null) ? (float)$note['total_tva'] : 0.0,
+                'montant_ttc' => $montant_ttc,
+                'etat' => $status,
+                'montant_reclame' => $montant_ttc,
+                'reste_a_payer' => $montant_ttc - $montant_paid,
+                'totaux' => $totaux,
+                'nombre_note' => $nb_note,
+                'lines' => $lignesTableau
+            ];
         }
 
-        return []; // Retourner un tableau vide en cas d'échec
+        return $noteFraisFormatees;
     }
+
+
+
 
     /**
      * Filtre une liste de notes de frais en fonction des critères fournis.
@@ -312,6 +329,10 @@ class NoteFraisService
 
         // Initialiser cURL
         $requeteCurl = curl_init($urlNoteFrais);
+        if ($requeteCurl === false) {
+            throw new RuntimeException("Échec de l'initialisation de cURL.");
+        }
+
         curl_setopt($requeteCurl, CURLOPT_VERBOSE, true);
         curl_setopt($requeteCurl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($requeteCurl, CURLOPT_HTTPGET, true);
@@ -322,6 +343,11 @@ class NoteFraisService
 
         // Exécuter la requête
         $response = curl_exec($requeteCurl);
+        if (!is_string($response)) {
+            curl_close($requeteCurl);
+            return [];
+        }
+
         $httpCode = curl_getinfo($requeteCurl, CURLINFO_HTTP_CODE);
         curl_close($requeteCurl);
 
