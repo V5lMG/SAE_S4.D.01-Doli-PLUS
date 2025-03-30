@@ -62,7 +62,6 @@ if (session_status() === PHP_SESSION_NONE) {
                                 <li><strong>Du / Au :</strong> Sélectionnez une plage de dates.</li>
                                 <li><strong>État de la note :</strong> Choisissez un état (par exemple, "Tous").</li>
                             </ul>
-                            <p></p>
 
                             <!-- Section Liste note de frais -->
                             <h3>Liste des notes de frais</h3>
