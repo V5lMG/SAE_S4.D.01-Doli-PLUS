@@ -83,8 +83,19 @@ $helpLink = $helpLinks[$page] ?? 'index.php?controller=Aide&action=default';
                         <button class="btn" onclick="window.location.href='index.php?controller=Fournisseur&action=indexPalmares'"><span class="text-white">Palmarès</span></button>
                     </li>
                 <?php endif; ?>
+                <!-- Dropdown utilisateur -->
+                <div class="dropdown">
+                    <button class="btn bouton-action w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <?php echo $userName; ?>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="index.php?controller=Home&action=logout"><i class="fa fa-sign-out-alt"></i> Déconnexion</a></li>
+                        <li><a class="dropdown-item" href="<?= $helpLink ?>"><i class="fa-regular fa-circle-question"></i> Besoin d'aide ?</a></li>
+                    </ul>
+                </div>
             </ul>
         </div>
+
     </nav>
 </div>
 
