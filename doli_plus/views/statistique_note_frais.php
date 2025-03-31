@@ -166,11 +166,11 @@ $mois = [
                                     <form id="formSectoriel" method="POST" action="<?= htmlspecialchars('index.php?controller=NoteFrais&action=indexStatistique'); ?>">
                                         <div class="row justify-content-center mt-3">
                                             <div class="col-md-4 col-12">
-                                                <label for="date_debut">Date début :</label>
+                                                <label for="date_debut">Date de début :</label>
                                                 <input type="date" class="form-control" id="date_debut" name="date_debut" value="<?= isset($date_debut) ? htmlspecialchars($date_debut) : '' ?>">
                                             </div>
                                             <div class="col-md-4 col-12">
-                                                <label for="date_fin">Date fin :</label>
+                                                <label for="date_fin">Date de fin :</label>
                                                 <input type="date" class="form-control" id="date_fin" name="date_fin" value="<?= isset($date_fin) ? htmlspecialchars($date_fin) : '' ?>">
                                             </div>
                                             <div class="col-md-1 col-12 mt-md-0 mt-3">
