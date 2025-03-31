@@ -376,6 +376,7 @@ class FournisseurService
                     }
                 }
             }
+
             return $factures;
         }
 
@@ -436,6 +437,7 @@ class FournisseurService
         }
         return [];
     }
+
     /**
      * Redirige directement vers l'URL du fichier pour le téléchargement
      */
