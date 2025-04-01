@@ -230,7 +230,7 @@ $mois = [
                 form.submit();
             }
 
-            /*---------------------------------------- Graphique Histogramme/Courbe ----------------------------------*/
+            /*---------------------------------------- Graphique Histogramme ----------------------------------*/
             // Récupération des données PHP encodées en JSON
             const listeStatHistogrammeActuel = <?php echo json_encode($listeStatHistogrammeActuel); ?>;
             const listeStatHistogrammeComparaison = <?php echo json_encode($listeStatHistogrammeComparaison); ?>;
@@ -257,14 +257,14 @@ $mois = [
                 labels: histogrammeLabels,
                 datasets: [
                     {
-                        label: 'Montant total (€)',
+                        label: "Montant des frais de l'année recherchée",
                         data: montantTotalActuel,
                         backgroundColor: 'rgba(75, 192, 192, 0.6)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1
                     },
                     ...(comparaisonCheckbox ? [{
-                        label: 'Montant total (Comparaison)',
+                        label: "Montant des frais de l'année précédente",
                         data: montantTotalComparaison,
                         backgroundColor: 'rgba(255, 99, 132, 0.6)', // Couleur pour les données de comparaison
                         borderColor: 'rgba(255, 99, 132, 1)',
@@ -302,9 +302,9 @@ $mois = [
 
                                 // Affichage lors du passage de la souris
                                 if (tooltipItem.datasetIndex === 0) {
-                                    return 'Montant total : ' + tooltipItem.raw + '€ | ' + nombreDeNotesActuel + ' notes de frais (Actuel)';
+                                    return 'Montant total : ' + tooltipItem.raw + '€ | ' + nombreDeNotesActuel + " notes de frais";
                                 } else {
-                                    return 'Montant total : ' + tooltipItem.raw + '€ | ' + nombreDeNotesComparaison + ' notes de frais (Comparaison)';
+                                    return 'Montant total : ' + tooltipItem.raw + '€ | ' + nombreDeNotesComparaison + " notes de frais lors de l'année précédente";
                                 }
                             }
                         }
