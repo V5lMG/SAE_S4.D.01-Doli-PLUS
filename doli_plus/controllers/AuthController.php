@@ -4,6 +4,13 @@ namespace controllers;
 use services\AuthService;
 use yasmf\View;
 
+/**
+ * @author ValMG
+ * @author Xavier Taborda Rodrigo
+ * @author Thierry Erwan
+ * @author Cambon Mathias
+ * Pas de copyright, ni de droit d'auteur
+ */
 class AuthController
 {
     private AuthService $authService;

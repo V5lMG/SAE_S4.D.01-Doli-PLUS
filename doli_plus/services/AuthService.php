@@ -3,6 +3,13 @@ namespace services;
 
 use RuntimeException;
 
+/**
+ * @author ValMG
+ * @author Xavier Taborda Rodrigo
+ * @author Thierry Erwan
+ * @author Cambon Mathias
+ * Pas de copyright, ni de droit d'auteur
+ */
 class AuthService
 {
 

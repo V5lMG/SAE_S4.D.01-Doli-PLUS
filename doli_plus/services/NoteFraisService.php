@@ -4,6 +4,13 @@ namespace services;
 use DateTime;
 use RuntimeException;
 
+/**
+ * @author ValMG
+ * @author Xavier Taborda Rodrigo
+ * @author Thierry Erwan
+ * @author Cambon Mathias
+ * Pas de copyright, ni de droit d'auteur
+ */
 class NoteFraisService
 {
 
@@ -172,9 +179,6 @@ class NoteFraisService
 
         return $noteFraisFormatees;
     }
-
-
-
 
     /**
      * Filtre une liste de notes de frais en fonction des critères fournis.

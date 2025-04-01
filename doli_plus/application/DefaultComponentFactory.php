@@ -41,6 +41,12 @@ use yasmf\NoServiceAvailableForNameException;
  *
  * Cette classe utilise un modèle de conception Singleton pour certains services,
  * afin de ne créer qu'une seule instance pour chaque service.
+ *
+ * @author ValMG
+ * @author Xavier Taborda Rodrigo
+ * @author Thierry Erwan
+ * @author Cambon Mathias
+ * Pas de copyright, ni de droit d'auteur
  */
 class DefaultComponentFactory implements ComponentFactory
 {

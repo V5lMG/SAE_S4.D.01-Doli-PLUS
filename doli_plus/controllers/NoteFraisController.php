@@ -6,6 +6,13 @@ use services\NoteFraisService;
 use yasmf\HttpHelper;
 use yasmf\View;
 
+/**
+ * @author ValMG
+ * @author Xavier Taborda Rodrigo
+ * @author Thierry Erwan
+ * @author Cambon Mathias
+ * Pas de copyright, ni de droit d'auteur
+ */
 class NoteFraisController
 {
     private NoteFraisService $noteFraisService;
