@@ -83,7 +83,7 @@ if ($droit != 'admin' && $droit != 'facture') {
                                             <td><?= htmlspecialchars($facture['date_echeance']) ?></td>
                                             <td><?= htmlspecialchars($facture['cond_reglement']) ?></td>
                                             <td><?= htmlspecialchars($facture['mode_reglement']) ?></td>
-                                            <td><?= htmlspecialchars($facture['montant_ht']) ?></td>
+                                            <td class="text-end"><?= htmlspecialchars($facture['montant_ht']) ?></td>
                                             <td><?= htmlspecialchars($facture['etat']) ?></td>
                                             <td class="col-3">
                                                 <?php if (empty($facture["fichiers_joints"])) :?>
@@ -123,12 +123,12 @@ if ($droit != 'admin' && $droit != 'facture') {
                                                                 <tr>
                                                                     <td><?= htmlspecialchars($ligne['description']) ?></td>
                                                                     <td><?= htmlspecialchars($ligne['ref']) ?></td>
-                                                                    <td><?= htmlspecialchars($ligne['tva']) ?> %</td>
-                                                                    <td><?= htmlspecialchars($ligne['prix_unitaire_ht']) ?> €</td>
-                                                                    <td><?= htmlspecialchars($ligne['prix_unitaire_ttc']) ?> €</td>
-                                                                    <td><?= htmlspecialchars($ligne['quantite']) ?></td>
-                                                                    <td><?= htmlspecialchars($ligne['reduction']) ?> %</td>
-                                                                    <td><?= htmlspecialchars($ligne['total_ht']) ?> €</td>
+                                                                    <td class="text-end"><?= htmlspecialchars($ligne['tva']) ?> %</td>
+                                                                    <td class="text-end"><?= htmlspecialchars($ligne['prix_unitaire_ht']) ?> €</td>
+                                                                    <td class="text-end"><?= htmlspecialchars($ligne['prix_unitaire_ttc']) ?> €</td>
+                                                                    <td class="text-end"><?= htmlspecialchars($ligne['quantite']) ?></td>
+                                                                    <td class="text-end"><?= htmlspecialchars($ligne['reduction']) ?> %</td>
+                                                                    <td class="text-end"><?= htmlspecialchars($ligne['total_ht']) ?> €</td>
                                                                 </tr>
                                                             <?php endforeach; ?>
                                                         <?php else: ?>

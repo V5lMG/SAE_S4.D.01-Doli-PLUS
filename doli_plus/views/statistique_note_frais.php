@@ -266,7 +266,7 @@ $mois = [
                     ...(comparaisonCheckbox ? [{
                         label: "Montant des frais de l'année précédente",
                         data: montantTotalComparaison,
-                        backgroundColor: 'rgba(255, 99, 132, 0.6)', // Couleur pour les données de comparaison
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
                         borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 1
                     }] : [] )
@@ -289,7 +289,7 @@ $mois = [
                         position: 'top'
                     },
                     tooltip: {
-                        enabled: true,  // Activer les tooltips
+                        enabled: true,
                         callbacks: {
                             // Ajouter un tooltip personnalisé
                             label: function(tooltipItem) {
@@ -355,17 +355,17 @@ $mois = [
             const listeStatSectorielle = <?php echo $listeStatSectorielle; ?>;
 
             // Extraction des labels (types de frais) et des données associées
-            const labels       = Object.keys(listeStatSectorielle); // ["Frais kilométriques", "Repas", "Transport", "Autre"]
+            const labels       = Object.keys(listeStatSectorielle);
             const montantTotalSectoriel = labels.map(type => listeStatSectorielle[type]['MontantTotalType']);
             const quantite     = labels.map(type => listeStatSectorielle[type]['Quantite']);
 
             // Configuration des données pour le diagramme
             const data = {
-                labels: labels, // Type des notes de frais
+                labels: labels,
                 datasets: [
                     {
                         label: 'Montant total',
-                        data: montantTotalSectoriel, // Montant total de chaque type de note de frais
+                        data: montantTotalSectoriel,
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.6)',
                             'rgba(54, 162, 235, 0.6)',
@@ -375,7 +375,7 @@ $mois = [
                     },
                     {
                         label: 'Nombre de notes de frais',
-                        data: quantite,        // Nombre de notes de frais par type
+                        data: quantite,
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.6)',
                             'rgba(54, 162, 235, 0.6)',

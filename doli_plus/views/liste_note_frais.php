@@ -145,9 +145,9 @@ if ($droit != 'admin' && $droit != 'note2frais') {
                                             <td><?= htmlspecialchars($note['user_author_infos']) ?></td>
                                             <td><?= htmlspecialchars($note['date_debut']) ?></td>
                                             <td><?= htmlspecialchars($note['date_fin']) ?></td>
-                                            <td><?= number_format($note['montant_ht'], 2, ',', ' ') ?> €</td>
-                                            <td><?= number_format($note['montant_tva'], 2, ',', ' ') ?> €</td>
-                                            <td><?= number_format($note['montant_ttc'], 2, ',', ' ') ?> €</td>
+                                            <td class="text-end"><?= number_format($note['montant_ht'], 2, ',', ' ') ?> €</td>
+                                            <td class="text-end"><?= number_format($note['montant_tva'], 2, ',', ' ') ?> €</td>
+                                            <td class="text-end"><?= number_format($note['montant_ttc'], 2, ',', ' ') ?> €</td>
                                             <td><?= htmlspecialchars($note['etat']) ?></td>
                                         </tr>
                                         <!-- Sous-tableau pour afficher les lignes de la note de frais -->
@@ -171,12 +171,12 @@ if ($droit != 'admin' && $droit != 'note2frais') {
                                                         <tr>
                                                             <td><?= htmlspecialchars($line['date']) ?></td> <!-- Date -->
                                                             <td><?= htmlspecialchars($line['type']) ?></td> <!-- Type -->
-                                                            <td><?= htmlspecialchars($line['tva']) ?></td> <!-- Tva -->
-                                                            <td><?= htmlspecialchars($line['prix_unitaire_ht']) ?></td> <!-- Prix Unitaire HT -->
-                                                            <td><?= htmlspecialchars($line['prix_unitaire_ttc']) ?></td> <!-- Prix unitaire TTC -->
-                                                            <td><?= htmlspecialchars($line['quantite']) ?></td> <!-- Quantité -->
-                                                            <td><?= htmlspecialchars($line['montant_ht']) ?></td> <!-- Montant HT (calculé avec quantité) -->
-                                                            <td><?= htmlspecialchars($line['montant_ttc']) ?></td> <!-- Montant TTC (calculé avec quantité) -->
+                                                            <td class="text-end"><?= htmlspecialchars($line['tva']) ?></td> <!-- Tva -->
+                                                            <td class="text-end"><?= htmlspecialchars($line['prix_unitaire_ht']) ?></td> <!-- Prix Unitaire HT -->
+                                                            <td class="text-end"><?= htmlspecialchars($line['prix_unitaire_ttc']) ?></td> <!-- Prix unitaire TTC -->
+                                                            <td class="text-end"><?= htmlspecialchars($line['quantite']) ?></td> <!-- Quantité -->
+                                                            <td class="text-end"><?= htmlspecialchars($line['montant_ht']) ?></td> <!-- Montant HT (calculé avec quantité) -->
+                                                            <td class="text-end"><?= htmlspecialchars($line['montant_ttc']) ?></td> <!-- Montant TTC (calculé avec quantité) -->
                                                         </tr>
                                                     <?php endforeach; ?>
                                                     </tbody>

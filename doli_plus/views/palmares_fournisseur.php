@@ -113,8 +113,8 @@ $compteur = 0;
                                     <tr  class="fournisseur<?=$compteur?>" >
                                         <td>Top <?php echo $compteur?></td>
                                         <td><?= htmlspecialchars($nomFournisseur) ?></td>             <!-- Nom du fournisseur -->
-                                        <td><?= htmlspecialchars($details['nombre_factures']) ?></td> <!-- Quantité de facture -->
-                                        <td><?= htmlspecialchars($details['total_ht']) . ' €' ?></td> <!-- Montant des factures -->
+                                        <td class="text-end"><?= htmlspecialchars($details['nombre_factures']) ?></td> <!-- Quantité de facture -->
+                                        <td class="text-end"><?= htmlspecialchars(number_format($details['total_ht'],2,',',' ')) . ' €' ?></td> <!-- Montant des factures -->
                                     </tr>
                                 <?php }
                                       endforeach; ?>
